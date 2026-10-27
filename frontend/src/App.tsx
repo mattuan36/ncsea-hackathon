@@ -10,6 +10,11 @@ import {
 } from 'lucide-react';
 import DocumentsPage from './pages/DocumentsPage';
 import PlaceholderPage from './pages/PlaceholderPage';
+import GravityPage from './pages/GravityPage';
+import ReportsPage from './pages/ReportsPage';
+import SettingsPage from './pages/SettingsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import { LtlProvider } from './ltl/store';
 
 interface MenuItem {
   path: string;
@@ -29,11 +34,12 @@ const MENU: MenuItem[] = [
 
 export default function App() {
   return (
+    <LtlProvider>
     <div className="app">
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">S</span>
-          <span className="brand-name">Structural</span>
+          <span className="brand-mark">L</span>
+          <span className="brand-name">LightenTheLoad</span>
         </div>
         <nav className="nav">
           {MENU.map(({ path, label, icon: Icon }) => (
@@ -48,12 +54,17 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/documents" replace />} />
           <Route path="/documents" element={<DocumentsPage />} />
-          {MENU.filter((m) => m.path !== '/documents').map(({ path, label, icon }) => (
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/gravity" element={<GravityPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          {MENU.filter((m) => m.path === '/lateral').map(({ path, label, icon }) => (
             <Route key={path} path={path} element={<PlaceholderPage title={label} icon={icon} />} />
           ))}
           <Route path="*" element={<Navigate to="/documents" replace />} />
         </Routes>
       </main>
     </div>
+    </LtlProvider>
   );
 }

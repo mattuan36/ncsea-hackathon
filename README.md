@@ -1,10 +1,35 @@
-# Structural App
+# LightenTheLoad (working name)
 
 React (Vite + TypeScript) frontend, Python (FastAPI) backend, PostgreSQL storage.
 
 Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
-Only **Documents** is functional (upload / download / delete); the other five are placeholders
-waiting for data.
+
+| Menu | State |
+|---|---|
+| Documents | Working: upload / download / delete, stored in Postgres |
+| Gravity | **Wireframe** — dead-load takeoff wizard (6 steps, below) |
+| Reports | **Wireframe** — graphical output sheets + spreadsheet layout preview |
+| Settings | **Wireframe** — project info + material database |
+| Analytics | **Wireframe** — takeoff summary (KPIs, dead load by assembly) |
+| Lateral | Placeholder (no requirements yet) |
+
+### Wireframe scope (Gravity / Reports / Settings / Analytics)
+
+- Frontend only, sample data (`frontend/src/ltl/data.ts`): reading the Revit/IFC model is
+  **simulated**; any chosen source shows the same sample floor/wall types and plan geometry.
+- State is in memory (`frontend/src/ltl/store.tsx`) and **resets on page reload**.
+- Real calculations: PSF = pcf × t / 12 (or listed psf per thickness), overrides win; plan areas
+  (shoelace) and wall lengths are computed from the geometry; kips = psf × SF, walls psf × height × LF.
+- Material unit weights are typical values — verify against ASCE 7 Table C3.1-1 before design use.
+- Not built yet: real IFC/Revit parsing, persistence of takeoffs, `.xlsx` export (button disabled).
+
+Gravity steps: 1 Model (upload IFC via Documents › 3D Models, or point to a Revit path) →
+2 Floor types / 3 Wall types (filter unused by instance count) → 4 Type table →
+5 Build assemblies (walk each type grouped by Revit structural material: labeled section graphic,
+searchable material + thickness dropdowns, PSF override, add material to DB, verify material,
+most-similar suggestion, skip, copy layers, merge as sub-assembly with governing choice) →
+6 Plan view (Bluebeam-style markups, thick wall lines, SF/LF, legend with expandable breakdown,
+click legend/area/wall to isolate).
 
 ## Run
 
