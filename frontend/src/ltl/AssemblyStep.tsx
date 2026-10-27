@@ -282,7 +282,7 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
                 goTo(idx + 1);
               }}
             >
-              {idx === queue.length - 1 ? 'Finish → plan view' : 'Save & next'} <ArrowRight size={16} />
+              {idx === queue.length - 1 ? 'Finish → type table' : 'Save & next'} <ArrowRight size={16} />
             </button>
           </div>
         </div>

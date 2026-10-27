@@ -9,7 +9,7 @@ import { WireframeNote } from '../ltl/ui';
 import AssemblyStep from '../ltl/AssemblyStep';
 import PlanView from '../ltl/PlanView';
 
-const STEPS = ['Model', 'Floor types', 'Wall types', 'Type table', 'Build assemblies', 'Plan view'];
+const STEPS = ['Model', 'Floor types', 'Wall types', 'Build assemblies', 'Type table', 'Plan view'];
 
 export default function GravityPage() {
   const { gravityStep: step, setGravityStep: setStep, model } = useLtl();
@@ -36,8 +36,8 @@ export default function GravityPage() {
       {step === 0 && <ModelStep onNext={() => go(1)} />}
       {step === 1 && <FilterStep kind="floor" onBack={() => go(0)} onNext={() => go(2)} />}
       {step === 2 && <FilterStep kind="wall" onBack={() => go(1)} onNext={() => go(3)} />}
-      {step === 3 && <TypeTableStep onBack={() => go(2)} onNext={() => go(4)} />}
-      {step === 4 && <AssemblyStep onDone={() => go(5)} />}
+      {step === 3 && <AssemblyStep onDone={() => go(4)} />}
+      {step === 4 && <TypeTableStep onBack={() => go(3)} onNext={() => go(5)} />}
       {step === 5 && (
         <div className="card fill">
           <PlanView />
@@ -239,7 +239,7 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
     <>
       <section className="card">
         <h2 className="card-title">Types in this takeoff</h2>
-        <p className="muted">{included.length} types included · {excluded} filtered out. Weights are prefilled from the model layers and refined in the next step.</p>
+        <p className="muted">{included.length} types included · {excluded} filtered out. Dead loads reflect the assemblies built in the previous step.</p>
         <table className="data-table">
           <thead>
             <tr>
@@ -272,7 +272,7 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
           </tbody>
         </table>
       </section>
-      <StepFooter onBack={onBack} onNext={onNext} nextLabel="Start walkthrough" />
+      <StepFooter onBack={onBack} onNext={onNext} nextLabel="Next: plan view" />
     </>
   );
 }
