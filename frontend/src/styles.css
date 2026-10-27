@@ -281,16 +281,16 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .verify.ok { background: #f0fdf4; border-color: #bbf7d0; }
 .verify > span:first-child { font-weight: 500; }
 .verify .ok-line { margin: 0; }
-.build { display: grid; grid-template-columns: minmax(300px, 2fr) minmax(0, 3fr); gap: 12px; align-items: start; }
-.build-graphic .assembly-graphic { max-width: 640px; }
-@media (max-width: 1280px) { .build { grid-template-columns: 1fr; } }
+.build { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(690px, 1fr); gap: 12px; align-items: start; }
+.build-graphic .assembly-graphic { max-width: 760px; }
+@media (max-width: 1360px) { .build { grid-template-columns: 1fr; } }
 
 .section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
 .assembly-graphic { width: 100%; height: auto; display: block; }
 .reuse { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
 
 /* material picker */
-.picker { position: relative; min-width: 210px; }
+.picker { position: relative; min-width: 160px; }
 .picker-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 6px; height: 34px; padding: 0 10px; border: 1px solid var(--border); border-radius: 7px; background: #fff; cursor: pointer; text-align: left; }
 .picker-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .picker-pop { position: absolute; z-index: 20; top: 38px; left: 0; width: 320px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15); padding: 6px; }

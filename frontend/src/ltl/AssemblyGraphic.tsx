@@ -58,14 +58,16 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const label = (r: (typeof rows)[number]) =>
     `${r.l.thickness ? fmtIn(r.l.thickness) + ' ' : ''}${r.m?.name ?? 'Unknown material'} — ${fmt(r.psf, 1)} psf`;
   // compact (spreadsheet) mode: numbered callouts only; the rows beside it carry the text
-  const fontSize = compact ? 14 : 12;
+  const fontSize = compact ? 14 : 13;
   const text = (r: (typeof rows)[number]) => (compact ? String(r.n) : label(r));
 
+  // label column sized to the longest label so the drawing isn't shrunk by empty space
+  const textW = Math.max(0, ...rows.map((r) => label(r).length)) * fontSize * 0.56 + 8;
   const fillOf = (r: (typeof rows)[number]) => (r.style.pattern ? `url(#${pid}-${r.style.pattern})` : r.style.fill);
 
   if (kind === 'floor') {
-    const W = compact ? 120 : 180;
-    const scale = Math.min(14, (compact ? 90 : 150) / total);
+    const W = compact ? 120 : 240;
+    const scale = Math.min(compact ? 14 : 24, (compact ? 90 : 240) / total);
     let y = 8;
     const rects = solid.map((r) => {
       const h = Math.max(r.l.thickness * scale, 8);
@@ -84,7 +86,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
     const height = allowTop + allowances.length * (fontSize + 8) + 6;
     const labelX = W + 24;
     return (
-      <svg className="assembly-graphic" viewBox={`0 0 ${labelX + (compact ? 30 : 330)} ${height}`} role="img" aria-label="Assembly section">
+      <svg className="assembly-graphic" viewBox={`0 0 ${labelX + (compact ? 30 : textW)} ${height}`} role="img" aria-label="Assembly section">
         <Patterns pid={pid} />
         {rects.map((r) => (
           <g key={r.l.id}>
@@ -112,8 +114,8 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   }
 
   // wall: vertical layers left (exterior) to right (interior), numbered callouts + key
-  const H = compact ? 90 : 140;
-  const scale = Math.min(16, (compact ? 110 : 170) / total);
+  const H = compact ? 90 : 220;
+  const scale = Math.min(compact ? 16 : 24, (compact ? 110 : 260) / total);
   let x = 4;
   const cols = solid.map((r) => {
     const w = Math.max(r.l.thickness * scale, 6);
@@ -125,7 +127,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const keyRows = [...cols, ...allowances.map((r) => ({ ...r, x: 0, w: 0 }))];
   const height = compact ? H + 34 : Math.max(H + 34, keyRows.length * (fontSize + 8) + 30);
   return (
-    <svg className="assembly-graphic" viewBox={`0 0 ${compact ? x + 8 : keyX + 330} ${height}`} role="img" aria-label="Wall section">
+    <svg className="assembly-graphic" viewBox={`0 0 ${compact ? x + 8 : keyX + textW} ${height}`} role="img" aria-label="Wall section">
       <Patterns pid={pid} />
       <text x="4" y={H + 30} fontSize={fontSize - 1} fill="#64748b">EXT</text>
       <text x={x - 4} y={H + 30} fontSize={fontSize - 1} fill="#64748b" textAnchor="end">INT</text>
