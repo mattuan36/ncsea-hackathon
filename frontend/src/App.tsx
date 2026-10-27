@@ -36,7 +36,7 @@ export default function App() {
   return (
     <LtlProvider>
     <div className="app">
-      <aside className="sidebar">
+      <header className="topbar">
         <div className="brand">
           <span className="brand-mark">L</span>
           <span className="brand-name">LightenTheLoad</span>
@@ -49,7 +49,7 @@ export default function App() {
             </NavLink>
           ))}
         </nav>
-      </aside>
+      </header>
       <main className="content">
         <Routes>
           <Route path="/" element={<Navigate to="/documents" replace />} />
