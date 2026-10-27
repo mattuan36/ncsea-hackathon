@@ -1,0 +1,122 @@
+from contextlib import asynccontextmanager
+from urllib.parse import quote
+
+from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
+
+from . import db
+
+MAX_UPLOAD_BYTES = 200 * 1024 * 1024
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    db.init_db()
+    yield
+    db.pool.close()
+
+
+app = FastAPI(title="Structural App API", lifespan=lifespan)
+
+
+@app.get("/api/health")
+def health():
+    return {"ok": True}
+
+
+@app.get("/api/folders")
+def list_folders():
+    """Flat folder list; `file_count` is recursive (includes subfolders)."""
+    with db.pool.connection() as conn:
+        rows = conn.execute(
+            """
+            WITH RECURSIVE sub AS (
+                SELECT id AS root_id, id FROM folders
+                UNION ALL
+                SELECT sub.root_id, f.id FROM folders f JOIN sub ON f.parent_id = sub.id
+            )
+            SELECT f.id, f.parent_id, f.name, f.position,
+                   (SELECT count(*) FROM documents d
+                     JOIN sub ON d.folder_id = sub.id
+                    WHERE sub.root_id = f.id)::int AS file_count
+              FROM folders f
+             ORDER BY f.parent_id NULLS FIRST, f.position, f.name
+            """
+        ).fetchall()
+    return rows
+
+
+@app.get("/api/documents")
+def list_documents(folder_id: int, recursive: bool = False):
+    with db.pool.connection() as conn:
+        if recursive:
+            sql = """
+                WITH RECURSIVE sub AS (
+                    SELECT id FROM folders WHERE id = %s
+                    UNION ALL
+                    SELECT f.id FROM folders f JOIN sub ON f.parent_id = sub.id
+                )
+                SELECT d.id, d.folder_id, d.filename, d.content_type, d.size_bytes, d.uploaded_at
+                  FROM documents d JOIN sub ON d.folder_id = sub.id
+                 ORDER BY d.filename
+            """
+        else:
+            sql = """
+                SELECT id, folder_id, filename, content_type, size_bytes, uploaded_at
+                  FROM documents WHERE folder_id = %s ORDER BY filename
+            """
+        return conn.execute(sql, (folder_id,)).fetchall()
+
+
+@app.post("/api/documents", status_code=201)
+async def upload_documents(folder_id: int = Form(...), files: list[UploadFile] = File(...)):
+    with db.pool.connection() as conn:
+        if conn.execute("SELECT 1 FROM folders WHERE id = %s", (folder_id,)).fetchone() is None:
+            raise HTTPException(404, "Folder not found")
+        created = []
+        for upload in files:
+            data = await upload.read()
+            if len(data) > MAX_UPLOAD_BYTES:
+                raise HTTPException(413, f"{upload.filename} exceeds 200 MB")
+            created.append(
+                conn.execute(
+                    """
+                    INSERT INTO documents (folder_id, filename, content_type, size_bytes, data)
+                    VALUES (%s, %s, %s, %s, %s)
+                    RETURNING id, folder_id, filename, content_type, size_bytes, uploaded_at
+                    """,
+                    (
+                        folder_id,
+                        upload.filename or "untitled",
+                        upload.content_type or "application/octet-stream",
+                        len(data),
+                        data,
+                    ),
+                ).fetchone()
+            )
+    return created
+
+
+@app.get("/api/documents/{doc_id}/download")
+def download_document(doc_id: int):
+    with db.pool.connection() as conn:
+        row = conn.execute(
+            "SELECT filename, content_type, data FROM documents WHERE id = %s", (doc_id,)
+        ).fetchone()
+    if row is None:
+        raise HTTPException(404, "Document not found")
+    return Response(
+        content=bytes(row["data"]),
+        media_type=row["content_type"],
+        headers={
+            "Content-Disposition": f"attachment; filename*=UTF-8''{quote(row['filename'])}"
+        },
+    )
+
+
+@app.delete("/api/documents/{doc_id}", status_code=204)
+def delete_document(doc_id: int):
+    with db.pool.connection() as conn:
+        deleted = conn.execute("DELETE FROM documents WHERE id = %s", (doc_id,)).rowcount
+    if not deleted:
+        raise HTTPException(404, "Document not found")
+    return Response(status_code=204)
