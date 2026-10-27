@@ -1,8 +1,11 @@
 import { useId, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, GitMerge } from 'lucide-react';
 import type { Level, Pt } from './data';
-import { assemblyPsf, fmt, fmtIn, layerPsf, levelTakeoff, polygonArea, polylineLength } from './calc';
+import { assemblyPsf, fmt, fmtIn, layerPsf, levelFloorArea, levelTakeoff, polygonArea, polylineLength } from './calc';
 import { useLtl } from './store';
+
+/** IFC models: shorter walls are drawn and clickable but not labelled (hundreds per floor) */
+const MIN_LABEL_LF = 15;
 
 const pts = (p: Pt[]) => p.map(([x, y]) => `${x},${y}`).join(' ');
 
@@ -61,7 +64,7 @@ export default function PlanView({ initialLevel, showLevelTabs = true }: { initi
   const faded = (typeId: string) => focus !== null && govOf(typeId) !== focus;
   const pick = (typeId: string) => setFocus((f) => (f === govOf(typeId) ? null : govOf(typeId)));
 
-  const floorSF = entries.filter((e) => e.kind === 'floor').reduce((s, e) => s + e.qty, 0);
+  const floorSF = levelFloorArea(level, types);
   const wallLF = entries.filter((e) => e.kind === 'wall').reduce((s, e) => s + e.qty, 0);
   const kips = entries.reduce((s, e) => s + e.kips, 0);
   const colorIds = [...new Set(types.map((t) => t.color))];
@@ -161,9 +164,13 @@ export default function PlanView({ initialLevel, showLevelTabs = true }: { initi
                   if (included(w.typeId)) pick(w.typeId);
                 }}
               >
+                <title>{`${byId.get(w.typeId)?.assemblyName ?? w.typeId} · ${fmt(polylineLength(w.points))} LF`}</title>
                 <polyline points={pts(w.points)} fill="none" stroke="transparent" strokeWidth={5 * k} />
-                <polyline points={pts(w.points)} fill="none" stroke={color} strokeWidth={1.5 * k} strokeLinecap="square" strokeLinejoin="miter" />
-                <text x={mx} y={my + 0.9 * k} textAnchor="middle" className="wall-qty">{fmt(polylineLength(w.points))} LF</text>
+                <polyline points={pts(w.points)} fill="none" stroke={color} strokeWidth={w.netAreaSf == null ? 1.5 * k : Math.min(1.5 * k, 1)} strokeLinecap="square" strokeLinejoin="miter" />
+                {/* IFC plans: label walls ≥ 15 ft only (owner's call 2026-10-27); the Demo labels every wall */}
+                {(w.netAreaSf == null || polylineLength(w.points) >= MIN_LABEL_LF) && (
+                  <text x={mx} y={my + 0.9 * k} textAnchor="middle" className="wall-qty">{fmt(polylineLength(w.points))} LF</text>
+                )}
               </g>
             );
           })}

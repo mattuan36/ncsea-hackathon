@@ -188,12 +188,13 @@ export function LtlProvider({ children }: { children: ReactNode }) {
     fetchModels()
       .then((list) => {
         setModels(list);
+        // a model still being read shows its progress whichever project is open
+        const running = list.find((m) => m.status === 'queued' || m.status === 'running');
+        if (running) setJob(running);
         const want = recalled();
         if (want === 'demo') return;
         const pick = list.find((m) => String(m.id) === want && m.status === 'ready') ?? list.find((m) => m.status === 'ready');
         if (pick) return openModel(pick.id);
-        const running = list.find((m) => m.status === 'queued' || m.status === 'running');
-        if (running) setJob(running);
       })
       .catch(() => { /* API offline: stay on the Demo */ });
   }, [openModel]);

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLtl } from '../ltl/store';
-import { assemblyPsf, fmt, levelTakeoff } from '../ltl/calc';
+import { assemblyPsf, fmt, levelFloorArea, levelTakeoff } from '../ltl/calc';
 
 export default function AnalyticsPage() {
   const { types, materials, model, plan, isDemo } = useLtl();
@@ -19,7 +19,7 @@ export default function AnalyticsPage() {
       .sort((a, b) => b.kips - a.kips);
     return {
       rows,
-      floorSF: rows.filter((r) => r.t.kind === 'floor').reduce((s, r) => s + r.qty, 0),
+      floorSF: plan.levels.reduce((s, l) => s + levelFloorArea(l, types), 0),
       wallLF: rows.filter((r) => r.t.kind === 'wall').reduce((s, r) => s + r.qty, 0),
       kips: rows.reduce((s, r) => s + r.kips, 0),
     };

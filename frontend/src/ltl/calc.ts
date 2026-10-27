@@ -61,6 +61,14 @@ export function levelTakeoff(level: Level, types: ElementType[], materials: Mate
   return [...out.values()].sort((a, b) => (a.kind === b.kind ? b.qty - a.qty : a.kind === 'floor' ? -1 : 1));
 }
 
+/** Plan area of a level, each zone once (a floor and the ceiling hung under it share one zone). */
+export function levelFloorArea(level: Level, types: ElementType[]): number {
+  const included = new Set(types.filter((t) => t.include).map((t) => t.id));
+  return level.areas
+    .filter((a) => (a.stackTypeIds ?? [a.typeId]).some((id) => included.has(id)))
+    .reduce((s, a) => s + (a.areaSf ?? polygonArea(a.points)), 0);
+}
+
 export const fmt = (n: number, digits = 0) =>
   n.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
