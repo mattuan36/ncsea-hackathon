@@ -4,7 +4,8 @@ import { fmt, fmtIn, layerPsf } from './calc';
 import { useLtl } from './store';
 
 type Pattern = 'dots' | 'hatch' | 'cross' | 'vert' | 'brick' | 'zigzag';
-const CAT_STYLE: Record<Category, { fill: string; pattern?: Pattern }> = {
+type Style = { fill: string; pattern?: Pattern };
+const CAT_STYLE: Record<string, Style> = {
   Concrete: { fill: '#e5e7eb', pattern: 'dots' },
   'Steel deck': { fill: '#cbd5e1', pattern: 'zigzag' },
   Masonry: { fill: '#f3d9bf', pattern: 'brick' },
@@ -16,6 +17,19 @@ const CAT_STYLE: Record<Category, { fill: string; pattern?: Pattern }> = {
   Glazing: { fill: '#dbeafe', pattern: 'hatch' },
   Allowance: { fill: 'none' },
 };
+
+// materials-DB rows carry the spreadsheet's use/component; pick a section style from the words
+const STYLE_WORDS: [RegExp, Category][] = [
+  [/allowance|mep|ceiling|ponding/i, 'Allowance'], [/deck/i, 'Steel deck'], [/concrete|slab|fill|topping/i, 'Concrete'],
+  [/cmu|brick|masonry|stone|block/i, 'Masonry'], [/insulat/i, 'Insulation'], [/gyp|plaster/i, 'Gypsum'],
+  [/stud|framing|joist|wood|timber/i, 'Framing'], [/roof|membrane|shingle/i, 'Roofing'], [/glass|glaz|curtain|window/i, 'Glazing'],
+];
+
+function styleOf(category: string | undefined, name: string | undefined): Style {
+  if (category && CAT_STYLE[category]) return CAT_STYLE[category];
+  const text = `${name ?? ''} ${category ?? ''}`;
+  return CAT_STYLE[STYLE_WORDS.find(([re]) => re.test(text))?.[1] ?? 'Finish'];
+}
 
 function Patterns({ pid }: { pid: string }) {
   const s = '#64748b';
@@ -50,7 +64,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const pid = `p${useId().replace(/:/g, '')}`;
   const rows = layers.map((l, i) => {
     const m = materials.find((x) => x.id === l.materialId);
-    return { l, m, n: i + 1, psf: layerPsf(l, materials), style: CAT_STYLE[m?.category ?? 'Finish'] };
+    return { l, m, n: i + 1, psf: layerPsf(l, materials), style: styleOf(m?.category, m?.name) };
   });
   const solid = rows.filter((r) => r.l.thickness > 0);
   const allowances = rows.filter((r) => r.l.thickness === 0);
@@ -58,14 +72,16 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const label = (r: (typeof rows)[number]) =>
     `${r.l.thickness ? fmtIn(r.l.thickness) + ' ' : ''}${r.m?.name ?? 'Unknown material'} — ${fmt(r.psf, 1)} psf`;
   // compact (spreadsheet) mode: numbered callouts only; the rows beside it carry the text
-  const fontSize = compact ? 14 : 12;
+  const fontSize = compact ? 14 : 13;
   const text = (r: (typeof rows)[number]) => (compact ? String(r.n) : label(r));
 
+  // label column sized to the longest label so the drawing isn't shrunk by empty space
+  const textW = Math.max(0, ...rows.map((r) => label(r).length)) * fontSize * 0.56 + 8;
   const fillOf = (r: (typeof rows)[number]) => (r.style.pattern ? `url(#${pid}-${r.style.pattern})` : r.style.fill);
 
   if (kind === 'floor') {
-    const W = compact ? 120 : 180;
-    const scale = Math.min(14, (compact ? 90 : 150) / total);
+    const W = compact ? 120 : 240;
+    const scale = Math.min(compact ? 14 : 24, (compact ? 90 : 240) / total);
     let y = 8;
     const rects = solid.map((r) => {
       const h = Math.max(r.l.thickness * scale, 8);
@@ -84,7 +100,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
     const height = allowTop + allowances.length * (fontSize + 8) + 6;
     const labelX = W + 24;
     return (
-      <svg className="assembly-graphic" viewBox={`0 0 ${labelX + (compact ? 30 : 330)} ${height}`} role="img" aria-label="Assembly section">
+      <svg className="assembly-graphic" viewBox={`0 0 ${labelX + (compact ? 30 : textW)} ${height}`} role="img" aria-label="Assembly section">
         <Patterns pid={pid} />
         {rects.map((r) => (
           <g key={r.l.id}>
@@ -112,8 +128,8 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   }
 
   // wall: vertical layers left (exterior) to right (interior), numbered callouts + key
-  const H = compact ? 90 : 140;
-  const scale = Math.min(16, (compact ? 110 : 170) / total);
+  const H = compact ? 90 : 220;
+  const scale = Math.min(compact ? 16 : 24, (compact ? 110 : 260) / total);
   let x = 4;
   const cols = solid.map((r) => {
     const w = Math.max(r.l.thickness * scale, 6);
@@ -125,7 +141,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const keyRows = [...cols, ...allowances.map((r) => ({ ...r, x: 0, w: 0 }))];
   const height = compact ? H + 34 : Math.max(H + 34, keyRows.length * (fontSize + 8) + 30);
   return (
-    <svg className="assembly-graphic" viewBox={`0 0 ${compact ? x + 8 : keyX + 330} ${height}`} role="img" aria-label="Wall section">
+    <svg className="assembly-graphic" viewBox={`0 0 ${compact ? x + 8 : keyX + textW} ${height}`} role="img" aria-label="Wall section">
       <Patterns pid={pid} />
       <text x="4" y={H + 30} fontSize={fontSize - 1} fill="#64748b">EXT</text>
       <text x={x - 4} y={H + 30} fontSize={fontSize - 1} fill="#64748b" textAnchor="end">INT</text>

@@ -94,9 +94,16 @@ export function MaterialPicker({ value, onChange, onCreate }: { value: string; o
 
 /** Create a material for the shared database. */
 export function MaterialModal({ initialName = '', onClose, onSaved }: { initialName?: string; onClose: () => void; onSaved?: (m: Material) => void }) {
-  const { addMaterial } = useLtl();
+  const { addMaterial, materials } = useLtl();
+  // Demo samples use the 10 wireframe categories; DB rows use the spreadsheet's use/component
+  const categories = useMemo(() => {
+    const fromDb = [...new Set(materials.filter((m) => !m.demo).map((m) => m.category))].sort();
+    return fromDb.length ? fromDb : CATEGORIES;
+  }, [materials]);
   const [name, setName] = useState(initialName);
-  const [category, setCategory] = useState<Category>('Concrete');
+  const [category, setCategory] = useState<Category>(categories[0] ?? 'Concrete');
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [basis, setBasis] = useState<Basis>('PCF');
   const [unitWeight, setUnitWeight] = useState('');
   const [thk, setThk] = useState('');
@@ -117,11 +124,17 @@ export function MaterialModal({ initialName = '', onClose, onSaved }: { initialN
           <button className="btn" onClick={onClose}>Cancel</button>
           <button
             className="btn primary"
-            disabled={!valid}
-            onClick={() => {
-              const m = addMaterial({ name: name.trim(), category, basis, unitWeight: weight, thicknesses });
-              onSaved?.(m);
-              onClose();
+            disabled={!valid || saving}
+            onClick={async () => {
+              setSaving(true);
+              try {
+                const m = await addMaterial({ name: name.trim(), category, basis, unitWeight: weight, thicknesses });
+                onSaved?.(m);
+                onClose();
+              } catch (e) {
+                setSaveError((e as Error).message);
+                setSaving(false);
+              }
             }}
           >
             Add material
@@ -129,6 +142,7 @@ export function MaterialModal({ initialName = '', onClose, onSaved }: { initialN
         </>
       }
     >
+      {saveError && <div className="banner error">{saveError}</div>}
       <div className="form-grid">
         <label>
           Name
@@ -137,7 +151,7 @@ export function MaterialModal({ initialName = '', onClose, onSaved }: { initialN
         <label>
           Category
           <select value={category} onChange={(e) => setCategory(e.target.value as Category)}>
-            {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+            {categories.map((c) => <option key={c}>{c}</option>)}
           </select>
         </label>
         <label>

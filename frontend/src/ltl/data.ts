@@ -3,17 +3,8 @@
 
 export type Kind = 'floor' | 'wall';
 export type Basis = 'PCF' | 'PSF';
-export type Category =
-  | 'Concrete'
-  | 'Steel deck'
-  | 'Masonry'
-  | 'Insulation'
-  | 'Gypsum'
-  | 'Framing'
-  | 'Finish'
-  | 'Roofing'
-  | 'Glazing'
-  | 'Allowance';
+/** The Demo samples use these; materials-DB rows carry the spreadsheet's use/component text instead. */
+export type Category = string;
 
 export const CATEGORIES: Category[] = [
   'Concrete', 'Steel deck', 'Masonry', 'Insulation', 'Gypsum', 'Framing', 'Finish', 'Roofing', 'Glazing', 'Allowance',
@@ -30,6 +21,12 @@ export interface Material {
   thicknesses: number[];
   psfByThickness?: Record<string, number>;
   custom?: boolean;
+  /** materials DB: Horizontal / Vertical / Both */
+  orientation?: string;
+  /** materials DB: ASCE C3.1-1a, Firm DL, Proposed, User, or 'Demo sample' */
+  source?: string;
+  /** only used by the Demo project; not a materials DB row */
+  demo?: boolean;
 }
 
 export interface Layer {
@@ -37,6 +34,8 @@ export interface Layer {
   materialId: string;
   thickness: number;
   overridePsf: number | null;
+  /** IFC models: the Revit layer this came from and how the matcher resolved it */
+  revit?: { material: string; status: string; candidates: string[]; note?: string };
 }
 
 export type TypeStatus = 'todo' | 'done' | 'skipped' | 'merged';
@@ -59,8 +58,16 @@ export interface ElementType {
   assemblyName: string;
   layers: Layer[];
   status: TypeStatus;
+  /** allowance category chosen for this assembly (e.g. MEP, Solar) */
+  allowance: string | null;
   /** set when merged into another assembly as a sub-assembly; points at the governing assembly */
   parentId: string | null;
+  /** IFC models: wall | curtain_wall | floor | roof | ceiling */
+  ifcKind?: string;
+  /** IFC walls: net area with openings removed, SF (model total) */
+  netArea?: number;
+  /** IFC models: extractor flags (finish_only, placeholder_material, ...) */
+  flags?: string[];
 }
 
 let seq = 0;
@@ -84,6 +91,8 @@ export const MATERIALS: Material[] = [
   { id: 'mep', name: 'MEP allowance', category: 'Allowance', basis: 'PSF', unitWeight: 5, thicknesses: [0] },
   { id: 'ceiling', name: 'Suspended acoustical ceiling', category: 'Allowance', basis: 'PSF', unitWeight: 1, thicknesses: [0] },
 ];
+
+export const ALLOWANCE_OPTIONS = ['MEP', 'Concrete Ponding', 'Future Finish', 'Solar'];
 
 export const STRUCTURAL_MATERIALS = [
   'Concrete, Normal Weight',
@@ -115,6 +124,7 @@ function T(
     structuralMaterial: revitMaterial,
     materialVerified: false,
     status: 'todo',
+    allowance: null,
     parentId: null,
   };
 }
@@ -160,12 +170,20 @@ export interface PlanArea {
   typeId: string;
   points: Pt[];
   label: Pt;
+  /** IFC models: all polygons of the zone, with holes (points = the first outer ring) */
+  polys?: { outer: Pt[]; holes: Pt[][] }[];
+  /** IFC models: zone area from the extractor, SF */
+  areaSf?: number;
+  /** IFC models: every type stacked in this zone, top to bottom (floor + hung ceiling...) */
+  stackTypeIds?: string[];
 }
 
 export interface PlanWall {
   id: string;
   typeId: string;
   points: Pt[];
+  /** IFC models: net wall area with openings removed, SF */
+  netAreaSf?: number;
 }
 
 export interface Level {
@@ -173,6 +191,20 @@ export interface Level {
   name: string;
   areas: PlanArea[];
   walls: PlanWall[];
+  elevationFt?: number;
+  /** datum-only storey that carries almost nothing (hidden from level tabs by default) */
+  minor?: boolean;
+}
+
+export interface GridLine {
+  name: string;
+  at: number;
+}
+
+export interface Plan {
+  levels: Level[];
+  /** null when the model has no grids */
+  grid: { x: GridLine[]; y: GridLine[] } | null;
 }
 
 // Plan coordinates in feet; building is 150' × 90' on a 30' grid.
@@ -214,3 +246,5 @@ export const LEVELS: Level[] = [
     walls: perimeterWalls('W1', 'W2'),
   },
 ];
+
+export const DEMO_PLAN: Plan = { levels: LEVELS, grid: { x: GRID_X, y: GRID_Y } };

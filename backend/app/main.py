@@ -1,10 +1,12 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from urllib.parse import quote
 
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
-from . import db
+from . import db, materials, models_api
 from .site_api import cors_origins, router as site_router
 
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
@@ -13,16 +15,20 @@ MAX_UPLOAD_BYTES = 200 * 1024 * 1024
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     db.init_db()
+    materials.import_if_empty()
+    models_api.fail_interrupted_jobs()
     yield
     db.pool.close()
 
 
 app = FastAPI(title="Structural App API", lifespan=lifespan)
 app.include_router(site_router)
+app.include_router(materials.router)
+app.include_router(models_api.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins(),
-    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 
@@ -132,10 +138,14 @@ async def archive_site_report(files: list[UploadFile] = File(...)):
 def download_document(doc_id: int):
     with db.pool.connection() as conn:
         row = conn.execute(
-            "SELECT filename, content_type, data FROM documents WHERE id = %s", (doc_id,)
+            "SELECT filename, content_type, data, storage_path FROM documents WHERE id = %s", (doc_id,)
         ).fetchone()
     if row is None:
         raise HTTPException(404, "Document not found")
+    if row["storage_path"]:  # large upload kept on disk (IFC models)
+        if not Path(row["storage_path"]).is_file():
+            raise HTTPException(410, "The stored file is no longer on disk")
+        return FileResponse(row["storage_path"], media_type=row["content_type"], filename=row["filename"])
     return Response(
         content=bytes(row["data"]),
         media_type=row["content_type"],

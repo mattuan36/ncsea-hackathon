@@ -9,17 +9,20 @@ import { WireframeNote } from '../ltl/ui';
 import AssemblyStep from '../ltl/AssemblyStep';
 import PlanView from '../ltl/PlanView';
 
-const STEPS = ['Model', 'Floor types', 'Wall types', 'Type table', 'Build assemblies', 'Plan view'];
+const STEPS = ['Model', 'Floor types', 'Wall types', 'Build assemblies', 'Type table', 'Plan view'];
 
 export default function GravityPage() {
-  const { gravityStep: step, setGravityStep: setStep, model } = useLtl();
+  const { gravityStep: step, setGravityStep: setStep, model, isDemo, project, error } = useLtl();
   const go = (n: number) => setStep(Math.max(0, Math.min(STEPS.length - 1, n)));
 
   return (
     <div className="page page-scroll">
       <header className="page-header">
         <h1>Dead Load Takeoff</h1>
-        <p className="muted subtitle">Build dead-load assemblies and design criteria from the model, step by step.</p>
+        <p className="muted subtitle">
+          Build dead-load assemblies and design criteria from the model, step by step.
+          {isDemo ? <span className="tag demo">Demo · sample data</span> : <span className="tag">{project.kind === 'model' ? project.filename : ''}</span>}
+        </p>
       </header>
 
       <ol className="stepper">
@@ -33,11 +36,12 @@ export default function GravityPage() {
         ))}
       </ol>
 
+      {error && step > 0 && <div className="banner error">{error}</div>}
       {step === 0 && <ModelStep onNext={() => go(1)} />}
       {step === 1 && <FilterStep kind="floor" onBack={() => go(0)} onNext={() => go(2)} />}
       {step === 2 && <FilterStep kind="wall" onBack={() => go(1)} onNext={() => go(3)} />}
-      {step === 3 && <TypeTableStep onBack={() => go(2)} onNext={() => go(4)} />}
-      {step === 4 && <AssemblyStep onDone={() => go(5)} />}
+      {step === 3 && <AssemblyStep onDone={() => go(4)} />}
+      {step === 4 && <TypeTableStep onBack={() => go(3)} onNext={() => go(5)} />}
       {step === 5 && (
         <div className="card fill">
           <PlanView />
@@ -57,7 +61,7 @@ function StepFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled }: { onBa
 }
 
 function ModelStep({ onNext }: { onNext: () => void }) {
-  const { model, setModel } = useLtl();
+  const { model, setModel, project, models, job, startUpload, startFromDocument, openModel, openDemo, error: storeError } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
   const [modelsFolder, setModelsFolder] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -72,18 +76,24 @@ function ModelStep({ onNext }: { onNext: () => void }) {
 
   useEffect(() => {
     load().catch((e: Error) => setError(e.message));
-  }, []);
+  }, [models.length]);
 
   const upload = async (list: File[]) => {
-    if (!list.length || modelsFolder == null) return;
-    try {
-      const created = await uploadDocuments(modelsFolder, list);
-      await load();
-      setModel({ kind: 'ifc', label: created[0].filename });
-    } catch (e) {
-      setError((e as Error).message);
-    }
+    if (!list.length) return;
+    setError(null);
+    await startUpload(list[0]);
+    load().catch(() => undefined);
   };
+
+  const readyFor = (docId: number) => models.find((m) => m.document_id === docId && m.status === 'ready');
+  const openDoc = (d: DocumentRow) => {
+    const ready = readyFor(d.id);
+    if (ready) openModel(ready.id);
+    else if (/\.rvt$/i.test(d.filename)) setError('A .rvt file cannot be read: export the model to IFC from Revit and upload the .ifc.');
+    else startFromDocument(d.id);
+  };
+  const activeDoc = project.kind === 'model' ? models.find((m) => m.id === project.id)?.document_id : undefined;
+  const busy = job != null && job.status !== 'failed';
 
   return (
     <>
@@ -96,21 +106,23 @@ function ModelStep({ onNext }: { onNext: () => void }) {
           <ul className="pick-list">
             {files.map((f) => (
               <li key={f.id}>
-                <label className={model?.kind === 'ifc' && model.label === f.filename ? 'selected' : ''}>
+                <label className={activeDoc === f.id ? 'selected' : ''}>
                   <input
                     type="radio"
                     name="model"
-                    checked={model?.kind === 'ifc' && model.label === f.filename}
-                    onChange={() => setModel({ kind: 'ifc', label: f.filename })}
+                    checked={activeDoc === f.id}
+                    disabled={busy}
+                    onChange={() => openDoc(f)}
                   />
                   <Box size={16} /> {f.filename}
+                  {!readyFor(f.id) && <span className="tag">not read yet</span>}
                 </label>
               </li>
             ))}
             {files.length === 0 && <li className="muted small">No IFC files yet.</li>}
           </ul>
           <div className="row-gap">
-            <button className="btn" onClick={() => input.current?.click()}><Upload size={16} /> Upload IFC</button>
+            <button className="btn" disabled={busy} onClick={() => input.current?.click()}><Upload size={16} /> Upload IFC</button>
             <Link className="link" to="/documents">Open Documents</Link>
           </div>
           <input
@@ -194,7 +206,12 @@ function FilterStep({ kind, onBack, onNext }: { kind: Kind; onBack: () => void; 
                     <td className="col-check">
                       <input type="checkbox" className="checkbox" checked={t.include} onChange={(e) => updateType(t.id, { include: e.target.checked })} aria-label={`Include ${t.name}`} />
                     </td>
-                    <td>{t.name}{t.instances === 0 && <span className="tag">unused</span>}</td>
+                    <td>
+                      {t.name}
+                      {t.ifcKind && t.ifcKind !== t.kind && <span className={`tag kind-${t.ifcKind}`}>{KIND_LABEL[t.ifcKind] ?? t.ifcKind}</span>}
+                      {t.instances === 0 && <span className="tag">unused</span>}
+                      {t.flags?.map((f) => <span key={f} className="tag warn" title={FLAG_HINT[f]}>{f.replace(/_/g, ' ')}</span>)}
+                    </td>
                     <td className="num">{t.instances}</td>
                     <td className="num">{fmt(t.modelQty)}</td>
                   </tr>
@@ -222,6 +239,15 @@ function FragmentRows({ header, children }: { header: string | null; children: R
   );
 }
 
+const KIND_LABEL: Record<string, string> = { roof: 'Roof', ceiling: 'Ceiling', curtain_wall: 'Curtain wall', floor: 'Floor', wall: 'Wall' };
+const FLAG_HINT: Record<string, string> = {
+  finish_only: 'Finish layers only (soffit, wall tile): flagged by the extractor',
+  placeholder_material: 'Revit placeholder material (Default Wall/Floor): define the layers',
+  no_layers: 'No material layers in the IFC',
+  layer_thickness_unknown: 'A layer has no thickness in the IFC',
+  layer_name_thickness_mismatch: 'Layer name and modelled thickness disagree; modelled thickness used',
+};
+
 const STATUS_LABEL = { todo: 'To do', done: 'Done', skipped: 'Skipped', merged: 'Merged' } as const;
 
 function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => void }) {
@@ -236,7 +262,7 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
     <>
       <section className="card">
         <h2 className="card-title">Types in this takeoff</h2>
-        <p className="muted">{included.length} types included · {excluded} filtered out. Weights are prefilled from the model layers and refined in the next step.</p>
+        <p className="muted">{included.length} types included · {excluded} filtered out. Dead loads reflect the assemblies built in the previous step.</p>
         <table className="data-table">
           <thead>
             <tr>
@@ -256,7 +282,10 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
               return (
                 <FragmentRows key={t.id} header={header ? `${t.kind === 'floor' ? 'Floors' : 'Walls'} · ${t.revitMaterial}` : null}>
                   <tr>
-                    <td><span className="swatch" style={{ background: t.color }} /> {t.name}</td>
+                    <td>
+                      <span className="swatch" style={{ background: t.color }} /> {t.name}
+                      {t.ifcKind && t.ifcKind !== t.kind && <span className={`tag kind-${t.ifcKind}`}>{KIND_LABEL[t.ifcKind] ?? t.ifcKind}</span>}
+                    </td>
                     <td>{t.assemblyName}</td>
                     <td className="num">{t.instances}</td>
                     <td className="num">{fmt(t.modelQty)} {t.kind === 'floor' ? 'SF' : 'LF'}</td>
@@ -269,7 +298,7 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
           </tbody>
         </table>
       </section>
-      <StepFooter onBack={onBack} onNext={onNext} nextLabel="Start walkthrough" />
+      <StepFooter onBack={onBack} onNext={onNext} nextLabel="Next: plan view" />
     </>
   );
 }
