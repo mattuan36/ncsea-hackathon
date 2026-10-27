@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { archiveSiteReport } from "../api";
+import { readBuildingInfo } from "../ifc/buildingInfo";
+import { useLtl } from "../ltl/store";
 import { saveLocalDocuments } from "../localDocuments";
 import { csReportFile, type CsReportData } from "./csReport";
 import { listHazardDocuments, parseHazardCsv, preferredHazardCsv, type DocumentPick, type HazardImport } from "./hazardCsv";
@@ -160,14 +162,25 @@ async function seismicJson<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function formatLoaded(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function ifcFieldClass(phase: "idle" | "reading" | "filling" | "filled"): string {
+  if (phase === "idle") return "";
+  return `ifc-${phase}`;
+}
+
 export default function SeismicCsStep({
   report,
   projectName,
   onBack,
+  active = true,
 }: {
   report: SiteReport | null;
   projectName: string;
   onBack: () => void;
+  active?: boolean;
 }) {
   const [systems, setSystems] = useState<SystemOption[]>([]);
   const [periodTypes, setPeriodTypes] = useState<Record<string, string>>({});
@@ -202,6 +215,54 @@ export default function SeismicCsStep({
   const loadedHazard = useRef(false);
   const appliedReport = useRef<SiteReport | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { ifc, ifcStatus } = useLtl();
+  const [ifcPhase, setIfcPhase] = useState<"idle" | "reading" | "filling" | "filled">("idle");
+  const hnTouched = useRef(false);
+  const storiesTouched = useRef(false);
+  const playedFor = useRef<Uint8Array | null>(null);
+
+  useEffect(() => {
+    if (!active || ifcStatus !== "ready" || !ifc || playedFor.current === ifc.data) return;
+    const info = readBuildingInfo(ifc.data);
+    if (!info) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    hnTouched.current = false;
+    storiesTouched.current = false;
+    setIfcPhase("reading");
+    setHn("");
+    setStories("");
+    let frame = 0;
+    const wait = window.setTimeout(() => {
+      if (reduce) {
+        if (!hnTouched.current) setHn(formatLoaded(info.hnFt));
+        if (!storiesTouched.current) setStories(String(info.stories));
+        playedFor.current = ifc.data;
+        setIfcPhase("filled");
+        return;
+      }
+      setIfcPhase("filling");
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / 900);
+        const eased = 1 - (1 - t) ** 3;
+        if (!hnTouched.current) setHn(t < 1 ? (info.hnFt * eased).toFixed(1) : formatLoaded(info.hnFt));
+        if (!storiesTouched.current) {
+          const shown = Math.round(info.stories * eased);
+          setStories(shown > 0 ? String(shown) : "");
+        }
+        if (t < 1) frame = requestAnimationFrame(tick);
+        else {
+          playedFor.current = ifc.data;
+          setIfcPhase("filled");
+        }
+      };
+      frame = requestAnimationFrame(tick);
+    }, reduce ? 0 : 700);
+    return () => {
+      window.clearTimeout(wait);
+      cancelAnimationFrame(frame);
+    };
+  }, [active, ifc, ifcStatus]);
 
   const applyHazard = (hazard: HazardPayload, message: string) => {
     setProject(hazard.project_number || projectName);
@@ -586,13 +647,29 @@ export default function SeismicCsStep({
             Reported SDC
             <input value={part1Sdc} onChange={(event) => setPart1Sdc(event.target.value)} />
           </label>
-          <label>
+          <label className={ifcFieldClass(ifcPhase)}>
             hn (ft)
-            <input value={hn} inputMode="decimal" onChange={(event) => setHn(event.target.value)} />
+            <input
+              value={hn}
+              inputMode="decimal"
+              onChange={(event) => {
+                hnTouched.current = true;
+                setHn(event.target.value);
+              }}
+            />
+            {ifcPhase === "filled" && <span className="ifc-from">From the IFC</span>}
           </label>
-          <label>
+          <label className={ifcFieldClass(ifcPhase)}>
             Stories above base
-            <input value={stories} inputMode="numeric" onChange={(event) => setStories(event.target.value)} />
+            <input
+              value={stories}
+              inputMode="numeric"
+              onChange={(event) => {
+                storiesTouched.current = true;
+                setStories(event.target.value);
+              }}
+            />
+            {ifcPhase === "filled" && <span className="ifc-from">From the IFC</span>}
           </label>
           <label>
             W (kips)

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  createMaterialRow, deleteMaterialRow, fetchMaterialRows, fetchModel, fetchModelData, fetchModels, modelFromDocument,
+  createMaterialRow, deleteMaterialRow, downloadUrl, fetchMaterialRows, fetchModel, fetchModelData, fetchModels, modelFromDocument,
   patchMaterialRow, patchModelSettings, saveTypeDecision, uploadModel, type ModelRow,
 } from '../api';
 import { ALLOWANCE_OPTIONS, DEMO_PLAN, ELEMENT_TYPES, uid, type ElementType, type Material, type Plan } from './data';
@@ -14,6 +14,13 @@ export interface ModelSource {
 /** Demo = the in-memory sample building; model = an uploaded IFC whose data lives in Postgres. */
 export type Project = { kind: 'demo' } | { kind: 'model'; id: number; filename: string };
 
+export type IfcLoadStatus = 'idle' | 'loading' | 'ready' | 'error';
+
+export interface IfcModel {
+  name: string;
+  data: Uint8Array;
+}
+
 interface LtlState {
   project: Project;
   isDemo: boolean;
@@ -21,6 +28,12 @@ interface LtlState {
   setProjectName: (name: string) => void;
   model: ModelSource | null;
   setModel: (m: ModelSource | null) => void;
+  /** Bytes of the imported IFC. In memory only; cleared on reload. */
+  ifc: IfcModel | null;
+  ifcStatus: IfcLoadStatus;
+  ifcError: string | null;
+  loadIfcFile: (file: File) => Promise<void>;
+  loadIfcFromUrl: (name: string, url: string) => Promise<void>;
   gravityStep: number;
   setGravityStep: (n: number) => void;
   lateralStep: number;
@@ -76,7 +89,11 @@ function recalled(): string | null {
 export function LtlProvider({ children }: { children: ReactNode }) {
   const [project, setProject] = useState<Project>({ kind: 'demo' });
   const [projectName, setProjectNameState] = useState(DEMO_NAME);
-  const [model, setModel] = useState<ModelSource | null>(null);
+  const [model, setModelState] = useState<ModelSource | null>(null);
+  const [ifc, setIfc] = useState<IfcModel | null>(null);
+  const [ifcStatus, setIfcStatus] = useState<IfcLoadStatus>('idle');
+  const [ifcError, setIfcError] = useState<string | null>(null);
+  const loadSeq = useRef(0);
   const [gravityStep, setGravityStep] = useState(0);
   const [lateralStep, setLateralStep] = useState(0);
   const [dbMaterials, setDbMaterials] = useState<Material[]>([]);
@@ -147,6 +164,57 @@ export function LtlProvider({ children }: { children: ReactNode }) {
       .catch((e: Error) => setError(e.message));
   }, [dbMaterials]);
 
+  const clearIfc = useCallback(() => {
+    loadSeq.current += 1;
+    setIfc(null);
+    setIfcStatus('idle');
+    setIfcError(null);
+  }, []);
+
+  const setModel = useCallback((m: ModelSource | null) => {
+    setModelState(m);
+    if (!m || m.kind !== 'ifc') clearIfc();
+  }, [clearIfc]);
+
+  const readIfc = useCallback(async (name: string, read: () => Promise<Uint8Array>) => {
+    const id = ++loadSeq.current;
+    setModelState({ kind: 'ifc', label: name });
+    setIfc(null);
+    setIfcStatus('loading');
+    setIfcError(null);
+    try {
+      const data = await read();
+      if (id !== loadSeq.current) return;
+      setIfc({ name, data });
+      setIfcStatus('ready');
+    } catch (readError) {
+      if (id !== loadSeq.current) return;
+      setIfc(null);
+      setIfcStatus('error');
+      setIfcError(readError instanceof Error ? readError.message : 'Could not read the IFC file.');
+    }
+  }, []);
+
+  const loadIfcFile = useCallback(async (file: File) => {
+    if (!/\.ifc$/i.test(file.name)) {
+      loadSeq.current += 1;
+      setModelState({ kind: 'ifc', label: file.name });
+      setIfc(null);
+      setIfcStatus('error');
+      setIfcError('Choose an .ifc file.');
+      return;
+    }
+    await readIfc(file.name, async () => new Uint8Array(await file.arrayBuffer()));
+  }, [readIfc]);
+
+  const loadIfcFromUrl = useCallback(async (name: string, url: string) => {
+    await readIfc(name, async () => {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not download ${name} (${response.status}).`);
+      return new Uint8Array(await response.arrayBuffer());
+    });
+  }, [readIfc]);
+
   // ---- projects
   const openDemo = useCallback(() => {
     const d = demoState.current;
@@ -175,11 +243,12 @@ export function LtlProvider({ children }: { children: ReactNode }) {
       setProjectNameState(data.settings.project_name ?? data.filename.replace(/\.ifc(zip)?$/i, ''));
       setAllowanceOptions(data.settings.allowance_options ?? ALLOWANCE_OPTIONS);
       setModel({ kind: 'ifc', label: data.filename });
+      if (data.document_id != null) void loadIfcFromUrl(data.filename, downloadUrl(data.document_id));
       remember(String(id));
     } catch (e) {
       setError(`Could not open model ${id}: ${(e as Error).message}`);
     }
-  }, [types, projectName, allowanceOptions]);
+  }, [types, projectName, allowanceOptions, setModel, loadIfcFromUrl]);
 
   const refreshModels = useCallback(() => fetchModels().then(setModels).catch(() => setModels([])), []);
 
@@ -313,13 +382,14 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       project, isDemo: project.kind === 'demo',
-      projectName, setProjectName, model, setModel, gravityStep, setGravityStep, lateralStep, setLateralStep,
+      projectName, setProjectName, model, setModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl,
+      gravityStep, setGravityStep, lateralStep, setLateralStep,
       materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption,
       types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error,
     }),
-    [project, projectName, setProjectName, model, gravityStep, lateralStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
+    [project, projectName, setProjectName, model, setModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl, gravityStep, lateralStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption, types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error],
   );
