@@ -48,6 +48,8 @@ and the result is cached in `st.session_state` until you change inputs or clear 
 | `APP_NAME` | `Streamlit Starter` | Title shown in the sidebar and page tab |
 | `DATA_SOURCE` | `demo` | Label shown in the sidebar |
 | `API_KEY` | — | Server-side secret; read with `os.getenv("API_KEY")`, never render it |
+| `SKYCIV_USERNAME` | — | SkyCiv account email for the Load Generator |
+| `SKYCIV_KEY` | — | SkyCiv API key; never render it or commit it |
 
 If you deploy to Streamlit Community Cloud, put the same keys in `.streamlit/secrets.toml`
 (also git-ignored) or the app's secrets manager.
@@ -59,6 +61,22 @@ app.py            # inputs → process() → session_state cache → workspace g
 requirements.txt  # pinned Python dependencies
 .env.example      # env template (copy to .env)
 .python-version   # 3.14, for pyenv/asdf users
+code/             # georeferenced SkyCiv Load Generator connector
+docs/skyciv/      # Load Generator API documentation
+```
+
+## Load Generator
+
+Wind, snow, and seismic site data come from the SkyCiv Load Generator. The client in `code/skyciv_load_generator.py` sends a latitude and longitude and prints one JSON document with `seismic`, `wind`, and `snow`. Usage and the vendored API notes are in `docs/skyciv/README.md`. Put credentials in `.env` or a local `API_Key.txt`; both are gitignored.
+
+```bash
+python code/skyciv_load_generator.py \
+  --lat 37.795143 \
+  --lng -122.404312 \
+  --design-code asce7-22 \
+  --risk-category II \
+  --site-class D \
+  --output loads.json
 ```
 
 To adapt it, replace `process()` with your workload and swap the fields in the sidebar
