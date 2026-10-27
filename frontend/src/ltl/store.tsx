@@ -3,6 +3,9 @@ import {
   createMaterialRow, deleteMaterialRow, downloadUrl, fetchMaterialRows, fetchModel, fetchModelData, fetchModels, modelFromDocument,
   patchMaterialRow, patchModelSettings, saveTypeDecision, uploadModel, type ModelRow,
 } from '../api';
+import type { CsReportData } from '../lateral/csReport';
+import type { SiteClassRow } from '../lateral/siteClass';
+import type { SiteReport } from '../lateral/skyciv';
 import { ALLOWANCE_OPTIONS, DEMO_PLAN, ELEMENT_TYPES, uid, type ElementType, type Material, type Plan } from './data';
 import { DEMO_MATERIALS, decisionOf, fromModel, materialToRow, rowToMaterial, unitWeightPatch } from './model';
 
@@ -19,6 +22,14 @@ export type IfcLoadStatus = 'idle' | 'loading' | 'ready' | 'error';
 export interface IfcModel {
   name: string;
   data: Uint8Array;
+}
+
+export interface SiteClassReport {
+  key: string;
+  fingerprint: string;
+  rows: SiteClassRow[];
+  projectClass: string;
+  risk: string;
 }
 
 interface LtlState {
@@ -38,6 +49,12 @@ interface LtlState {
   setGravityStep: (n: number) => void;
   lateralStep: number;
   setLateralStep: (n: number) => void;
+  hazardReport: SiteReport | null;
+  setHazardReport: (report: SiteReport | null) => void;
+  baseShearReport: CsReportData | null;
+  setBaseShearReport: (report: CsReportData | null) => void;
+  siteClassComparison: SiteClassReport | null;
+  setSiteClassComparison: (report: SiteClassReport | null) => void;
   materials: Material[];
   /** 'offline': the materials API could not be reached; the Demo samples are shown instead */
   materialsSource: 'loading' | 'db' | 'offline';
@@ -96,6 +113,9 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const loadSeq = useRef(0);
   const [gravityStep, setGravityStep] = useState(0);
   const [lateralStep, setLateralStep] = useState(0);
+  const [hazardReport, setHazardReport] = useState<SiteReport | null>(null);
+  const [baseShearReport, setBaseShearReport] = useState<CsReportData | null>(null);
+  const [siteClassComparison, setSiteClassComparison] = useState<SiteClassReport | null>(null);
   const [dbMaterials, setDbMaterials] = useState<Material[]>([]);
   const [localMaterials, setLocalMaterials] = useState<Material[]>(DEMO_MATERIALS);
   const [materialsSource, setMaterialsSource] = useState<LtlState['materialsSource']>('loading');
@@ -384,12 +404,14 @@ export function LtlProvider({ children }: { children: ReactNode }) {
       project, isDemo: project.kind === 'demo',
       projectName, setProjectName, model, setModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl,
       gravityStep, setGravityStep, lateralStep, setLateralStep,
+      hazardReport, setHazardReport, baseShearReport, setBaseShearReport,
+      siteClassComparison, setSiteClassComparison,
       materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption,
       types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error,
     }),
-    [project, projectName, setProjectName, model, setModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl, gravityStep, lateralStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
+    [project, projectName, setProjectName, model, setModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl, gravityStep, lateralStep, hazardReport, baseShearReport, siteClassComparison, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption, types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error],
   );

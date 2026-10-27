@@ -452,7 +452,13 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .ifc-overlay.ifc-error { color: #991b1b; }
 .ifc-hint { margin: 8px 0 0; }
 .spectrum { width: 100%; height: 180px; }
+.spectrum-tall { height: 220px; }
 .spectrum-label { font-size: 11px; fill: var(--muted); }
+.legend { display: flex; gap: 16px; margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.swatch.sds { background: #1d4ed8; }
+.swatch.sd1 { background: #94a3b8; }
+.data-table tr.project td { background: var(--accent-bg); }
+.data-table td.site-error { color: #991b1b; white-space: normal; }
 @media (max-width: 760px) {
   .match-grid, .metric-row { grid-template-columns: 1fr; }
 }
