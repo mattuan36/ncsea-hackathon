@@ -2,14 +2,18 @@ import { useLtl } from '../ltl/store';
 import { WireframeNote } from '../ltl/ui';
 
 export default function SettingsPage() {
-  const { projectName, setProjectName, model } = useLtl();
+  const { projectName, setProjectName, model, isDemo } = useLtl();
 
   return (
     <div className="page page-scroll">
       <header className="page-header">
         <h1>Settings</h1>
       </header>
-      <WireframeNote>Wireframe: changes here live in the browser session only and reset on reload.</WireframeNote>
+      <WireframeNote>
+        {isDemo
+          ? 'Demo project: changes here live in the browser session only and reset on reload.'
+          : 'Saved with the uploaded model: the project name is kept after a reload.'}
+      </WireframeNote>
 
       <section className="card">
         <h2 className="card-title">Project</h2>

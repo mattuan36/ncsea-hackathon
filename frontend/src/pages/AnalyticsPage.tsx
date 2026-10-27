@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLtl } from '../ltl/store';
-import { LEVELS } from '../ltl/data';
 import { assemblyPsf, fmt, levelTakeoff } from '../ltl/calc';
 
 export default function AnalyticsPage() {
-  const { types, materials, model } = useLtl();
+  const { types, materials, model, plan, isDemo } = useLtl();
 
   const { rows, floorSF, wallLF, kips } = useMemo(() => {
     const agg = new Map<string, { kips: number; qty: number }>();
-    LEVELS.forEach((l) =>
+    plan.levels.forEach((l) =>
       levelTakeoff(l, types, materials).forEach((e) => {
         const cur = agg.get(e.govId) ?? { kips: 0, qty: 0 };
         agg.set(e.govId, { kips: cur.kips + e.kips, qty: cur.qty + e.qty });
@@ -24,7 +23,7 @@ export default function AnalyticsPage() {
       wallLF: rows.filter((r) => r.t.kind === 'wall').reduce((s, r) => s + r.qty, 0),
       kips: rows.reduce((s, r) => s + r.kips, 0),
     };
-  }, [types, materials]);
+  }, [types, materials, plan]);
 
   const included = types.filter((t) => t.include);
   const reviewed = included.filter((t) => t.status === 'done' || t.status === 'merged').length;
@@ -36,7 +35,7 @@ export default function AnalyticsPage() {
       <header className="page-header">
         <h1>Analytics</h1>
         <p className="muted subtitle">
-          Takeoff summary across {LEVELS.length} plan levels{model ? ` · ${model.label}` : ' · sample model'}.
+          Takeoff summary across {plan.levels.length} plan levels{model ? ` · ${model.label}` : ' · Demo sample model'}.
         </p>
       </header>
 
@@ -65,7 +64,7 @@ export default function AnalyticsPage() {
           ))}
         </div>
         <p className="muted small">
-          Walls: psf × height × length. Full breakdown in <Link className="link" to="/reports">Reports</Link>.
+          Walls: {isDemo ? 'psf × height × length' : 'psf × net wall area (openings removed)'}. Full breakdown in <Link className="link" to="/reports">Reports</Link>.
         </p>
       </section>
     </div>

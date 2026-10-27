@@ -6,6 +6,10 @@ import { useLtl } from './store';
 import { MaterialModal, MaterialPicker, Modal } from './ui';
 import AssemblyGraphic from './AssemblyGraphic';
 
+const MATCH_LABEL: Record<string, string> = {
+  matched: 'matched', suggested: 'suggested, verify', ambiguous: 'pick a row', no_db_row: 'no DB row', placeholder: 'placeholder', unknown: 'not matched',
+};
+
 /** Walk order: floors then walls, grouped by the structural material read from Revit. */
 function walkOrder(types: ElementType[]) {
   return types
@@ -111,9 +115,9 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
               value={t.structuralMaterial}
               onChange={(e) => updateType(t.id, { structuralMaterial: e.target.value, materialVerified: false })}
             >
-              {STRUCTURAL_MATERIALS.map((m) => <option key={m}>{m}</option>)}
+              {[...new Set([...STRUCTURAL_MATERIALS, t.revitMaterial, t.structuralMaterial])].map((m) => <option key={m}>{m}</option>)}
             </select>
-            {t.structuralMaterial !== t.revitMaterial && <span className="muted small">Revit says “{t.revitMaterial}”</span>}
+            {t.structuralMaterial !== t.revitMaterial && <span className="muted small">{t.ifcKind ? 'Guessed from the IFC layers' : 'Revit says'} “{t.revitMaterial}”</span>}
             {t.materialVerified ? (
               <span className="ok-line"><Check size={14} /> Verified by engineer</span>
             ) : (
@@ -169,10 +173,16 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
                             }}
                             onCreate={(name) => setNewMaterialFor({ layerId: l.id, name })}
                           />
+                          {l.revit && (
+                            <span className="layer-src muted small" title={l.revit.note}>
+                              Revit: {l.revit.material} · <span className={`match-${l.revit.status}`}>{MATCH_LABEL[l.revit.status] ?? l.revit.status}</span>
+                              {l.revit.status === 'ambiguous' && l.revit.candidates.length > 0 && ` (${l.revit.candidates.length} candidate rows)`}
+                            </span>
+                          )}
                         </td>
                         <td>
                           <select value={l.thickness} onChange={(e) => patchLayer(l.id, { thickness: Number(e.target.value) })} aria-label="Thickness">
-                            {(m?.thicknesses ?? [l.thickness]).map((th) => <option key={th} value={th}>{fmtIn(th)}</option>)}
+                            {[...new Set([...(m?.thicknesses ?? []), l.thickness])].sort((a, b) => a - b).map((th) => <option key={th} value={th}>{fmtIn(th)}</option>)}
                           </select>
                         </td>
                         <td className="num muted small">{m ? basisLabel(m) : '—'}</td>

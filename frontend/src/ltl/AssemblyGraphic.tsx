@@ -4,7 +4,8 @@ import { fmt, fmtIn, layerPsf } from './calc';
 import { useLtl } from './store';
 
 type Pattern = 'dots' | 'hatch' | 'cross' | 'vert' | 'brick' | 'zigzag';
-const CAT_STYLE: Record<Category, { fill: string; pattern?: Pattern }> = {
+type Style = { fill: string; pattern?: Pattern };
+const CAT_STYLE: Record<string, Style> = {
   Concrete: { fill: '#e5e7eb', pattern: 'dots' },
   'Steel deck': { fill: '#cbd5e1', pattern: 'zigzag' },
   Masonry: { fill: '#f3d9bf', pattern: 'brick' },
@@ -16,6 +17,19 @@ const CAT_STYLE: Record<Category, { fill: string; pattern?: Pattern }> = {
   Glazing: { fill: '#dbeafe', pattern: 'hatch' },
   Allowance: { fill: 'none' },
 };
+
+// materials-DB rows carry the spreadsheet's use/component; pick a section style from the words
+const STYLE_WORDS: [RegExp, Category][] = [
+  [/allowance|mep|ceiling|ponding/i, 'Allowance'], [/deck/i, 'Steel deck'], [/concrete|slab|fill|topping/i, 'Concrete'],
+  [/cmu|brick|masonry|stone|block/i, 'Masonry'], [/insulat/i, 'Insulation'], [/gyp|plaster/i, 'Gypsum'],
+  [/stud|framing|joist|wood|timber/i, 'Framing'], [/roof|membrane|shingle/i, 'Roofing'], [/glass|glaz|curtain|window/i, 'Glazing'],
+];
+
+function styleOf(category: string | undefined, name: string | undefined): Style {
+  if (category && CAT_STYLE[category]) return CAT_STYLE[category];
+  const text = `${name ?? ''} ${category ?? ''}`;
+  return CAT_STYLE[STYLE_WORDS.find(([re]) => re.test(text))?.[1] ?? 'Finish'];
+}
 
 function Patterns({ pid }: { pid: string }) {
   const s = '#64748b';
@@ -50,7 +64,7 @@ export default function AssemblyGraphic({ kind, layers, compact = false }: { kin
   const pid = `p${useId().replace(/:/g, '')}`;
   const rows = layers.map((l, i) => {
     const m = materials.find((x) => x.id === l.materialId);
-    return { l, m, n: i + 1, psf: layerPsf(l, materials), style: CAT_STYLE[m?.category ?? 'Finish'] };
+    return { l, m, n: i + 1, psf: layerPsf(l, materials), style: styleOf(m?.category, m?.name) };
   });
   const solid = rows.filter((r) => r.l.thickness > 0);
   const allowances = rows.filter((r) => r.l.thickness === 0);

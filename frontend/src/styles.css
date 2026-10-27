@@ -313,14 +313,15 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .seg button { border: 0; background: #fff; padding: 6px 12px; cursor: pointer; font-weight: 500; color: var(--muted); }
 .seg button.on { background: var(--accent); color: #fff; }
-.plan-svg { width: 100%; height: auto; display: block; margin: 8px; width: calc(100% - 16px); box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12); }
+/* label sizes are em of the plan scale PlanView sets on the svg (1px = Demo, 150 ft) */
+.plan-svg { font-size: 1px; width: 100%; height: auto; display: block; margin: 8px; width: calc(100% - 16px); box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12); }
 .plan-svg .grid line { stroke: #94a3b8; stroke-width: 0.2; stroke-dasharray: 2 1; }
 .plan-svg .grid circle { fill: #fff; stroke: #64748b; stroke-width: 0.3; }
 .plan-svg .grid text { font-size: 3.4px; fill: #334155; font-weight: 600; }
 .plan-svg .markup { cursor: pointer; transition: opacity 0.15s; }
-.plan-svg .area-name { font-size: 3px; font-weight: 600; fill: #0f172a; paint-order: stroke; stroke: #fff; stroke-width: 0.8px; }
-.plan-svg .area-qty { font-size: 2.8px; fill: #334155; paint-order: stroke; stroke: #fff; stroke-width: 0.8px; }
-.plan-svg .wall-qty { font-size: 2.4px; font-weight: 600; fill: #0f172a; paint-order: stroke; stroke: #fff; stroke-width: 0.9px; }
+.plan-svg .area-name { font-size: 3em; font-weight: 600; fill: #0f172a; paint-order: stroke; stroke: #fff; stroke-width: 0.267em; }
+.plan-svg .area-qty { font-size: 2.8em; fill: #334155; paint-order: stroke; stroke: #fff; stroke-width: 0.286em; }
+.plan-svg .wall-qty { font-size: 2.4em; font-weight: 600; fill: #0f172a; paint-order: stroke; stroke: #fff; stroke-width: 0.375em; }
 .legend { border: 1px solid var(--border); border-radius: 8px; background: #fff; padding: 10px; display: flex; flex-direction: column; gap: 10px; align-self: start; }
 .legend-head { display: flex; justify-content: space-between; align-items: center; }
 .legend-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
@@ -417,3 +418,17 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
   .sheet { break-after: page; box-shadow: none; border: 0; }
   body { background: #fff; }
 }
+
+/* IFC model reading */
+.progress { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin: 6px 0; }
+.progress > div { height: 100%; background: var(--accent); transition: width 0.4s; }
+.card.job.failed { border-color: #fecaca; }
+.tag.demo { background: #fef3c7; color: #92400e; }
+.tag.warn { background: #fff7ed; color: #9a3412; }
+.tag.kind-roof { background: #f3e8ff; color: #6b21a8; }
+.tag.kind-ceiling { background: #ecfeff; color: #155e75; }
+.tag.kind-curtain_wall { background: #e0f2fe; color: #075985; }
+.layer-src { display: block; margin-top: 2px; }
+.match-matched { color: #166534; }
+.match-suggested, .match-ambiguous { color: #9a3412; }
+.match-no_db_row, .match-placeholder, .match-unknown { color: #991b1b; }

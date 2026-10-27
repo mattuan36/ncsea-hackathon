@@ -41,21 +41,23 @@ export interface TakeoffEntry {
 export function levelTakeoff(level: Level, types: ElementType[], materials: Material[]): TakeoffEntry[] {
   const byId = new Map(types.map((t) => [t.id, t]));
   const out = new Map<string, TakeoffEntry>();
-  const add = (typeId: string, kind: Kind, qty: number) => {
+  /** wallAreaSf: IFC walls carry their net area (openings removed); the Demo uses height × length */
+  const add = (typeId: string, kind: Kind, qty: number, wallAreaSf?: number) => {
     const t = byId.get(typeId);
     if (!t || !t.include) return;
     const govId = t.parentId ?? t.id;
     const gov = byId.get(govId) ?? t;
     const psf = assemblyPsf(gov.layers, materials);
-    const kips = kind === 'floor' ? (psf * qty) / 1000 : (psf * (t.height ?? 0) * qty) / 1000;
+    const kips = kind === 'floor' ? (psf * qty) / 1000 : (psf * (wallAreaSf ?? (t.height ?? 0) * qty)) / 1000;
     const e = out.get(govId) ?? { govId, kind, qty: 0, kips: 0, memberIds: [] };
     e.qty += qty;
     e.kips += kips;
     if (!e.memberIds.includes(typeId)) e.memberIds.push(typeId);
     out.set(govId, e);
   };
-  level.areas.forEach((a) => add(a.typeId, 'floor', polygonArea(a.points)));
-  level.walls.forEach((w) => add(w.typeId, 'wall', polylineLength(w.points)));
+  // an IFC zone stacks several types (floor + hung ceiling): each one carries the zone's area
+  level.areas.forEach((a) => (a.stackTypeIds ?? [a.typeId]).forEach((id) => add(id, 'floor', a.areaSf ?? polygonArea(a.points))));
+  level.walls.forEach((w) => add(w.typeId, 'wall', polylineLength(w.points), w.netAreaSf));
   return [...out.values()].sort((a, b) => (a.kind === b.kind ? b.qty - a.qty : a.kind === 'floor' ? -1 : 1));
 }
 
