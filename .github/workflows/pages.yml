@@ -34,6 +34,7 @@ jobs:
         working-directory: frontend
         env:
           PAGES_BASE: /ncsea-hackathon/
+          VITE_API_BASE: ${{ vars.API_BASE }}
       - run: cp dist/index.html dist/404.html && touch dist/.nojekyll
         working-directory: frontend
       - uses: actions/upload-pages-artifact@v3
