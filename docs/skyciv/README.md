@@ -43,20 +43,74 @@ For a US site, `asce7-22` returns wind, snow, and seismic. `asce7-16` does too. 
 
 Set `SKYCIV_USERNAME` and `SKYCIV_KEY` in the environment, or copy `.env.example` to `.env`. A local `API_Key.txt` at the repo root is also read, with `USERNAME` and `SKY_CIV_KEY`. That file is gitignored. Do not commit a key.
 
-## Run a site check
+## Environment
+
+From the repo root, `uv sync` creates `.venv` from `pyproject.toml`, `uv.lock`, and `.python-version`. Run the connector with `uv run` so `python-dotenv` can load `.env`.
+
+## JSON output
+
+A site check writes one JSON object. The data keys are `seismic`, `wind`, and `snow`. `site` records the coordinate that was sent and the address SkyCiv resolved. `--full` adds `seismic.spectra`. `--output loads.json` writes the file instead of stdout.
+
+`wind.wind_speed` is `all_wind_speed` for the requested risk category. On the Kearny Street check the API's own scalar `wind_speed` was the Category IV value, so the connector does not copy that scalar through unchanged.
 
 ```bash
-python code/skyciv_load_generator.py \
+uv run python code/skyciv_load_generator.py \
   --lat 37.795143 \
   --lng -122.404312 \
   --design-code asce7-22 \
   --risk-category II \
-  --site-class D
+  --site-class D \
+  --output loads.json
 ```
 
-Add `--full` to include the response spectra. From Python, put the `code` directory on `sys.path` and import `skyciv_load_generator`. The folder is not a package: the name `code` is already a Python standard-library module.
+Recorded ASCE 7-22 output for that coordinate, Risk Category II, Site Class D. Spectra are omitted here; `--full` adds them under `seismic.spectra`.
 
-`wind_data.all_wind_speed` is keyed by risk category. On the Kearny Street check the scalar `wind_data.wind_speed` was the Category IV speed, not the category requested. The connector reports `all_wind_speed` for the requested category.
+```json
+{
+  "seismic": {
+    "ss": 1.5,
+    "s1": 0.6,
+    "sms": 1.63,
+    "sm1": 1.7,
+    "sds": 1.09,
+    "sd1": 1.13,
+    "sdc": "D",
+    "pgam": 0.55,
+    "ts": 1.04,
+    "t0": 0.209,
+    "tl": 12
+  },
+  "wind": {
+    "wind_speed": 92,
+    "wind_speed_unit": "mph",
+    "all_wind_speed": {
+      "I": 87,
+      "II": 92,
+      "III": 99,
+      "IV": 103,
+      "10-year": 61,
+      "25-year": 68,
+      "50-year": 73,
+      "100-year": 78
+    }
+  },
+  "snow": {
+    "snow_load": "not available",
+    "w2": 0.25
+  },
+  "site": {
+    "latitude": 37.795143,
+    "longitude": -122.404312,
+    "address": "750 Kearny St, San Francisco, CA 94108, USA",
+    "elevation_m": 7.15,
+    "design_code": "asce7-22",
+    "risk_category": "II",
+    "site_class": "D"
+  }
+}
+```
+
+From Python, put the `code` directory on `sys.path` and import `skyciv_load_generator`. The folder is not a package: the name `code` is already a Python standard-library module. `SiteLoads.as_json()` returns the same document.
 
 ## Checked site
 

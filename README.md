@@ -7,33 +7,28 @@ A minimal Streamlit boilerplate: sidebar inputs, a column-based workspace grid, 
 
 | | |
 |---|---|
-| Python | **3.11+** — tested on **3.14.3** (see `.python-version`) |
+| Python | **3.12+** — `uv sync` uses **3.14** from `.python-version` |
 | Streamlit | **1.66.1** (latest) — uses the current `width="stretch"` API, not the deprecated `use_container_width` |
 | OS | Any (Windows, macOS, Linux) |
 
-All Python packages are pinned in `requirements.txt`. Streamlit pulls in its own
-dependencies (Altair, PyArrow, Tornado, …) automatically.
+Packages and the virtual environment are defined with [uv](https://docs.astral.sh/uv/). Direct dependencies are pinned in `pyproject.toml`. `uv.lock` pins the full tree, including Streamlit's own dependencies. `.python-version` selects Python 3.14 for `uv sync`.
 
 ## Setup
 
-```powershell
-# 1. Create and activate a virtual environment
-python -m venv venv
-.\venv\Scripts\Activate.ps1          # Windows PowerShell
-# source venv/bin/activate           # macOS / Linux
+Install uv, then create `.venv` and install the lockfile:
 
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Create your local environment file
-Copy-Item .env.example .env          # Windows
-# cp .env.example .env               # macOS / Linux
+```bash
+# https://docs.astral.sh/uv/getting-started/installation/
+uv sync
+cp .env.example .env
 ```
+
+`uv sync` creates `.venv` in the repo root. That directory is gitignored.
 
 ## Run
 
-```powershell
-streamlit run app.py
+```bash
+uv run streamlit run app.py
 ```
 
 Open <http://localhost:8501>. The sidebar controls the inputs; **Run** applies them,
@@ -48,6 +43,8 @@ and the result is cached in `st.session_state` until you change inputs or clear 
 | `APP_NAME` | `Streamlit Starter` | Title shown in the sidebar and page tab |
 | `DATA_SOURCE` | `demo` | Label shown in the sidebar |
 | `API_KEY` | — | Server-side secret; read with `os.getenv("API_KEY")`, never render it |
+| `SKYCIV_USERNAME` | — | SkyCiv account email for the Load Generator |
+| `SKYCIV_KEY` | — | SkyCiv API key; never render it or commit it |
 
 If you deploy to Streamlit Community Cloud, put the same keys in `.streamlit/secrets.toml`
 (also git-ignored) or the app's secrets manager.
@@ -56,16 +53,27 @@ If you deploy to Streamlit Community Cloud, put the same keys in `.streamlit/sec
 
 ```
 app.py            # inputs → process() → session_state cache → workspace grid
-requirements.txt  # pinned Python dependencies
+pyproject.toml    # direct dependencies for uv
+uv.lock           # locked environment
 .env.example      # env template (copy to .env)
-.python-version   # 3.14, for pyenv/asdf users
+.python-version   # 3.14, used by uv sync
 code/             # georeferenced SkyCiv Load Generator connector
 docs/skyciv/      # Load Generator API documentation
 ```
 
 ## Load Generator
 
-Wind, snow, and seismic site data come from the SkyCiv Load Generator. The client in `code/skyciv_load_generator.py` sends a latitude and longitude. Usage and the vendored API notes are in `docs/skyciv/README.md`. Put credentials in the environment or a local `API_Key.txt`; that file is gitignored.
+Wind, snow, and seismic site data come from the SkyCiv Load Generator. The client in `code/skyciv_load_generator.py` sends a latitude and longitude and prints one JSON document with `seismic`, `wind`, and `snow`. Usage and the vendored API notes are in `docs/skyciv/README.md`. Put credentials in `.env` or a local `API_Key.txt`; both are gitignored.
+
+```bash
+uv run python code/skyciv_load_generator.py \
+  --lat 37.795143 \
+  --lng -122.404312 \
+  --design-code asce7-22 \
+  --risk-category II \
+  --site-class D \
+  --output loads.json
+```
 
 To adapt it, replace `process()` with your workload and swap the fields in the sidebar
 `st.form`; the caching and layout wiring stay unchanged.

@@ -17,7 +17,7 @@ import os
 import sys
 import urllib.error
 import urllib.request
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
 
 API_URL = "https://api.skyciv.com/v3"
@@ -54,8 +54,17 @@ def _read_key_file() -> dict[str, str]:
     return values
 
 
+def _load_env_file() -> None:
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(_repo_root() / ".env")
+
+
 def resolve_credentials(username: str | None = None, key: str | None = None) -> tuple[str, str]:
     """Resolve a SkyCiv username and API key without printing either."""
+    _load_env_file()
     file_values = _read_key_file()
     resolved_username = (
         username
@@ -162,8 +171,35 @@ class SiteLoads:
     spectra: dict = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> dict:
-        return asdict(self)
+    def as_json(self, *, include_spectra: bool = False) -> dict:
+        """JSON document whose data keys are seismic, wind, and snow."""
+        seismic = dict(self.seismic)
+        if include_spectra and self.spectra:
+            seismic["spectra"] = self.spectra
+        document = {
+            "seismic": seismic,
+            "wind": {
+                "wind_speed": self.wind_speed,
+                "wind_speed_unit": self.wind_speed_unit,
+                "all_wind_speed": self.wind_by_category,
+            },
+            "snow": self.snow,
+            "site": {
+                "latitude": self.latitude,
+                "longitude": self.longitude,
+                "resolved_latitude": self.resolved_latitude,
+                "resolved_longitude": self.resolved_longitude,
+                "address": self.address,
+                "elevation_m": self.elevation_m,
+                "country": self.country,
+                "design_code": self.design_code,
+                "risk_category": self.risk_category,
+                "site_class": self.site_class,
+            },
+        }
+        if self.notes:
+            document["notes"] = self.notes
+        return document
 
 
 class LoadGenerator:
@@ -340,7 +376,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--full",
         action="store_true",
-        help="Include response spectra in the printed JSON",
+        help="Include response spectra in the seismic object",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Write the JSON document to this path instead of stdout",
     )
     args = parser.parse_args(argv)
     try:
@@ -355,11 +396,11 @@ def main(argv: list[str] | None = None) -> int:
         print(exc, file=sys.stderr)
         return 1
 
-    payload = result.to_dict()
-    if not args.full:
-        payload.pop("spectra", None)
-    json.dump(payload, sys.stdout, indent=2)
-    sys.stdout.write("\n")
+    text = json.dumps(result.as_json(include_spectra=args.full), indent=2) + "\n"
+    if args.output:
+        args.output.write_text(text)
+    else:
+        sys.stdout.write(text)
     return 0
 
 
