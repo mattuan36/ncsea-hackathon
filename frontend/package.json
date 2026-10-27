@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
     "fflate": "0.8.3",
+    "katex": "^0.16.22",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",

@@ -1,4 +1,5 @@
 import { Download } from "lucide-react";
+import { FormulaList, siteFormulas } from "../math/Equation";
 import { useLtl } from "../ltl/store";
 import { downloadBytes, exportFilename, hazardCsv, hazardPdf } from "./hazardExport";
 import { compareSeismicDesignCategory } from "./seismic";
@@ -96,7 +97,9 @@ export default function ReportView({ report }: { report: SiteReport }) {
       <h3 className="section-label">Snow</h3>
       <ScalarTable values={report.snow} empty="Snow is not available for this site." />
 
-      <h3 className="section-label">Seismic</h3>
+      <h3 className="section-label">Seismic parameters</h3>
+      <p className="muted small">ASCE 7 Section 11.4. Reported values stay on the right-hand side when this site returned them.</p>
+      <FormulaList formulas={siteFormulas(report.seismic)} />
       <ScalarTable values={ordered(report.seismic)} empty="Seismic parameters were not returned." />
 
       {spectra.length > 0 && (

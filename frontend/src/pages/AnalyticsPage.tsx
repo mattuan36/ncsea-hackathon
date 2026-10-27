@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Upload } from 'lucide-react';
 import { useLtl } from '../ltl/store';
+import { deadLoadFormulas, FormulaList } from '../math/Equation';
 import { assemblyPsf, fmt, levelFloorArea, levelTakeoff } from '../ltl/calc';
 import IfcViewer from '../ifc/IfcViewer';
 
@@ -89,8 +90,9 @@ export default function AnalyticsPage() {
             </div>
           ))}
         </div>
+        <FormulaList formulas={deadLoadFormulas(!isDemo)} />
         <p className="muted small">
-          Walls: {isDemo ? 'psf × height × length' : 'psf × net wall area (openings removed)'}. Full breakdown in <Link className="link" to="/reports">Reports</Link>.
+          Full breakdown in <Link className="link" to="/reports">Reports</Link>.
         </p>
       </section>
     </div>
