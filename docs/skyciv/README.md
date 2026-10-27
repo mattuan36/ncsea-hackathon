@@ -43,10 +43,6 @@ For a US site, `asce7-22` returns wind, snow, and seismic. `asce7-16` does too. 
 
 Set `SKYCIV_USERNAME` and `SKYCIV_KEY` in the environment, or copy `.env.example` to `.env`. A local `API_Key.txt` at the repo root is also read, with `USERNAME` and `SKY_CIV_KEY`. That file is gitignored. Do not commit a key.
 
-## Environment
-
-From the repo root, `uv sync` creates `.venv` from `pyproject.toml`, `uv.lock`, and `.python-version`. Run the connector with `uv run` so `python-dotenv` can load `.env`.
-
 ## JSON output
 
 A site check writes one JSON object. The data keys are `seismic`, `wind`, and `snow`. `site` records the coordinate that was sent and the address SkyCiv resolved. `--full` adds `seismic.spectra`. `--output loads.json` writes the file instead of stdout.
@@ -54,7 +50,7 @@ A site check writes one JSON object. The data keys are `seismic`, `wind`, and `s
 `wind.wind_speed` is `all_wind_speed` for the requested risk category. On the Kearny Street check the API's own scalar `wind_speed` was the Category IV value, so the connector does not copy that scalar through unchanged.
 
 ```bash
-uv run python code/skyciv_load_generator.py \
+python code/skyciv_load_generator.py \
   --lat 37.795143 \
   --lng -122.404312 \
   --design-code asce7-22 \

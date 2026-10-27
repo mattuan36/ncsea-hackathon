@@ -1,8 +1,13 @@
-"""Streamlit boilerplate.
+"""Streamlit boilerplate for the NCSEA hackathon workspace.
 
-Layout: wide page, sidebar for inputs, column grid for the workspace.
-Processing results live in ``st.session_state`` so widget interaction,
-tab switches and any other rerun never lose the computed output.
+The page is a wide layout. The sidebar collects the inputs that drive a
+demo series, and the main area renders that series as metrics, a line
+chart, and a table. Computed frames live in ``st.session_state`` so a
+widget change, a tab switch, or any other rerun keeps the last result.
+
+The domain functions (``Inputs``, ``Result``, ``process``) do not call
+Streamlit. The script below them is the page: it builds the form, caches
+``process`` by input value, and draws the workspace.
 """
 
 from __future__ import annotations
@@ -29,7 +34,16 @@ DATA_SOURCE = os.getenv("DATA_SOURCE", "demo")
 # --- domain ---------------------------------------------------------------
 @dataclass(frozen=True)
 class Inputs:
-    """Everything that affects processing. Frozen so it hashes predictably."""
+    """Values that change the demo series. Frozen so equal forms share a cache key.
+
+    Attributes:
+        start: First day of the generated series.
+        days: Number of daily points, including the start day.
+        baseline: Level of the series on day zero, before growth.
+        growth: Percent change applied once per day, compounded.
+        noise: Percent standard deviation of the multiplicative noise.
+        currency: Label drawn next to the metrics. It does not convert values.
+    """
 
     start: date
     days: int
@@ -41,17 +55,46 @@ class Inputs:
 
 @dataclass
 class Result:
+    """One cached run of ``process``.
+
+    Attributes:
+        frame: Daily ``date``, ``value``, and ``rolling_7d`` columns.
+        key: Short hash of the ``Inputs`` that produced ``frame``.
+    """
+
     frame: pd.DataFrame
     key: str
 
 
 def _cache_key(inputs: Inputs) -> str:
+    """Return a stable 16-character id for this input set.
+
+    The hash covers every field, so two forms that differ only in currency
+    or noise do not reuse each other's frame. The same form on a later
+    rerun produces the same id and the same random series.
+    """
     payload = repr(sorted(asdict(inputs).items()))
     return hashlib.sha256(payload.encode()).hexdigest()[:16]
 
 
 def process(inputs: Inputs) -> Result:
-    """Replace this with the real workload. Keep it free of Streamlit calls."""
+    """Build the demo series for ``inputs``.
+
+    Replace this with the real workload. Keep the function free of
+    Streamlit calls so tests and reruns can call it directly.
+
+    The series is ``baseline`` compounded by ``growth`` percent each day,
+    then scaled by normal noise whose standard deviation is ``noise``
+    percent. The random draw is seeded from ``_cache_key``, so identical
+    inputs always return the same frame. A 7-day rolling mean is added
+    as ``rolling_7d``.
+
+    Args:
+        inputs: Sidebar values that define the horizon and the series shape.
+
+    Returns:
+        The frame and the cache key derived from ``inputs``.
+    """
     key = _cache_key(inputs)
     rng = np.random.default_rng(seed=int(key[:8], 16))
     dates = pd.date_range(inputs.start, periods=inputs.days, freq="D")

@@ -1,12 +1,30 @@
 #!/usr/bin/env python3
 """Georeferenced SkyCiv Load Generator client.
 
-Sends latitude and longitude to ``standalone.loads.getSiteData`` and
-``standalone.loads.getLoads``. Request shape and design codes are documented
-in ``docs/skyciv/load-gen-api/SKILL.md``.
+This module calls the SkyCiv v3 API at ``https://api.skyciv.com/v3`` and
+always locates the site with latitude and longitude. It does not send a
+street address. Two calls are wrapped:
 
-Credentials are read from ``SKYCIV_USERNAME`` and ``SKYCIV_KEY``, or from a
-gitignored ``API_Key.txt`` in the repo root. This file never contains a key.
+* ``LoadGenerator.site_data`` runs ``standalone.loads.getSiteData`` and
+  returns wind, snow, and seismic values for that coordinate.
+* ``LoadGenerator.loads`` runs ``standalone.loads.getLoads`` for a building
+  placed on that same coordinate.
+
+Every request starts with ``standalone.loads.start``. ``S3D.session.start``
+does not open a Load Generator session. Design codes, ``site_data``, and
+``building_data`` are specified in ``docs/skyciv/load-gen-api/SKILL.md``.
+The auth envelope is in ``docs/skyciv/skyciv-api-v3/SKILL.md``.
+
+Credentials are read from the ``username`` and ``key`` arguments, then
+``SKYCIV_USERNAME`` and ``SKYCIV_KEY`` in the environment or a ``.env``
+file, then a gitignored ``API_Key.txt`` in the repo root. This file never
+contains a key, and error text has the key removed before it is raised.
+
+Run the site check from the repo root:
+
+    python code/skyciv_load_generator.py --lat 37.795143 --lng -122.404312 --site-class D
+
+The command prints one JSON object with ``seismic``, ``wind``, and ``snow``.
 """
 
 from __future__ import annotations
@@ -33,14 +51,34 @@ SPECTRUM_KEYS = (
 
 
 class SkyCivError(RuntimeError):
-    """The Load Generator call did not return usable data."""
+    """The Load Generator call failed or returned no usable data.
+
+    Raised for a missing credential, an HTTP error, a non-JSON body, or a
+    SkyCiv ``response.status`` other than 0 (success) or 1 (warning with
+    data). The message never includes the API key.
+    """
 
 
 def _repo_root() -> Path:
+    """Return the repository root, the parent of the ``code`` directory.
+
+    Credential files and ``.env`` are resolved from this directory so the
+    script works when it is launched from another working directory.
+    """
     return Path(__file__).resolve().parent.parent
 
 
 def _read_key_file() -> dict[str, str]:
+    """Read ``API_Key.txt`` in the repo root as ``NAME=value`` lines.
+
+    Blank lines and ``#`` comments are ignored. A missing file returns an
+    empty mapping so the caller can fall through to the environment.
+    The file is gitignored and must not be committed.
+
+    Returns:
+        Mapping of the names found in the file. Typical names are
+        ``USERNAME`` and ``SKY_CIV_KEY``.
+    """
     path = _repo_root() / "API_Key.txt"
     if not path.is_file():
         return {}
@@ -55,6 +93,12 @@ def _read_key_file() -> dict[str, str]:
 
 
 def _load_env_file() -> None:
+    """Load the repo-root ``.env`` when ``python-dotenv`` is installed.
+
+    Existing environment variables are left unchanged. If dotenv is not
+    installed, credentials still come from the process environment or
+    ``API_Key.txt``.
+    """
     try:
         from dotenv import load_dotenv
     except ImportError:
@@ -63,7 +107,23 @@ def _load_env_file() -> None:
 
 
 def resolve_credentials(username: str | None = None, key: str | None = None) -> tuple[str, str]:
-    """Resolve a SkyCiv username and API key without printing either."""
+    """Resolve a SkyCiv username and API key without printing either.
+
+    Lookup order for each value is the explicit argument, then the
+    environment (after ``.env`` is loaded), then ``API_Key.txt``.
+    Username names are ``SKYCIV_USERNAME`` and ``USERNAME``. Key names are
+    ``SKYCIV_KEY`` and ``SKY_CIV_KEY``.
+
+    Args:
+        username: Account email. Skips lookup when provided.
+        key: API key from the SkyCiv account settings. Skips lookup when provided.
+
+    Returns:
+        The username and key to place in the request ``auth`` object.
+
+    Raises:
+        SkyCivError: Either value is missing after every lookup.
+    """
     _load_env_file()
     file_values = _read_key_file()
     resolved_username = (
@@ -87,6 +147,15 @@ def resolve_credentials(username: str | None = None, key: str | None = None) -> 
 
 
 def _validate_coords(lat: float, lng: float) -> None:
+    """Reject a latitude or longitude outside the geographic range.
+
+    Args:
+        lat: Decimal degrees, from -90 (south) to 90 (north).
+        lng: Decimal degrees, from -180 (west) to 180 (east).
+
+    Raises:
+        ValueError: ``lat`` or ``lng`` is outside that range.
+    """
     if not -90 <= lat <= 90:
         raise ValueError(f"latitude must be between -90 and 90, got {lat}")
     if not -180 <= lng <= 180:
@@ -94,12 +163,34 @@ def _validate_coords(lat: float, lng: float) -> None:
 
 
 def _scrub(message: str, secret: str) -> str:
+    """Remove the API key from ``message`` before it can be logged or raised.
+
+    Args:
+        message: Text that might echo the request, including the key.
+        secret: The key to replace. An empty secret leaves ``message`` as it is.
+
+    Returns:
+        ``message`` with every copy of ``secret`` replaced by ``***``.
+    """
     if secret and secret in message:
         return message.replace(secret, "***")
     return message
 
 
 def _post(payload: dict, secret: str, timeout: float) -> dict:
+    """POST one JSON body to the SkyCiv v3 endpoint.
+
+    Args:
+        payload: The full request, including ``auth``, ``options``, and ``functions``.
+        secret: API key stripped from any HTTP error body.
+        timeout: Seconds to wait for the response. Site calls often take about 20 seconds.
+
+    Returns:
+        The decoded JSON object.
+
+    Raises:
+        SkyCivError: The HTTP call failed, the body was not a JSON object, or the host was unreachable.
+    """
     request = urllib.request.Request(
         API_URL,
         data=json.dumps(payload).encode(),
@@ -124,6 +215,22 @@ def _post(payload: dict, secret: str, timeout: float) -> dict:
 
 
 def _interpret(body: dict) -> tuple[dict, list[str]]:
+    """Pull the last function's data out of a SkyCiv response.
+
+    Status 0 is success. Status 1 is a warning: the data is kept and the
+    message is returned as a note. Any other status, or a body with no
+    ``response.data`` object, is a failure. Per-function warning text is
+    collected the same way.
+
+    Args:
+        body: Decoded response from ``_post``.
+
+    Returns:
+        The ``response.data`` object and the warning strings, if any.
+
+    Raises:
+        SkyCivError: The call failed or returned no data object.
+    """
     envelope = body.get("response") if isinstance(body.get("response"), dict) else {}
     status = envelope.get("status")
     message = str(envelope.get("msg") or "").strip()
@@ -151,7 +258,35 @@ def _interpret(body: dict) -> tuple[dict, list[str]]:
 
 @dataclass
 class SiteLoads:
-    """Site wind, snow, and seismic values for one coordinate."""
+    """Wind, snow, and seismic values for one coordinate.
+
+    ``latitude`` and ``longitude`` are the values sent to SkyCiv.
+    ``resolved_latitude``, ``resolved_longitude``, ``address``, and
+    ``elevation_m`` are what SkyCiv returned for that point. Elevation is
+    in meters. ``wind_speed`` is the entry in ``wind_by_category`` for
+    ``risk_category``, not the API's headline speed when those differ.
+    ``seismic`` holds the scalar design parameters. Response spectra stay
+    in ``spectra`` until ``as_json`` is asked to include them.
+
+    Attributes:
+        latitude: Requested latitude in decimal degrees.
+        longitude: Requested longitude in decimal degrees.
+        resolved_latitude: Latitude SkyCiv associated with the site.
+        resolved_longitude: Longitude SkyCiv associated with the site.
+        address: Formatted address SkyCiv resolved from the coordinate.
+        elevation_m: Site elevation in meters.
+        country: Country name from the site record.
+        design_code: API design code used for the call, such as ``asce7-22``.
+        risk_category: ASCE risk category used to pick ``wind_speed``.
+        site_class: Site class sent for seismic coefficients. ``None`` if omitted.
+        wind_speed: Speed for ``risk_category`` from ``all_wind_speed``.
+        wind_speed_unit: Unit string from the API, usually ``mph``.
+        wind_by_category: Speeds keyed by risk category and return period.
+        snow: Ground-snow fields from ``snow_data``.
+        seismic: Scalar seismic parameters, without spectrum arrays.
+        spectra: Multi-period and two-period spectrum arrays.
+        notes: Warnings, including a mismatched headline wind speed.
+    """
 
     latitude: float
     longitude: float
@@ -172,7 +307,21 @@ class SiteLoads:
     notes: list[str] = field(default_factory=list)
 
     def as_json(self, *, include_spectra: bool = False) -> dict:
-        """JSON document whose data keys are seismic, wind, and snow."""
+        """Build the site-check document.
+
+        The first three keys are always ``seismic``, ``wind``, and ``snow``.
+        ``site`` records the requested coordinate and the address SkyCiv
+        resolved. ``notes`` is included only when the call produced warnings.
+
+        Args:
+            include_spectra: When true, copy ``spectra`` onto ``seismic``
+                under the key ``spectra``. The default leaves those arrays out
+                so the document stays a summary of the design parameters.
+
+        Returns:
+            A JSON-ready dictionary. Spectrum arrays are omitted unless
+            ``include_spectra`` is true.
+        """
         seismic = dict(self.seismic)
         if include_spectra and self.spectra:
             seismic["spectra"] = self.spectra
@@ -203,7 +352,20 @@ class SiteLoads:
 
 
 class LoadGenerator:
-    """Client for the SkyCiv Load Generator, located by latitude and longitude."""
+    """Client for one SkyCiv account.
+
+    Each public method sends its own session: ``standalone.loads.start``
+    with ``keep_open`` false, then one load function. The site is always
+    passed as ``lat`` and ``lng``. A ``project_address`` on the site object
+    is removed so a caller cannot switch the call back to geocoding.
+
+    Args:
+        username: SkyCiv account email. Looked up when omitted.
+        key: SkyCiv API key. Looked up when omitted.
+        validate_input: Ask SkyCiv to validate the payload before it runs.
+        api_version: Load Generator payload version. The current default is 2.1.
+        timeout: Seconds allowed for one HTTP call.
+    """
 
     def __init__(
         self,
@@ -214,6 +376,15 @@ class LoadGenerator:
         api_version: float = 2.1,
         timeout: float = 120,
     ) -> None:
+        """Store credentials and the options applied to every call.
+
+        Args:
+            username: SkyCiv account email. Looked up when omitted.
+            key: SkyCiv API key. Looked up when omitted.
+            validate_input: Ask SkyCiv to validate the payload before it runs.
+            api_version: Load Generator payload version. The current default is 2.1.
+            timeout: Seconds allowed for one HTTP call.
+        """
         self.username, self.key = resolve_credentials(username, key)
         self.validate_input = validate_input
         self.api_version = api_version
@@ -231,8 +402,22 @@ class LoadGenerator:
     ) -> SiteLoads:
         """Return wind, snow, and seismic parameters for a coordinate.
 
-        ``site_class`` is required for ASCE 7 seismic values. Without it the
-        API returns an empty ``seismic_data`` object.
+        This calls ``standalone.loads.getSiteData``. For ASCE 7, pass
+        ``site_class`` or ``seismic`` comes back empty. On ASCE 7-16, Site
+        Class D with ``S1`` of at least 0.2 can omit ``Fv``, ``SM1``, and
+        ``SD1`` and cite Section 11.4.8. Extra keyword arguments are copied
+        onto ``site_data`` for code-specific fields such as ``exposure``.
+
+        Args:
+            lat: Latitude in decimal degrees.
+            lng: Longitude in decimal degrees.
+            design_code: API code, for example ``asce7-22`` or ``asce7-16``.
+            risk_category: ASCE risk category ``I``, ``II``, ``III``, or ``IV``.
+            site_class: Seismic site class. Required for ASCE 7 seismic values.
+            **extra_site: Further ``site_data`` fields. ``project_address`` is dropped.
+
+        Returns:
+            A ``SiteLoads`` value whose ``as_json`` method is the command output.
         """
         _validate_coords(lat, lng)
         site = {
@@ -269,11 +454,26 @@ class LoadGenerator:
         site_data: dict | None = None,
         report: bool = False,
     ) -> dict:
-        """Run ``getLoads`` for a building at a coordinate.
+        """Run ``standalone.loads.getLoads`` for a building at a coordinate.
 
-        ``building_data`` follows ``docs/skyciv/load-gen-api/SKILL.md``. Any
-        ``project_address`` in ``site_data`` is dropped so the call stays tied
-        to ``lat`` and ``lng``. Set ``report`` to include the viewable report link.
+        ``building_data`` follows ``docs/skyciv/load-gen-api/SKILL.md`` and
+        should name the structure, roof, dimensions, and which of wind, snow,
+        and seismic to calculate. Any ``project_address`` in ``site_data`` is
+        dropped so the call stays tied to ``lat`` and ``lng``.
+
+        Args:
+            lat: Latitude in decimal degrees.
+            lng: Longitude in decimal degrees.
+            building_data: Structure geometry and the load parameters to run.
+            design_code: API code written onto ``site_data``.
+            risk_category: ASCE risk category written onto ``site_data``.
+            site_class: Seismic site class. Required for ASCE 7 seismic values.
+            project_details: Report header. Defaults to imperial units.
+            site_data: Extra site fields merged under the coordinate.
+            report: When true, SkyCiv includes a viewable report link.
+
+        Returns:
+            ``latitude``, ``longitude``, the raw ``data`` object, and ``notes``.
         """
         _validate_coords(lat, lng)
         site = dict(site_data or {})
@@ -298,6 +498,22 @@ class LoadGenerator:
         return {"latitude": lat, "longitude": lng, "data": data, "notes": notes}
 
     def _call(self, functions: list[dict]) -> tuple[dict, list[str]]:
+        """Open a Load Generator session and run ``functions`` inside it.
+
+        ``standalone.loads.start`` is always first. The session is not kept
+        open. The API key is stripped from any ``SkyCivError`` raised while
+        the body is interpreted.
+
+        Args:
+            functions: Load functions that follow the session start. Each item
+                has ``function`` and ``arguments``.
+
+        Returns:
+            Data from the last function, plus warning strings.
+
+        Raises:
+            SkyCivError: The session or the load function failed.
+        """
         payload = {
             "auth": {"username": self.username, "key": self.key},
             "options": {"validate_input": self.validate_input},
@@ -322,6 +538,28 @@ def _site_loads(
     data: dict,
     notes: list[str],
 ) -> SiteLoads:
+    """Map a ``getSiteData`` payload onto ``SiteLoads``.
+
+    Wind for the requested risk category is taken from
+    ``wind_data.all_wind_speed``. When that value differs from the API's
+    scalar ``wind_speed``, a note records both numbers. The scalar has been
+    the Category IV speed even when Category II was requested. Spectrum
+    arrays are split into ``spectra`` so the scalar seismic map stays small.
+    An ASCE call with no site class and an empty seismic object gets a note
+    explaining that the class is required.
+
+    Args:
+        lat: Latitude that was sent.
+        lng: Longitude that was sent.
+        design_code: Design code that was sent.
+        risk_category: Risk category used to choose the reported wind speed.
+        site_class: Site class that was sent, or ``None``.
+        data: ``response.data`` from ``getSiteData``.
+        notes: Warnings already collected from the response. This function may append more.
+
+    Returns:
+        The structured site result.
+    """
     site = data.get("site_data") if isinstance(data.get("site_data"), dict) else {}
     wind = data.get("wind_data") if isinstance(data.get("wind_data"), dict) else {}
     snow = data.get("snow_data") if isinstance(data.get("snow_data"), dict) else {}
@@ -365,6 +603,19 @@ def _site_loads(
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Run a georeferenced site check and write its JSON document.
+
+    Arguments are the command-line flags. ``--output`` writes the document
+    to a file; otherwise it is written to stdout. ``--full`` includes
+    ``seismic.spectra``. Failures are printed to stderr and return 1.
+
+    Args:
+        argv: Flags to parse. ``None`` reads ``sys.argv``.
+
+    Returns:
+        ``0`` when the JSON document was written, ``1`` when the call or the
+        coordinates were rejected.
+    """
     parser = argparse.ArgumentParser(
         description="Georeferenced SkyCiv Load Generator site check"
     )
