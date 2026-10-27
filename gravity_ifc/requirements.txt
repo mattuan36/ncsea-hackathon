@@ -1,0 +1,10 @@
+# Python 3.11+ (tested on 3.14). ifcopenshell ships wheels for Windows/macOS/Linux.
+ifcopenshell==0.9.0.post1
+shapely
+numpy
+openpyxl
+
+# review_app.py only
+streamlit
+plotly
+pandas
