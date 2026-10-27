@@ -25,12 +25,13 @@ function mostSimilar(t: ElementType, types: ElementType[]) {
 }
 
 export default function AssemblyStep({ onDone }: { onDone: () => void }) {
-  const { types, materials, updateType, copyLayers, mergeTypes, unmerge } = useLtl();
+  const { types, materials, updateType, copyLayers, mergeTypes, unmerge, allowanceOptions, addAllowanceOption } = useLtl();
   const queue = useMemo(() => walkOrder(types), [types]);
   const [currentId, setCurrentId] = useState(queue[0]?.id);
   const [newMaterialFor, setNewMaterialFor] = useState<{ layerId: string; name: string } | null>(null);
   const [mergeOpen, setMergeOpen] = useState(false);
   const [copyFrom, setCopyFrom] = useState('');
+  const [newAllowance, setNewAllowance] = useState<string | null>(null);
 
   const t = queue.find((x) => x.id === currentId) ?? queue[0];
   if (!t) return <div className="card">No types are included. Go back and include at least one floor or wall type.</div>;
@@ -50,6 +51,7 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
     if (next) {
       setCurrentId(next.id);
       setCopyFrom('');
+      setNewAllowance(null);
     } else onDone();
   };
 
@@ -211,6 +213,38 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
                   </tr>
                 </tfoot>
               </table>
+
+              <div className="allowance-field">
+                <label className="section-label" htmlFor="allowance-select">Allowance</label>
+                {newAllowance === null ? (
+                  <select
+                    id="allowance-select"
+                    value={t.allowance ?? ''}
+                    onChange={(e) => {
+                      if (e.target.value === '__add__') setNewAllowance('');
+                      else updateType(t.id, { allowance: e.target.value || null });
+                    }}
+                  >
+                    <option value="" hidden>Select allowance…</option>
+                    <option value="__add__">Add new…</option>
+                    {allowanceOptions.map((o) => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                ) : (
+                  <form
+                    className="row-gap"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!newAllowance.trim()) return;
+                      updateType(t.id, { allowance: addAllowanceOption(newAllowance) });
+                      setNewAllowance(null);
+                    }}
+                  >
+                    <input autoFocus placeholder="New allowance name" value={newAllowance} onChange={(e) => setNewAllowance(e.target.value)} aria-label="New allowance name" />
+                    <button className="btn small primary" type="submit" disabled={!newAllowance.trim()}>Add</button>
+                    <button className="btn small" type="button" onClick={() => setNewAllowance(null)}>Cancel</button>
+                  </form>
+                )}
+              </div>
 
               <div className="reuse">
                 <h3 className="section-label">Already built a similar type?</h3>

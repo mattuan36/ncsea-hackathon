@@ -287,6 +287,9 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 
 .section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
 .assembly-graphic { width: 100%; height: auto; display: block; }
+.allowance-field { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
+.allowance-field label { display: block; }
+.allowance-field select { min-width: 260px; }
 .reuse { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
 
 /* material picker */

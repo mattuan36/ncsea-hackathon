@@ -59,6 +59,8 @@ export interface ElementType {
   assemblyName: string;
   layers: Layer[];
   status: TypeStatus;
+  /** allowance category chosen for this assembly (e.g. MEP, Solar) */
+  allowance: string | null;
   /** set when merged into another assembly as a sub-assembly; points at the governing assembly */
   parentId: string | null;
 }
@@ -84,6 +86,8 @@ export const MATERIALS: Material[] = [
   { id: 'mep', name: 'MEP allowance', category: 'Allowance', basis: 'PSF', unitWeight: 5, thicknesses: [0] },
   { id: 'ceiling', name: 'Suspended acoustical ceiling', category: 'Allowance', basis: 'PSF', unitWeight: 1, thicknesses: [0] },
 ];
+
+export const ALLOWANCE_OPTIONS = ['MEP', 'Concrete Ponding', 'Future Finish', 'Solar'];
 
 export const STRUCTURAL_MATERIALS = [
   'Concrete, Normal Weight',
@@ -115,6 +119,7 @@ function T(
     structuralMaterial: revitMaterial,
     materialVerified: false,
     status: 'todo',
+    allowance: null,
     parentId: null,
   };
 }

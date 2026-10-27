@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-import { ELEMENT_TYPES, MATERIALS, uid, type ElementType, type Material } from './data';
+import { ALLOWANCE_OPTIONS, ELEMENT_TYPES, MATERIALS, uid, type ElementType, type Material } from './data';
 
 export interface ModelSource {
   kind: 'ifc' | 'revit';
@@ -17,6 +17,9 @@ interface LtlState {
   addMaterial: (m: Omit<Material, 'id'>) => Material;
   updateMaterial: (id: string, patch: Partial<Material>) => void;
   removeMaterial: (id: string) => void;
+  allowanceOptions: string[];
+  /** adds an allowance option (case-insensitive dedupe) and returns the stored name */
+  addAllowanceOption: (name: string) => string;
   types: ElementType[];
   updateType: (id: string, patch: Partial<ElementType>) => void;
   copyLayers: (fromId: string, toId: string) => void;
@@ -34,6 +37,15 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const [gravityStep, setGravityStep] = useState(0);
   const [materials, setMaterials] = useState<Material[]>(MATERIALS);
   const [types, setTypes] = useState<ElementType[]>(ELEMENT_TYPES);
+  const [allowanceOptions, setAllowanceOptions] = useState<string[]>(ALLOWANCE_OPTIONS);
+
+  const addAllowanceOption = useCallback((name: string) => {
+    const clean = name.trim();
+    const existing = allowanceOptions.find((o) => o.toLowerCase() === clean.toLowerCase());
+    if (existing) return existing;
+    setAllowanceOptions((list) => [...list, clean]);
+    return clean;
+  }, [allowanceOptions]);
 
   const addMaterial = useCallback((m: Omit<Material, 'id'>) => {
     const created = { ...m, id: uid('m'), custom: true };
@@ -84,9 +96,10 @@ export function LtlProvider({ children }: { children: ReactNode }) {
     () => ({
       projectName, setProjectName, model, setModel, gravityStep, setGravityStep,
       materials, addMaterial, updateMaterial, removeMaterial,
+      allowanceOptions, addAllowanceOption,
       types, updateType, copyLayers, mergeTypes, unmerge,
     }),
-    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, types, updateType, copyLayers, mergeTypes, unmerge],
+    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, allowanceOptions, addAllowanceOption, types, updateType, copyLayers, mergeTypes, unmerge],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
