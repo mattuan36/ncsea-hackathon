@@ -5,6 +5,25 @@ import { inServiceArea } from "../lateral/coverage";
 import { LocateError, searchPlaces, type Place } from "../lateral/search";
 import { fetchSiteReport, SkyCivError, type SiteReport } from "../lateral/skyciv";
 
+const SAMPLE_REPORT: SiteReport = {
+  latitude: 37.795143,
+  longitude: -122.404312,
+  address: "750 Kearny St, San Francisco, CA 94108, USA",
+  elevationM: 7.15,
+  country: "United States",
+  designCode: "asce7-22",
+  riskCategory: "II",
+  siteClass: "D",
+  windSpeed: 92,
+  windUnit: "mph",
+  windByCategory: { I: 87, II: 92, III: 99, IV: 103, "10-year": 61, "25-year": 68, "50-year": 73, "100-year": 78 },
+  snow: { snow_load: "not available", w2: 0.25 },
+  seismic: { ss: 1.5, s1: 0.6, sms: 1.63, sm1: 1.7, sds: 1.09, sd1: 1.13, sdc: "D", pgam: 0.55, ts: 1.04, t0: 0.209, tl: 12 },
+  spectra: {},
+  notes: ["Sample from the documented Kearny Street check. Generate a SkyCiv report for a live site."],
+  raw: {},
+};
+
 const DEFAULT_LAT = 37.795143;
 const DEFAULT_LNG = -122.404312;
 
@@ -12,14 +31,6 @@ const SITE_CLASSES: Record<string, string[]> = {
   "asce7-22": ["A", "B", "BC", "C", "CD", "D", "DE", "E"],
   "asce7-16": ["A", "B", "C", "D", "D-default", "E"],
 };
-
-function stored(name: string): string {
-  try {
-    return sessionStorage.getItem(name) ?? "";
-  } catch {
-    return "";
-  }
-}
 
 export default function LateralPage() {
   const [query, setQuery] = useState("750 Kearny St, San Francisco");
@@ -30,8 +41,6 @@ export default function LateralPage() {
   const [risk, setRisk] = useState("II");
   const [designCode, setDesignCode] = useState("asce7-22");
   const [siteClass, setSiteClass] = useState("D");
-  const [username, setUsername] = useState(() => stored("ltl_skyciv_username"));
-  const [apiKey, setApiKey] = useState(() => stored("ltl_skyciv_key"));
   const [searchError, setSearchError] = useState("");
   const [areaError, setAreaError] = useState("");
   const [reportError, setReportError] = useState("");
@@ -44,12 +53,12 @@ export default function LateralPage() {
 
   useEffect(() => {
     try {
-      sessionStorage.setItem("ltl_skyciv_username", username);
-      sessionStorage.setItem("ltl_skyciv_key", apiKey);
+      sessionStorage.removeItem("ltl_skyciv_username");
+      sessionStorage.removeItem("ltl_skyciv_key");
     } catch {
-      /* private mode can block storage; the fields still submit */
+      /* private mode can block storage */
     }
-  }, [username, apiKey]);
+  }, []);
 
   const choose = (place: Place) => {
     setLat(place.lat);
@@ -97,15 +106,9 @@ export default function LateralPage() {
       setAreaError("That coordinate is outside the United States and Puerto Rico. Alaska is included.");
       return;
     }
-    if (!username.trim() || !apiKey.trim()) {
-      setReportError("Enter the SkyCiv username and API key. They stay in this browser and are not saved in the project.");
-      return;
-    }
     setBusy("report");
     try {
       setReport(await fetchSiteReport({
-        username: username.trim(),
-        key: apiKey.trim(),
         lat,
         lng,
         designCode,
@@ -164,20 +167,31 @@ export default function LateralPage() {
               {SITE_CLASSES[designCode].map((item) => <option key={item}>{item}</option>)}
             </select>
           </label>
-          <label>
-            SkyCiv username
-            <input value={username} autoComplete="username" onChange={(event) => setUsername(event.target.value)} />
-          </label>
-          <label className="span-2">
-            SkyCiv API key
-            <input type="password" value={apiKey} autoComplete="current-password" onChange={(event) => setApiKey(event.target.value)} />
-          </label>
         </div>
-        <p className="muted small">Each report uses SkyCiv credits. The key is sent only to api.skyciv.com and is not stored in the repository.</p>
+        <p className="muted small">Each report uses SkyCiv credits. The API key stays on the server and is not stored in the browser or the repository.</p>
         <div className="row-gap">
           <button className="btn" type="submit" disabled={busy != null}>{busy === "search" ? "Searching…" : "Search"}</button>
           <button className="btn primary" type="button" onClick={onGenerate} disabled={busy != null}>
             {busy === "report" ? "Generating…" : "Generate SkyCiv report"}
+          </button>
+          <button
+            className="btn"
+            type="button"
+            disabled={busy != null}
+            onClick={() => {
+              setReport(SAMPLE_REPORT);
+              setLat(SAMPLE_REPORT.latitude);
+              setLng(SAMPLE_REPORT.longitude);
+              setLabel(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
+              setQuery(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
+              setRisk(SAMPLE_REPORT.riskCategory);
+              setDesignCode(SAMPLE_REPORT.designCode);
+              setSiteClass(SAMPLE_REPORT.siteClass ?? "D");
+              setReportError("");
+              setAreaError("");
+            }}
+          >
+            Load sample report
           </button>
         </div>
         {searchError && <p className="banner error">{searchError}</p>}

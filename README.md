@@ -2,7 +2,7 @@
 
 React (Vite + TypeScript) frontend, Python (FastAPI) backend, PostgreSQL storage.
 
-The published site is [https://mattuan36.github.io/ncsea-hackathon/](https://mattuan36.github.io/ncsea-hackathon/). A push to `main` builds `frontend/` and deploys it with GitHub Pages. The Lateral report runs in the browser. Documents still needs the local API.
+The published site is [https://mattuan36.github.io/ncsea-hackathon/](https://mattuan36.github.io/ncsea-hackathon/). A push to `main` builds `frontend/` and deploys it with GitHub Pages. Lateral calls the site API (`VITE_API_BASE`, or the local proxy). Documents still needs the local API. The SkyCiv key is only on the API server.
 
 Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
 
@@ -13,7 +13,7 @@ Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
 | Reports | **Wireframe** — graphical output sheets + spreadsheet layout preview |
 | Settings | **Wireframe** — project info + material database |
 | Analytics | **Wireframe** — takeoff summary (KPIs, dead load by assembly) |
-| Lateral | Site wind, snow, and seismic report. Search or drop a pin in the United States, Alaska, or Puerto Rico, then enter a SkyCiv username and API key in the page. The key is not stored in the repo. |
+| Lateral | Site wind, snow, and seismic report. Search or drop a pin in the United States, Alaska, or Puerto Rico. The page calls the site API, which holds `SKYCIV_USERNAME` and `SKYCIV_KEY`. The key is not in the browser or the repo. |
 
 #### Wireframe scope (Gravity / Reports / Settings / Analytics)
 
@@ -44,6 +44,13 @@ cd frontend && npm install && npm run dev  # http://localhost:5180
 ```
 
 The API creates its tables (`backend/schema.sql`) and a default folder tree on first start.
+
+The Lateral page calls `POST /api/site-report` on port 8101. That process does not use Postgres. It reads `SKYCIV_USERNAME` and `SKYCIV_KEY` from the environment, `.env`, or `API_Key.txt`.
+
+```bash
+cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements-site.txt
+.venv/bin/uvicorn app.site_api:app --port 8101
+```
 
 ### Documents
 
