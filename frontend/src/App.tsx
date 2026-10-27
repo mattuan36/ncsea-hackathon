@@ -19,6 +19,7 @@ import LoadsPage from './pages/LoadsPage';
 import MaterialsPage from './pages/MaterialsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import { LtlProvider } from './ltl/store';
+import AgentPanel from './agent/AgentPanel';
 
 interface MenuItem {
   path: string;
@@ -70,6 +71,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/documents" replace />} />
         </Routes>
       </main>
+      <AgentPanel />
     </div>
     </LtlProvider>
   );

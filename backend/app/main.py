@@ -4,6 +4,7 @@ from urllib.parse import quote
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
 
 from . import db
+from .agent import router as agent_router
 
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
 
@@ -16,6 +17,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Structural App API", lifespan=lifespan)
+app.include_router(agent_router)
 
 
 @app.get("/api/health")

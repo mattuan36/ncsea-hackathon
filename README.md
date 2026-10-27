@@ -157,3 +157,7 @@ The API creates its tables (`backend/schema.sql`) and a default folder tree on f
 ```bash
 cd backend && .venv/bin/python -m pytest -q   # needs the docker DB running
 ```
+
+## Project assistant
+
+The **Ask** button (bottom right) opens a chat that answers questions about your inputs and results: assemblies, layers, materials, takeoff by level, and the Lateral site report. The browser sends a snapshot of the current project with each question to `POST /api/agent/chat`, which forwards it to an open-source model served over an OpenAI-compatible API (default: local Ollama, `llama3.1:8b`). Configure with `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` (see `.env.example`). The backend does not read `.env` itself, so export them in the shell that starts uvicorn. `GET /api/agent/status` reports whether the model server is reachable.

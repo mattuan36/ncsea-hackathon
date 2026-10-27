@@ -3,6 +3,7 @@ import MapView from "../lateral/MapView";
 import ReportView from "../lateral/ReportView";
 import { inServiceArea } from "../lateral/coverage";
 import { LocateError, searchPlaces, type Place } from "../lateral/search";
+import { useLtl } from "../ltl/store";
 import { fetchSiteReport, SkyCivError, type SiteReport } from "../lateral/skyciv";
 
 const DEFAULT_LAT = 37.795143;
@@ -37,6 +38,16 @@ export default function LateralPage() {
   const [reportError, setReportError] = useState("");
   const [busy, setBusy] = useState<"search" | "report" | null>(null);
   const [report, setReport] = useState<SiteReport | null>(null);
+  const { setSiteInputs, setSiteReport } = useLtl();
+
+  // Mirror inputs and the report into the shared store so the assistant can answer from them.
+  useEffect(() => {
+    setSiteInputs({ label, lat, lng, riskCategory: risk, designCode, siteClass });
+  }, [label, lat, lng, risk, designCode, siteClass, setSiteInputs]);
+
+  useEffect(() => {
+    setSiteReport(report);
+  }, [report, setSiteReport]);
 
   useEffect(() => {
     if (!SITE_CLASSES[designCode].includes(siteClass)) setSiteClass("D");

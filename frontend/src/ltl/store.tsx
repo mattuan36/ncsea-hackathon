@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import type { SiteReport } from '../lateral/skyciv';
 import { ALLOWANCE_OPTIONS, ELEMENT_TYPES, MATERIALS, uid, type ElementType, type Material } from './data';
 
 export interface ModelSource {
@@ -26,6 +27,20 @@ interface LtlState {
   /** Merge two assemblies; the non-governing one becomes a sub-assembly of the governing one. */
   mergeTypes: (aId: string, bId: string, governingId: string) => void;
   unmerge: (id: string) => void;
+  /** Lateral site inputs and the last SkyCiv report; shared so the assistant can read them. */
+  siteInputs: SiteInputs | null;
+  setSiteInputs: (i: SiteInputs | null) => void;
+  siteReport: SiteReport | null;
+  setSiteReport: (r: SiteReport | null) => void;
+}
+
+export interface SiteInputs {
+  label: string;
+  lat: number;
+  lng: number;
+  riskCategory: string;
+  designCode: string;
+  siteClass: string;
 }
 
 const Ctx = createContext<LtlState | null>(null);
@@ -37,6 +52,8 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const [gravityStep, setGravityStep] = useState(0);
   const [materials, setMaterials] = useState<Material[]>(MATERIALS);
   const [types, setTypes] = useState<ElementType[]>(ELEMENT_TYPES);
+  const [siteInputs, setSiteInputs] = useState<SiteInputs | null>(null);
+  const [siteReport, setSiteReport] = useState<SiteReport | null>(null);
   const [allowanceOptions, setAllowanceOptions] = useState<string[]>(ALLOWANCE_OPTIONS);
 
   const addAllowanceOption = useCallback((name: string) => {
@@ -98,8 +115,9 @@ export function LtlProvider({ children }: { children: ReactNode }) {
       materials, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption,
       types, updateType, copyLayers, mergeTypes, unmerge,
+      siteInputs, setSiteInputs, siteReport, setSiteReport,
     }),
-    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, allowanceOptions, addAllowanceOption, types, updateType, copyLayers, mergeTypes, unmerge],
+    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, allowanceOptions, addAllowanceOption, types, updateType, copyLayers, mergeTypes, unmerge, siteInputs, siteReport],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
