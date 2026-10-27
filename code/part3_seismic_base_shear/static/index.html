@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seismic Cs · LightenTheLoad</title>
+<style>
+:root {
+  --topbar-h: 56px;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --border-soft: #eef2f6;
+  --text: #1e293b;
+  --text-strong: #0f172a;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --accent: #1d4ed8;
+  --accent-bg: #eff5ff;
+  --accent-border: #c7d7f5;
+  --hover: #f1f5f9;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --radius: 10px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  font-size: 14px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+button { font: inherit; color: inherit; }
+.app { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); }
+.topbar {
+  position: sticky; top: 0; z-index: 30; height: var(--topbar-h);
+  display: flex; align-items: center; gap: 28px; padding: 0 28px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 7px; background: var(--accent); color: #fff;
+  display: grid; place-items: center; font-weight: 600;
+}
+.brand-name { color: var(--text-strong); font-weight: 600; font-size: 16px; }
+.nav-item {
+  display: flex; align-items: center; height: var(--topbar-h); padding: 0 12px;
+  color: var(--accent); font-weight: 500; border-bottom: 2px solid var(--accent); margin-bottom: -1px;
+}
+.page { padding: 20px 28px 40px; display: flex; flex-direction: column; gap: 16px; }
+.page-header h1 { margin: 0; font-size: 20px; font-weight: 600; color: var(--text-strong); }
+.subtitle { margin: 4px 0 0; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.card-title { margin: 0 0 4px; font-size: 15px; font-weight: 600; color: var(--text-strong); }
+.card p { margin: 0; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wf-note { border: 1px dashed #f59e0b; background: #fffbeb; color: #92400e; border-radius: 8px; padding: 8px 12px; font-size: 13px; margin: 0; }
+.tag { display: inline-block; margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: #f1f5f9; color: var(--muted); font-size: 11px; font-weight: 500; vertical-align: 1px; }
+.row-gap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-weight: 500;
+}
+.btn:hover { background: var(--hover); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: #1e40af; }
+input:not([type]), input[type=number], input[type=text], select {
+  height: 34px; border: 1px solid var(--border); border-radius: 7px; padding: 0 10px;
+  font: inherit; background: #fff; color: var(--text); width: 100%;
+}
+input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid > label, .form-grid > .span-2 { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.form-grid > label.check { flex-direction: row; align-items: flex-start; color: var(--text); }
+.form-grid .span-2 { grid-column: span 2; }
+.checks { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text); }
+.checkbox {
+  appearance: none; width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; cursor: pointer;
+  border: 1.5px solid #cbd5e1; border-radius: 5px; background: #fff; display: inline-grid; place-items: center;
+}
+.checkbox:checked { background: var(--accent); border-color: var(--accent); }
+.checkbox:checked::after {
+  content: ""; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg);
+}
+.drop {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  min-height: 112px; border: 1.5px dashed var(--border); border-radius: var(--radius); cursor: pointer;
+  text-align: center; padding: 16px; position: relative;
+}
+.drop:hover, .drop.over { border-color: var(--accent-border); background: #fbfdff; }
+.drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; height: 100%; }
+.banner { display: flex; align-items: flex-start; padding: 8px 14px; border-radius: 8px; margin: 10px 0 0; }
+.banner.info { background: var(--accent-bg); border: 1px solid var(--accent-border); color: #1e3a8a; }
+.banner.error { background: var(--danger-bg); color: #991b1b; border: 1px solid #fecaca; }
+.banner.warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.kpi span { color: var(--muted); font-size: 13px; }
+.kpi strong { font-size: 22px; font-weight: 600; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: 12px; color: var(--muted); font-weight: 400; }
+.section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 16px 0 8px; font-weight: 600; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-soft); }
+.data-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+.dir { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; background: #fff; }
+.dir h3 { margin: 0 0 12px; font-size: 15px; }
+#result[hidden] { display: none; }
+.stack { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.stack .banner { margin: 0; }
+@media (max-width: 800px) {
+  .topbar { padding: 0 16px; gap: 12px; }
+  .brand-name { display: none; }
+  .page { padding: 16px; }
+  .two-col, .form-grid, .kpis { grid-template-columns: 1fr; }
+  .form-grid .span-2 { grid-column: auto; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">L</span><span class="brand-name">LightenTheLoad</span></div>
+    <span class="nav-item">Seismic Cs</span>
+  </header>
+  <main class="page">
+    <header class="page-header">
+      <h1>Seismic Cs and base shear</h1>
+      <p class="muted subtitle">ASCE 7-22 equivalent lateral force, directions X and Y.</p>
+    </header>
+    <p class="wf-note">Preliminary calculation. ELF eligibility (Table 12.6-1), irregularities, redundancy, and Section 12.2.5.4 height increases are not checked. Warnings do not block a result. W is engineer-supplied.</p>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">Hazard file <span class="tag" id="source"></span></h2>
+          <p class="muted small" id="rowsNote"></p>
+        </div>
+        <div class="row-gap">
+          <button class="btn" id="import" type="button">Read file</button>
+          <button class="btn" id="reset" type="button">Reset to Riverside CSV</button>
+        </div>
+      </div>
+      <label class="drop" id="drop">
+        <input id="file" type="file" accept=".xlsx,.csv,text/csv">
+        <strong>Drop a workbook or Revit CSV</strong>
+        <span class="muted">Hazard_Exchange .xlsx, or parameter_name CSV · ASCE 7-22</span>
+        <span class="muted small" id="fileName"></span>
+      </label>
+      <p id="importStatus" class="banner info" hidden></p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">Site, building, and hazards</h2>
+          <p class="muted small">SDS, SD1, S1, and TL come from the file. Height, stories, and weight are engineer inputs.</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <label class="span-2">Project number<input id="project" type="text"></label>
+        <label>Risk category (sets Ie)
+          <select id="rc"><option value="">— select —</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
+        </label>
+        <label>Site class<input id="siteclass" type="text"></label>
+        <label>SDS (g)<input id="sds" type="number" step="any"></label>
+        <label>SD1 (g)<input id="sd1" type="number" step="any"></label>
+        <label>S1 (g)<input id="s1" type="number" step="any"></label>
+        <label>TL (s)<input id="tl" type="number" step="any"></label>
+        <label>Reported SDC<input id="p1sdc" type="text" maxlength="2"></label>
+        <label>Structural height hn (ft)<input id="hn" type="number" step="any"></label>
+        <label>Stories above base<input id="stories" type="number" step="1" min="1"></label>
+        <label>Effective seismic weight W (kips)<input id="w" type="number" step="any" placeholder="Optional"></label>
+      </div>
+      <div class="checks">
+        <label class="check"><input class="checkbox" id="cap" type="checkbox"><span>Apply Section 12.8.1.3 maximum SDS for Cs. The tool also requires ≤ 5 stories, T ≤ 0.5 s, Risk Category I or II, and Site Class other than E or F.</span></label>
+        <label class="check"><input class="checkbox" id="regular" type="checkbox"><span>I confirm the structure is regular (no irregularities per 12.3.2).</span></label>
+        <label class="check"><input class="checkbox" id="rho" type="checkbox"><span>I confirm ρ = 1.0 (Section 12.3.4).</span></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">Lateral systems</h2>
+          <p class="muted small">One system, a horizontal combination, or an upper system over a lower system.</p>
+        </div>
+      </div>
+      <div class="two-col" id="dirs"></div>
+      <div class="checks">
+        <label class="check"><input class="checkbox" id="reviewed" type="checkbox"><span>I have reviewed the code edition and all input values. This does not authorize synthetic data.</span></label>
+      </div>
+      <div class="row-gap" style="margin-top:14px">
+        <button class="btn primary" id="calculate" type="button">Calculate Cs and V</button>
+        <button class="btn" id="download" type="button">Download calculation Excel</button>
+      </div>
+      <p id="calcStatus" class="banner info" hidden></p>
+    </section>
+
+    <section class="card" id="result" hidden>
+      <div class="card-head">
+        <div>
+          <h2 class="card-title">Preliminary results</h2>
+          <div class="stack" id="notes"></div>
+        </div>
+      </div>
+      <div class="kpis" id="global"></div>
+      <div class="two-col" id="out"></div>
+      <h3 class="section-label">Warnings</h3>
+      <div class="stack" id="warnings"></div>
+    </section>
+  </main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+let currentSource = "SYNTHETIC_DEMO", rows = [], SYS = [], PTYPES = {}, DEFAULT = null;
+const hazFields = ["sds", "sd1", "s1", "tl"];
+const DEMO = { project: "HACKATHON-001", rc: "II", siteclass: "D", sds: 0.85, sd1: 0.55, s1: 0.45, tl: 8, p1sdc: "D", hn: 60, stories: 4, w: "" };
+
+function num(id) {
+  const v = $(id).value.trim();
+  return v === "" ? null : Number(v);
+}
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function status(id, text, bad = false) {
+  const el = $(id);
+  el.hidden = !text;
+  el.textContent = text;
+  el.className = "banner " + (bad ? "error" : "info");
+}
+function label() {
+  $("source").textContent = currentSource || "—";
+  $("rowsNote").textContent = rows.length ? rows.length + " imported rows" : "No file rows linked";
+}
+function sysOptions() {
+  let html = "<option value=''>—</option>", cat = "";
+  for (const s of SYS) {
+    if (s.category !== cat) {
+      if (cat) html += "</optgroup>";
+      cat = s.category;
+      html += `<optgroup label="${esc(cat)}">`;
+    }
+    html += `<option value="${s.id}">${s.id} · ${esc(s.name)} (R=${s.R})</option>`;
+  }
+  return html + "</optgroup>";
+}
+function dirHTML(d) {
+  const systems = sysOptions();
+  const types = "<option value=''>Auto (from system)</option>" + Object.entries(PTYPES).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("");
+  const slots = [1, 2, 3, 4].map(k => `<div class="span-2" id="${d}row${k}"><span id="${d}lab${k}">System ${k}</span><select id="${d}sys${k}">${systems}</select></div>`).join("");
+  return `<div class="dir"><h3>Direction ${d}</h3><div class="form-grid">
+    <label class="span-2">Combination (Section 12.2.3)<select id="${d}comb"><option value="single">Single system</option><option value="horizontal">Horizontal — multiple systems, same direction</option><option value="vertical">Vertical — upper over lower</option></select></label>
+    ${slots}
+    <label>Analysis period T (s)<input type="number" step="any" id="${d}t" placeholder="Blank = use Ta"></label>
+    <label>Table 12.8-2 type<select id="${d}pt">${types}</select></label>
+    <label class="check span-2"><input class="checkbox" type="checkbox" id="${d}mf"><span>Moment frames resist 100% of the seismic force and are not enclosed by more rigid components.</span></label>
+  </div></div>`;
+}
+function layout(d) {
+  const combination = $(d + "comb").value;
+  const count = combination === "single" ? 1 : combination === "vertical" ? 2 : 4;
+  for (let k = 1; k <= 4; k++) {
+    $(d + "row" + k).style.display = k <= count ? "" : "none";
+    $(d + "lab" + k).textContent = combination === "vertical" ? (k === 1 ? "Upper system" : "Lower system") : combination === "horizontal" ? `System ${k}${k > 2 ? " (optional)" : ""}` : "Lateral system";
+  }
+}
+function dirReq(d) {
+  const combination = $(d + "comb").value;
+  const count = combination === "single" ? 1 : combination === "vertical" ? 2 : 4;
+  const ids = [];
+  for (let k = 1; k <= count; k++) {
+    const value = $(d + "sys" + k).value;
+    if (value) ids.push(value);
+  }
+  return { direction: d, combination, system_ids: ids, period_analysis_sec: num(d + "t"), period_type_override: $(d + "pt").value || null, moment_frames_resist_100pct: $(d + "mf").checked };
+}
+function req() {
+  return {
+    project_number: $("project").value.trim(), asce_edition: "7-22", source_status: currentSource,
+    sds: num("sds"), sd1: num("sd1"), s1: num("s1"), tl: num("tl"), risk_category: $("rc").value || null,
+    site_class: $("siteclass").value.trim(), part1_sdc: $("p1sdc").value.trim(), hn_ft: num("hn"),
+    stories_above_base: num("stories"), weight_kips: num("w"), directions: ["X", "Y"].map(dirReq),
+    apply_sds_cap_12_8_1_3: $("cap").checked, confirm_regular_no_irregularities: $("regular").checked,
+    confirm_rho_equals_1: $("rho").checked, engineer_reviewed: $("reviewed").checked,
+  };
+}
+async function post(url, data) {
+  const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+  const out = await res.json();
+  if (!res.ok) throw Error(typeof out.detail === "string" ? out.detail : out.detail.map(e => (e.loc || []).slice(1).join(".") + ": " + e.msg).join("\n"));
+  return out;
+}
+function applyHazard(o) {
+  currentSource = o.source_status;
+  rows = o.exchange_rows;
+  for (const id of hazFields) $(id).value = o[id];
+  $("project").value = o.project_number;
+  $("rc").value = o.risk_category || "";
+  $("siteclass").value = o.site_class;
+  $("p1sdc").value = o.part1_sdc;
+  $("w").value = o.weight_kips == null ? "" : o.weight_kips;
+  $("reviewed").checked = false;
+  label();
+}
+function reset() {
+  $("file").value = "";
+  $("fileName").textContent = "";
+  ["cap", "regular", "rho", "reviewed"].forEach(id => $(id).checked = false);
+  $("hn").value = DEMO.hn;
+  $("stories").value = DEMO.stories;
+  for (const d of ["X", "Y"]) {
+    $(d + "comb").value = "single";
+    for (let k = 1; k <= 4; k++) $(d + "sys" + k).value = "";
+    $(d + "t").value = "";
+    $(d + "pt").value = "";
+    $(d + "mf").checked = false;
+    layout(d);
+  }
+  $("Xsys1").value = "C1";
+  $("Xt").value = 1.2;
+  $("Xmf").checked = true;
+  $("Ysys1").value = "B2";
+  $("result").hidden = true;
+  if (DEFAULT) {
+    applyHazard(DEFAULT);
+    status("importStatus", "Riverside Office Building CSV loaded. Height, stories, and lateral systems are page defaults; the CSV does not include them.");
+  } else {
+    currentSource = "SYNTHETIC_DEMO";
+    rows = [];
+    for (const [k, v] of Object.entries(DEMO)) $(k).value = v;
+    status("importStatus", "Fictional sample inputs loaded. No real ASCE data.");
+    label();
+  }
+}
+function fmt(v, digits = 5) {
+  return v === null || v === undefined ? "—" : Number(v).toFixed(digits);
+}
+function show(r) {
+  $("result").hidden = false;
+  $("global").innerHTML = [
+    ["Ie", r.ie, "Table 1.5-2"],
+    ["SDC", r.sdc, r.sdc_basis],
+    ["Cu", fmt(r.cu, 3), "Table 12.8-1"],
+    ["W", r.weight_kips == null ? "—" : Number(r.weight_kips).toLocaleString(), r.weight_kips == null ? "Engineer input required" : "kips"],
+  ].map(([name, value, sub]) => `<div class="kpi"><span>${esc(name)}</span><strong>${esc(value)}</strong><span class="sub">${esc(sub)}</span></div>`).join("");
+  $("out").innerHTML = ["X", "Y"].map(d => {
+    const x = r.directions[d];
+    const shear = x.base_shear_kips === null ? x.symbolic_base_shear : x.base_shear_kips.toLocaleString(undefined, { maximumFractionDigits: 1 }) + " kips";
+    const extra = x.cs_upper_system !== null ? `<tr><td>Cs, upper system (R=${x.upper_system.R})</td><td>${fmt(x.cs_upper_system)}</td></tr><tr><td>Transfer amplification</td><td>${fmt(x.transfer_amplification, 3)}</td></tr>` : "";
+    const limits = x.system_limits.map(s => `<tr><td>${esc(s.id)} limit, SDC ${esc(r.sdc)}</td><td>${esc(s.status)}</td></tr>`).join("");
+    return `<div class="dir"><h3>Direction ${d} · ${esc(x.system_ids.join(" + "))}</h3>
+      <div class="kpis">
+        <div class="kpi"><span>Cs</span><strong>${fmt(x.cs)}</strong><span class="sub">${esc(x.governing)}</span></div>
+        <div class="kpi"><span>V</span><strong>${esc(shear)}</strong><span class="sub">${x.base_shear_lbs === null ? "W required" : Math.round(x.base_shear_lbs).toLocaleString() + " lb"}</span></div>
+        <div class="kpi"><span>T used</span><strong>${fmt(x.T_used, 3)}</strong><span class="sub">${esc(x.T_basis)}</span></div>
+        <div class="kpi"><span>R / Ω0 / Cd</span><strong>${x.R} / ${x.omega0} / ${x.Cd}</strong><span class="sub">${esc(x.combination)}</span></div>
+      </div>
+      <table class="data-table">
+        <tr><td>Ta = Ct hn^x (${esc(x.period_type_label)})</td><td>${fmt(x.Ta, 3)} s</td></tr>
+        <tr><td>Cu Ta</td><td>${fmt(x.CuTa, 3)} s</td></tr>
+        <tr><td>SDS used for Cs</td><td>${fmt(x.sds_used, 3)}</td></tr>
+        ${extra}${limits}
+      </table>
+      <p class="muted small" style="margin-top:8px">${esc(x.combination_rule)} · 12.8.1.3: ${esc(x.sds_cap_status)}</p>
+    </div>`;
+  }).join("");
+  $("warnings").innerHTML = (r.warnings.length ? r.warnings : ["None"]).map(w => `<p class="banner warn">${esc(w)}</p>`).join("");
+  $("notes").innerHTML = r.notes.map(note => `<p class="banner info">${esc(note)}</p>`).join("");
+  $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+async function readChosenFile() {
+  const file = $("file").files[0];
+  if (!file) {
+    status("importStatus", "Choose an Excel or CSV file first.", true);
+    return;
+  }
+  $("fileName").textContent = file.name;
+  const form = new FormData();
+  form.append("xlsx", file);
+  try {
+    const resp = await fetch("/api/import", { method: "POST", body: form });
+    const data = await resp.json();
+    if (!resp.ok) throw Error(typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail));
+    applyHazard(data);
+    status("importStatus", "Imported. " + data.warnings.join(" "));
+  } catch (error) {
+    status("importStatus", error.message, true);
+  }
+}
+async function init() {
+  const systems = await (await fetch("/api/systems")).json();
+  SYS = systems.systems;
+  PTYPES = systems.period_types;
+  $("dirs").innerHTML = dirHTML("X") + dirHTML("Y");
+  try {
+    const response = await fetch("/api/default-hazard");
+    if (response.ok) DEFAULT = await response.json();
+  } catch (error) { /* the page still resets to the built-in sample */ }
+  for (const d of ["X", "Y"]) $(d + "comb").addEventListener("change", () => layout(d));
+  for (const id of hazFields) {
+    $(id).addEventListener("input", () => {
+      if (!rows.length) return;
+      rows = [];
+      currentSource = "MANUAL_OVERRIDE_UNVERIFIED";
+      label();
+      status("importStatus", "Imported hazard values were edited. Export will not link to the imported sheet.");
+    });
+  }
+  const drop = $("drop");
+  drop.addEventListener("dragover", event => { event.preventDefault(); drop.classList.add("over"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+  drop.addEventListener("drop", event => {
+    event.preventDefault();
+    drop.classList.remove("over");
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    $("file").files = transfer.files;
+    readChosenFile();
+  });
+  reset();
+}
+$("reset").onclick = reset;
+$("import").onclick = readChosenFile;
+$("file").addEventListener("change", () => { if ($("file").files[0]) readChosenFile(); });
+$("calculate").onclick = async () => {
+  try {
+    show(await post("/api/calculate", req()));
+    status("calcStatus", "Calculated. Review all warnings.");
+  } catch (error) {
+    status("calcStatus", error.message, true);
+  }
+};
+$("download").onclick = async () => {
+  try {
+    const data = await post("/api/export", { inputs: req(), exchange_rows: rows });
+    show(data.results);
+    const bytes = Uint8Array.from(atob(data.xlsx_base64), c => c.charCodeAt(0));
+    const url = URL.createObjectURL(new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = data.filename;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    status("calcStatus", "Workbook exported. Formulas recalculate in Excel. Warning text does not.");
+  } catch (error) {
+    status("calcStatus", error.message, true);
+  }
+};
+init();
+</script>
+</body>
+</html>
