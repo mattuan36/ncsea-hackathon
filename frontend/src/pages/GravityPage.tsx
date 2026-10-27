@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Check, FileBox, Link2, Upload } from 'lucide-react';
+import { Box, Check, FileBox, ListOrdered, Upload } from 'lucide-react';
 import { fetchDocuments, fetchFolders, uploadDocuments, type DocumentRow } from '../api';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, effectiveLayers, fmt } from '../ltl/calc';
@@ -60,7 +60,6 @@ function ModelStep({ onNext }: { onNext: () => void }) {
   const { model, setModel } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
   const [modelsFolder, setModelsFolder] = useState<number | null>(null);
-  const [path, setPath] = useState(model?.kind === 'revit' ? model.label : '');
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
@@ -68,7 +67,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
     const folders = await fetchFolders();
     const root = folders.find((f) => f.parent_id === null);
     setModelsFolder(folders.find((f) => f.name === '3D Models')?.id ?? root?.id ?? null);
-    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.(ifc|rvt)$/i.test(d.filename)));
+    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.ifc$/i.test(d.filename)));
   };
 
   useEffect(() => {
@@ -88,7 +87,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
 
   return (
     <>
-      <WireframeNote>Wireframe: reading the model is simulated. Whichever source you pick, the sample floor and wall types below are used.</WireframeNote>
+      <WireframeNote>Wireframe: reading the model is simulated. Whichever IFC you pick, the sample floor and wall types below are used.</WireframeNote>
       {error && <div className="banner error">{error}</div>}
       <div className="two-col">
         <section className="card">
@@ -117,7 +116,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
           <input
             ref={input}
             type="file"
-            accept=".ifc,.rvt"
+            accept=".ifc"
             hidden
             onChange={(e) => {
               upload([...(e.target.files ?? [])]);
@@ -127,16 +126,14 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </section>
 
         <section className="card">
-          <h2 className="card-title"><Link2 size={18} /> Point to a Revit model</h2>
-          <p className="muted">A local .rvt path or a cloud model (ACC / BIM 360) link.</p>
-          <label className="field">
-            Model location
-            <input placeholder="C:\Projects\Riverside\Riverside_STR.rvt" value={path} onChange={(e) => setPath(e.target.value)} />
-          </label>
-          <button className="btn" disabled={!path.trim()} onClick={() => setModel({ kind: 'revit', label: path.trim() })}>
-            Connect
-          </button>
-          {model?.kind === 'revit' && <p className="ok-line"><Check size={14} /> Connected to {model.label}</p>}
+          <h2 className="card-title"><ListOrdered size={18} /> Export an IFC from Revit</h2>
+          <ol className="howto-list">
+            <li>Open the architect's model in Revit and open a 3D view (hit the <b>Home</b> icon at the middle/top of Revit).</li>
+            <li>In Visibility/Graphics, show only <b>Walls, Floors, Roofs, Ceilings, Curtain Panels/Systems</b> (smaller file, faster upload).</li>
+            <li><b>File → Export → IFC</b>. Setup: <b>IFC 2x3 Coordination View 2.0</b>.</li>
+            <li>Then change the setup to <b>In-Session Setup</b> and go to the <b>Additional Content</b> tab → General: tick <b>Export only elements visible in view</b>.</li>
+            <li>Hit OK, then do the export.</li>
+          </ol>
         </section>
       </div>
 
@@ -148,7 +145,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </div>
       </section>
 
-      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? `Read ${model.kind === 'ifc' ? 'IFC' : 'Revit'} model` : 'Choose a model first'} />
+      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? 'Read IFC model' : 'Choose a model first'} />
     </>
   );
 }

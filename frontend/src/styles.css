@@ -247,6 +247,7 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .step-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 
 /* model step */
+.howto-list { margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; line-height: 1.45; }
 .pick-list { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-direction: column; gap: 6px; }
 .pick-list label { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
 .pick-list label.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
