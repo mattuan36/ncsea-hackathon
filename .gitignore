@@ -27,3 +27,9 @@ Thumbs.db
 
 # --- tooling ---------------------------------------------------------------
 .openchamber/
+
+# --- LightenTheLoad web app ---------------------------------------------------
+node_modules/
+dist/
+*.tsbuildinfo
+.claude/
