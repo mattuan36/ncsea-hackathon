@@ -5,7 +5,7 @@ import { saveLocalDocuments } from "../localDocuments";
 import { csReportFile, type CsReportData } from "./csReport";
 import { listHazardDocuments, parseHazardCsv, preferredHazardCsv, type DocumentPick, type HazardImport } from "./hazardCsv";
 import { hazardFiles } from "./hazardExport";
-import type { SiteReport } from "./skyciv";
+import { apiBase, type SiteReport } from "./skyciv";
 
 type Combination = "single" | "horizontal" | "vertical";
 
@@ -152,7 +152,7 @@ async function readHazardFile(file: File): Promise<HazardImport> {
 async function seismicJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`/api/seismic${path}`, init);
+    response = await fetch(`${apiBase()}/api/seismic${path}`, init);
   } catch {
     throw new Error("The seismic calculation service is not running.");
   }

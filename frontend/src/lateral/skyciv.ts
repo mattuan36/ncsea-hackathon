@@ -24,7 +24,7 @@ export interface SiteReport {
 
 export class SkyCivError extends Error {}
 
-function apiBase(): string {
+export function apiBase(): string {
   const configured = import.meta.env.VITE_API_BASE;
   return (configured || "").replace(/\/$/, "");
 }
