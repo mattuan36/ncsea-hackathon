@@ -42,6 +42,29 @@ def test_upload_download_delete_round_trip():
         assert client.delete(f"/api/documents/{doc['id']}").status_code == 404
 
 
+def test_site_report_archive_lands_in_documents():
+    with TestClient(app) as client:
+        project_docs = _folder_id(client, "Project Documents")
+        r = client.post(
+            "/api/site-reports/archive",
+            files=[
+                ("files", ("Riverside_Hazard_Studio_Revit_Import.csv", b"parameter_name,value\n", "text/csv")),
+                ("files", ("Riverside_Hazard_Studio_Site_Criteria.pdf", b"%PDF-1.4 archived", "application/pdf")),
+            ],
+        )
+        assert r.status_code == 201
+        body = r.json()
+        assert body["folder_path"][-1] == "Site Reports"
+        assert [doc["filename"] for doc in body["documents"]] == [
+            "Riverside_Hazard_Studio_Revit_Import.csv",
+            "Riverside_Hazard_Studio_Site_Criteria.pdf",
+        ]
+        listed = client.get("/api/documents", params={"folder_id": project_docs, "recursive": True}).json()
+        names = {doc["filename"] for doc in listed}
+        assert "Riverside_Hazard_Studio_Revit_Import.csv" in names
+        assert "Riverside_Hazard_Studio_Site_Criteria.pdf" in names
+
+
 def test_upload_to_missing_folder_is_404():
     with TestClient(app) as client:
         r = client.post(

@@ -4,3 +4,9 @@ python-multipart>=0.0.9
 psycopg[binary,pool]>=3.2
 pytest>=8
 httpx>=0.27
+
+# IFC extraction (gravity_ifc/); not needed by the site-API Docker image
+ifcopenshell==0.9.0.post1
+shapely
+numpy
+openpyxl

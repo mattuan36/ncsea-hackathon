@@ -1,0 +1,5 @@
+# extracted JSON (multi-MB per model) and the inputs: client models and the DB stay out of git
+out/
+*.ifc
+*.ifczip
+*.xlsx

@@ -1,0 +1,15 @@
+app = "ncsea-hackathon-site-api"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "backend/Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[env]
+  API_CORS_ORIGINS = "https://mattuan36.github.io,http://localhost:5180,http://127.0.0.1:5180"

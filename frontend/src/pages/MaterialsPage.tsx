@@ -5,7 +5,9 @@ import { fmtIn } from '../ltl/calc';
 import { MaterialModal, WireframeNote } from '../ltl/ui';
 
 export default function MaterialsPage() {
-  const { materials, updateMaterial, removeMaterial } = useLtl();
+  const { materials: all, materialsSource, updateMaterial, removeMaterial } = useLtl();
+  // the page shows the materials DB; the Demo's own samples appear only when the DB is offline
+  const materials = materialsSource === 'db' ? all.filter((m) => !m.demo) : all;
   const [q, setQ] = useState('');
   const [adding, setAdding] = useState(false);
   const list = materials.filter((m) => `${m.name} ${m.category}`.toLowerCase().includes(q.trim().toLowerCase()));
@@ -15,7 +17,11 @@ export default function MaterialsPage() {
       <header className="page-header">
         <h1>Materials DB</h1>
       </header>
-      <WireframeNote>Wireframe: changes here live in the browser session only and reset on reload.</WireframeNote>
+      {materialsSource === 'db' ? (
+        <WireframeNote>Kim's dead load spreadsheet, stored in the database. Edits and added materials are saved. Layer matching for uploaded IFC models reads these rows.</WireframeNote>
+      ) : (
+        <WireframeNote>{materialsSource === 'loading' ? 'Loading the materials database…' : 'Materials API offline: showing the Demo samples. Changes live in this browser session only and reset on reload.'}</WireframeNote>
+      )}
 
       <section className="card">
         <div className="card-head">
@@ -36,6 +42,8 @@ export default function MaterialsPage() {
             <tr>
               <th>Material</th>
               <th>Category</th>
+              <th>Orientation</th>
+              <th>Source</th>
               <th>Basis</th>
               <th className="num">Unit weight</th>
               <th>Thicknesses</th>
@@ -47,6 +55,8 @@ export default function MaterialsPage() {
               <tr key={m.id}>
                 <td>{m.name}{m.custom && <span className="tag">custom</span>}</td>
                 <td className="muted">{m.category}</td>
+                <td className="muted">{m.orientation || '—'}</td>
+                <td className="muted small">{m.source || '—'}</td>
                 <td className="muted">{m.basis}</td>
                 <td className="num">
                   <input

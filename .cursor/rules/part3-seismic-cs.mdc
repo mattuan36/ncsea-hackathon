@@ -1,0 +1,16 @@
+---
+description: ASCE 7-22 Part 3 seismic Cs and base shear. Use when editing code/part3_seismic_base_shear or when a task mentions Cs, ELF base shear, Table 12.2-1, or the Hazard_Exchange workbook.
+globs: code/part3_seismic_base_shear/**/*
+alwaysApply: false
+---
+
+# Part 3 seismic Cs
+
+Read `code/part3_seismic_base_shear/CONTEXT.md` before changing this module. The tests in `tests/test_part3.py` are the numerical contract. Run `python -m pytest -q` from `code/part3_seismic_base_shear`.
+
+- ASCE 7-22 only. Warnings never block `calculate()`. Missing SDS, SD1, S1, or TL is an error, never zero.
+- Do not hand-edit `data/table_12_2_1.json`. Regenerate it with `scripts/build_table_json.py`.
+- Leave `SDS_CAP_VERIFIED` false until a person has checked Section 12.8.1.3 and sets it.
+- A provision change updates `calculation.py` and the Excel formulas in `workbook.py` together. Sheet order and the Inputs / Code Tables row numbers in CONTEXT.md are part of the cache.
+- `/api/import` reads a Hazard_Exchange xlsx and the Revit CSV (`parameter_name`, `BP_HZ_*`). Blank SDS, SD1, S1, and TL stay missing.
+- Lateral step 2 (`frontend/src/lateral/SeismicCsStep.tsx`) calls this app through the Vite `/api/seismic` proxy. Do not change `frontend/src/lateral/seismic.ts` SDC logic.
