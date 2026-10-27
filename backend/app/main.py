@@ -2,8 +2,10 @@ from contextlib import asynccontextmanager
 from urllib.parse import quote
 
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import db
+from .site_api import cors_origins, router as site_router
 
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
 
@@ -16,6 +18,13 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Structural App API", lifespan=lifespan)
+app.include_router(site_router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins(),
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type"],
+)
 
 
 @app.get("/api/health")
