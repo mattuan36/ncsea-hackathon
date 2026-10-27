@@ -44,6 +44,18 @@ export async function uploadDocuments(folderId: number, files: File[]): Promise<
   return (await check(await fetch('/api/documents', { method: 'POST', body }))).json();
 }
 
+export interface SiteReportArchive {
+  folder_id: number;
+  folder_path: string[];
+  documents: DocumentRow[];
+}
+
+export async function archiveSiteReport(files: File[]): Promise<SiteReportArchive> {
+  const body = new FormData();
+  files.forEach((file) => body.append('files', file));
+  return (await check(await fetch('/api/site-reports/archive', { method: 'POST', body }))).json();
+}
+
 export async function deleteDocument(id: number): Promise<void> {
   await check(await fetch(`/api/documents/${id}`, { method: 'DELETE' }));
 }

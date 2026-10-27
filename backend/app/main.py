@@ -2,8 +2,10 @@ from contextlib import asynccontextmanager
 from urllib.parse import quote
 
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import db
+from .site_api import cors_origins, router as site_router
 
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
 
@@ -16,6 +18,13 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Structural App API", lifespan=lifespan)
+app.include_router(site_router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins(),
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type"],
+)
 
 
 @app.get("/api/health")
@@ -67,14 +76,12 @@ def list_documents(folder_id: int, recursive: bool = False):
         return conn.execute(sql, (folder_id,)).fetchall()
 
 
-@app.post("/api/documents", status_code=201)
-async def upload_documents(folder_id: int = Form(...), files: list[UploadFile] = File(...)):
+def _store_uploads(folder_id: int, files: list[UploadFile], data_list: list[bytes]) -> list[dict]:
+    created = []
     with db.pool.connection() as conn:
         if conn.execute("SELECT 1 FROM folders WHERE id = %s", (folder_id,)).fetchone() is None:
             raise HTTPException(404, "Folder not found")
-        created = []
-        for upload in files:
-            data = await upload.read()
+        for upload, data in zip(files, data_list, strict=True):
             if len(data) > MAX_UPLOAD_BYTES:
                 raise HTTPException(413, f"{upload.filename} exceeds 200 MB")
             created.append(
@@ -94,6 +101,31 @@ async def upload_documents(folder_id: int = Form(...), files: list[UploadFile] =
                 ).fetchone()
             )
     return created
+
+
+@app.post("/api/documents", status_code=201)
+async def upload_documents(folder_id: int = Form(...), files: list[UploadFile] = File(...)):
+    payloads = [await upload.read() for upload in files]
+    return _store_uploads(folder_id, files, payloads)
+
+
+@app.post("/api/site-reports/archive", status_code=201)
+async def archive_site_report(files: list[UploadFile] = File(...)):
+    """Store the CSV and PDF issued with a SkyCiv site report.
+
+    Files land in Documents › Project Documents › Site Reports so they
+    appear in the default Documents listing.
+    """
+    if not files:
+        raise HTTPException(400, "Attach the site-report CSV and PDF.")
+    payloads = [await upload.read() for upload in files]
+    folder_id = db.ensure_folder_path()
+    documents = _store_uploads(folder_id, files, payloads)
+    return {
+        "folder_id": folder_id,
+        "folder_path": list(db.SITE_REPORTS_PATH),
+        "documents": documents,
+    }
 
 
 @app.get("/api/documents/{doc_id}/download")
