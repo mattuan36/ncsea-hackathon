@@ -88,6 +88,8 @@ To adapt it, replace `process()` with your workload and swap the fields in the s
 
 React (Vite + TypeScript) frontend, Python (FastAPI) backend, PostgreSQL storage.
 
+The published site is [https://mattuan36.github.io/ncsea-hackathon/](https://mattuan36.github.io/ncsea-hackathon/). A push to `main` builds `frontend/` and deploys it with GitHub Pages. The Lateral report runs in the browser. Documents still needs the local API.
+
 Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
 
 | Menu | State |
