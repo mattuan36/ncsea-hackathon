@@ -2,7 +2,7 @@
 
 React (Vite + TypeScript) frontend, Python (FastAPI) backend, PostgreSQL storage.
 
-The published site is [https://mattuan36.github.io/ncsea-hackathon/](https://mattuan36.github.io/ncsea-hackathon/). A push to `main` builds `frontend/` and deploys it with GitHub Pages. Lateral calls the site API (`VITE_API_BASE`, or the local proxy). Documents still needs the local API. The SkyCiv key is only on the API server.
+The published site is [https://mattuan36.github.io/ncsea-hackathon/](https://mattuan36.github.io/ncsea-hackathon/). A push to `main` builds `frontend/` and deploys it with GitHub Pages. API calls use `VITE_API_BASE` when provided (the Pages workflow maps this from the repository variable `API_BASE`), otherwise they stay on relative `/api/...` paths for local Vite proxy development. The SkyCiv key is only on the API server.
 
 Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
 

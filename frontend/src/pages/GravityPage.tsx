@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Check, FileBox, ListOrdered, Upload } from 'lucide-react';
-import { fetchDocuments, fetchFolders, uploadDocuments, type DocumentRow } from '../api';
+import { fetchDocuments, fetchFolders, type DocumentRow } from '../api';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, effectiveLayers, fmt } from '../ltl/calc';
 import type { Kind } from '../ltl/data';
@@ -61,17 +61,20 @@ function StepFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled }: { onBa
 }
 
 function ModelStep({ onNext }: { onNext: () => void }) {
-  const { model, setModel, project, models, job, startUpload, startFromDocument, openModel, openDemo, error: storeError } = useLtl();
+  const { model, project, models, job, startUpload, startFromDocument, openModel } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
-  const [modelsFolder, setModelsFolder] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     const folders = await fetchFolders();
     const root = folders.find((f) => f.parent_id === null);
-    setModelsFolder(folders.find((f) => f.name === '3D Models')?.id ?? root?.id ?? null);
-    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.ifc$/i.test(d.filename)));
+    const folderId = folders.find((f) => f.name === '3D Models')?.id ?? root?.id;
+    if (folderId == null) {
+      setFiles([]);
+      return;
+    }
+    setFiles((await fetchDocuments(folderId)).filter((d) => /\.ifc$/i.test(d.filename)));
   };
 
   useEffect(() => {
