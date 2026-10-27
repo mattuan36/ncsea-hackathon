@@ -292,9 +292,10 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .verify.ok { background: #f0fdf4; border-color: #bbf7d0; }
 .verify > span:first-child { font-weight: 500; }
 .verify .ok-line { margin: 0; }
-.build { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(690px, 1fr); gap: 12px; align-items: start; }
+.build { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+.build > .card { min-width: 0; }
+.build-table { overflow-x: auto; }
 .build-graphic .assembly-graphic { max-width: 760px; }
-@media (max-width: 1360px) { .build { grid-template-columns: 1fr; } }
 
 .section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
 .assembly-graphic { width: 100%; height: auto; display: block; }
