@@ -17,9 +17,7 @@ export default function MaterialsPage() {
       <header className="page-header">
         <h1>Materials DB</h1>
       </header>
-      {materialsSource === 'db' ? (
-        <WireframeNote>Kim's dead load spreadsheet, stored in the database. Edits and added materials are saved. Layer matching for uploaded IFC models reads these rows.</WireframeNote>
-      ) : (
+      {materialsSource !== 'db' && (
         <WireframeNote>{materialsSource === 'loading' ? 'Loading the materials database…' : 'Materials API offline: showing the Demo samples. Changes live in this browser session only and reset on reload.'}</WireframeNote>
       )}
 
