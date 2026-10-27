@@ -59,7 +59,13 @@ app.py            # inputs → process() → session_state cache → workspace g
 requirements.txt  # pinned Python dependencies
 .env.example      # env template (copy to .env)
 .python-version   # 3.14, for pyenv/asdf users
+code/             # georeferenced SkyCiv Load Generator connector
+docs/skyciv/      # Load Generator API documentation
 ```
+
+## Load Generator
+
+Wind, snow, and seismic site data come from the SkyCiv Load Generator. The client in `code/skyciv_load_generator.py` sends a latitude and longitude. Usage and the vendored API notes are in `docs/skyciv/README.md`. Put credentials in the environment or a local `API_Key.txt`; that file is gitignored.
 
 To adapt it, replace `process()` with your workload and swap the fields in the sidebar
 `st.form`; the caching and layout wiring stay unchanged.

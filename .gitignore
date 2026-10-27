@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 .streamlit/secrets.toml
+API_Key.txt
 
 # --- environments ----------------------------------------------------------
 venv/
