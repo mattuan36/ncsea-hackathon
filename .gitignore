@@ -1,7 +1,35 @@
+# --- secrets ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+API_Key.txt
+
+# --- environments ----------------------------------------------------------
+venv/
+.venv/
+env/
+ENV/
+
+# --- python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- editors / os ----------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- tooling ---------------------------------------------------------------
+.openchamber/
+
+# --- LightenTheLoad web app ---------------------------------------------------
 node_modules/
 dist/
-.venv/
-__pycache__/
-.pytest_cache/
 *.tsbuildinfo
 .claude/
