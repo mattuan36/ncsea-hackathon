@@ -1,10 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { Check } from "lucide-react";
 import { archiveSiteReport } from "../api";
 import { hazardFiles } from "../lateral/hazardExport";
 import { saveLocalDocuments } from "../localDocuments";
 import MapView from "../lateral/MapView";
 import ReportView from "../lateral/ReportView";
+import SeismicCsStep from "../lateral/SeismicCsStep";
 import { inServiceArea } from "../lateral/coverage";
 import { useLtl } from "../ltl/store";
 import { LocateError, searchPlaces, type Place } from "../lateral/search";
@@ -32,6 +34,8 @@ const SAMPLE_REPORT: SiteReport = {
 const DEFAULT_LAT = 37.795143;
 const DEFAULT_LNG = -122.404312;
 
+const STEPS = ["Site loads", "Cs and base shear"];
+
 const SITE_CLASSES: Record<string, string[]> = {
   "asce7-22": ["A", "B", "BC", "C", "CD", "D", "DE", "E"],
   "asce7-16": ["A", "B", "C", "D", "D-default", "E"],
@@ -53,7 +57,14 @@ export default function LateralPage() {
   const [report, setReport] = useState<SiteReport | null>(null);
   const [archiveNote, setArchiveNote] = useState("");
   const [archiveError, setArchiveError] = useState("");
-  const { projectName } = useLtl();
+  const { projectName, lateralStep: step, setLateralStep: setStep } = useLtl();
+  const go = (n: number) => setStep(Math.max(0, Math.min(STEPS.length - 1, n)));
+  const openCs = () => {
+    const onSampleSite = Math.abs(lat - DEFAULT_LAT) < 1e-6 && Math.abs(lng - DEFAULT_LNG) < 1e-6
+      && designCode === "asce7-22" && risk === "II" && siteClass === "D";
+    if (!report && onSampleSite) setReport(SAMPLE_REPORT);
+    go(1);
+  };
 
   useEffect(() => {
     if (!SITE_CLASSES[designCode].includes(siteClass)) setSiteClass("D");
@@ -155,9 +166,23 @@ export default function LateralPage() {
     <div className="page page-scroll">
       <header className="page-header">
         <h1>Lateral</h1>
-        <p className="muted subtitle">Wind, snow, and seismic site loads for the United States, including Alaska and Puerto Rico.</p>
+        <p className="muted subtitle">Site loads first, then ASCE 7-22 seismic Cs and base shear.</p>
       </header>
 
+      <ol className="stepper">
+        {STEPS.map((label, i) => (
+          <li key={label} className={i === step ? "current" : i < step ? "done" : ""}>
+            <button type="button" onClick={() => (i === 1 ? openCs() : go(i))}>
+              <span className="step-num">{i < step ? <Check size={13} /> : i + 1}</span>
+              <span>{label}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+
+      {step === 1 && <SeismicCsStep report={report} projectName={projectName} onBack={() => go(0)} />}
+
+      {step === 0 && <>
       <form className="card" onSubmit={onSearch}>
         <div className="form-grid">
           <label className="span-2">
@@ -232,6 +257,11 @@ export default function LateralPage() {
         <MapView lat={lat} lng={lng} onPick={onPick} />
       </div>
       {report && <ReportView report={report} />}
+      <div className="step-footer">
+        <span />
+        <button className="btn primary" type="button" onClick={openCs}>Next: Cs and base shear</button>
+      </div>
+      </>}
     </div>
   );
 }

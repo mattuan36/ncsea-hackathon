@@ -4,11 +4,13 @@ Load this file before editing `code/part3_seismic_base_shear/`. It is the contra
 
 ## Place in the repo
 
-Standalone FastAPI app, version `2.0.0`, port **8003**. It does not share a process with the documents API (8100) or the site API (8101), and the Lateral page does not call it.
+Standalone FastAPI app, version `2.0.0`, port **8003**. It does not share a process with the documents API (8100) or the site API (8101).
 
-`frontend/src/lateral/seismic.ts` classifies SDC only through D. This module also applies S1 ≥ 0.75g → SDC E (Risk Category I–III) or F (IV). Leave the Lateral page unchanged when editing Part 3.
+The product surface is Lateral step 2, `frontend/src/lateral/SeismicCsStep.tsx`. Vite rewrites `/api/seismic` to this app’s `/api`. Step 1 remains the site-load report. When that report is ASCE 7-22, step 2 copies SDS, SD1, S1, TL, risk category, site class, and the reported SDC. Height, stories, and the lateral systems stay engineer inputs. `static/index.html` is the same calculation without the app shell.
 
-`frontend/src/lateral/hazardExport.ts` writes the Revit CSV that `/api/import` also reads. Header: `parameter_name,value,units,description,preliminary,source_status,engineer_confirmed`. Mapped names are `BP_HZ_SDS`, `BP_HZ_SD1`, `BP_HZ_S1`, `BP_HZ_TL`, `BP_HZ_ASCE_EDITION`, `BP_HZ_RISK_CATEGORY`, `BP_HZ_SITE_CLASS`, `BP_HZ_SDC`, `BP_HZ_PROJECT_NUMBER`, and `BP_HZ_W_PRELIM`. Blank cells stay missing. The page default is `samples/Riverside_Office_Building_Hazard_Studio_Revit_Import.csv`. Leave the Lateral page code alone when editing Part 3.
+`frontend/src/lateral/seismic.ts` classifies SDC only through D. This module also applies S1 ≥ 0.75g → SDC E (Risk Category I–III) or F (IV). Do not change that SDC helper to match Part 3.
+
+`frontend/src/lateral/hazardExport.ts` writes the Revit CSV that `/api/import` also reads. Header: `parameter_name,value,units,description,preliminary,source_status,engineer_confirmed`. Mapped names are `BP_HZ_SDS`, `BP_HZ_SD1`, `BP_HZ_S1`, `BP_HZ_TL`, `BP_HZ_ASCE_EDITION`, `BP_HZ_RISK_CATEGORY`, `BP_HZ_SITE_CLASS`, `BP_HZ_SDC`, `BP_HZ_PROJECT_NUMBER`, and `BP_HZ_W_PRELIM`. Blank cells stay missing. The page default is `samples/Riverside_Office_Building_Hazard_Studio_Revit_Import.csv`.
 
 ## Rules that survive a refactor
 

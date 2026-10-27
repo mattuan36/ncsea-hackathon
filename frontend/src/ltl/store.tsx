@@ -13,6 +13,8 @@ interface LtlState {
   setModel: (m: ModelSource | null) => void;
   gravityStep: number;
   setGravityStep: (n: number) => void;
+  lateralStep: number;
+  setLateralStep: (n: number) => void;
   materials: Material[];
   addMaterial: (m: Omit<Material, 'id'>) => Material;
   updateMaterial: (id: string, patch: Partial<Material>) => void;
@@ -32,6 +34,7 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const [projectName, setProjectName] = useState('Riverside Office Building');
   const [model, setModel] = useState<ModelSource | null>(null);
   const [gravityStep, setGravityStep] = useState(0);
+  const [lateralStep, setLateralStep] = useState(0);
   const [materials, setMaterials] = useState<Material[]>(MATERIALS);
   const [types, setTypes] = useState<ElementType[]>(ELEMENT_TYPES);
 
@@ -82,11 +85,11 @@ export function LtlProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      projectName, setProjectName, model, setModel, gravityStep, setGravityStep,
+      projectName, setProjectName, model, setModel, gravityStep, setGravityStep, lateralStep, setLateralStep,
       materials, addMaterial, updateMaterial, removeMaterial,
       types, updateType, copyLayers, mergeTypes, unmerge,
     }),
-    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, types, updateType, copyLayers, mergeTypes, unmerge],
+    [projectName, model, gravityStep, lateralStep, materials, addMaterial, updateMaterial, removeMaterial, types, updateType, copyLayers, mergeTypes, unmerge],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

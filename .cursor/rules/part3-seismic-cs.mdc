@@ -12,4 +12,5 @@ Read `code/part3_seismic_base_shear/CONTEXT.md` before changing this module. The
 - Do not hand-edit `data/table_12_2_1.json`. Regenerate it with `scripts/build_table_json.py`.
 - Leave `SDS_CAP_VERIFIED` false until a person has checked Section 12.8.1.3 and sets it.
 - A provision change updates `calculation.py` and the Excel formulas in `workbook.py` together. Sheet order and the Inputs / Code Tables row numbers in CONTEXT.md are part of the cache.
-- `/api/import` reads a Hazard_Exchange xlsx and the Revit CSV (`parameter_name`, `BP_HZ_*`). Blank SDS, SD1, S1, and TL stay missing. Do not change `frontend/src/lateral/` unless the task says to.
+- `/api/import` reads a Hazard_Exchange xlsx and the Revit CSV (`parameter_name`, `BP_HZ_*`). Blank SDS, SD1, S1, and TL stay missing.
+- Lateral step 2 (`frontend/src/lateral/SeismicCsStep.tsx`) calls this app through the Vite `/api/seismic` proxy. Do not change `frontend/src/lateral/seismic.ts` SDC logic.
