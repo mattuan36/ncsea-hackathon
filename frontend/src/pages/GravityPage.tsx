@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Check, FileBox, Link2, Upload } from 'lucide-react';
-import { fetchDocuments, fetchFolders, type DocumentRow } from '../api';
+import { Box, Check, FileBox, ListOrdered, Upload } from 'lucide-react';
+import { fetchDocuments, fetchFolders, uploadDocuments, type DocumentRow } from '../api';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, effectiveLayers, fmt } from '../ltl/calc';
 import type { Kind } from '../ltl/data';
@@ -63,14 +63,15 @@ function StepFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled }: { onBa
 function ModelStep({ onNext }: { onNext: () => void }) {
   const { model, setModel, project, models, job, startUpload, startFromDocument, openModel, openDemo, error: storeError } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
-  const [path, setPath] = useState(model?.kind === 'revit' ? model.label : '');
+  const [modelsFolder, setModelsFolder] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     const folders = await fetchFolders();
     const root = folders.find((f) => f.parent_id === null);
-    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.(ifc|ifczip|rvt)$/i.test(d.filename)));
+    setModelsFolder(folders.find((f) => f.name === '3D Models')?.id ?? root?.id ?? null);
+    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.ifc$/i.test(d.filename)));
   };
 
   useEffect(() => {
@@ -96,52 +97,8 @@ function ModelStep({ onNext }: { onNext: () => void }) {
 
   return (
     <>
-      <WireframeNote>IFC uploads are read from the model and saved, so they reopen after a reload. Pointing to a Revit model is still simulated: it opens the Demo sample project.</WireframeNote>
-      {(error || storeError) && <div className="banner error">{error ?? storeError}</div>}
-
-      <section className="card">
-        <h2 className="card-title">Project</h2>
-        <ul className="pick-list">
-          <li>
-            <label className={project.kind === 'demo' ? 'selected' : ''}>
-              <input type="radio" name="project" checked={project.kind === 'demo'} onChange={openDemo} />
-              <Box size={16} /> Demo · Riverside Office Building <span className="tag">sample data</span>
-            </label>
-          </li>
-          {models.filter((m) => m.status === 'ready').map((m) => (
-            <li key={m.id}>
-              <label className={project.kind === 'model' && project.id === m.id ? 'selected' : ''}>
-                <input type="radio" name="project" checked={project.kind === 'model' && project.id === m.id} onChange={() => openModel(m.id)} />
-                <FileBox size={16} /> {m.settings.project_name ?? m.filename}
-                <span className="muted small"> · {m.filename} · read {new Date(m.finished_at ?? m.created_at).toLocaleString()}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {job && (
-        <section className={`card job${job.status === 'failed' ? ' failed' : ''}`} aria-live="polite">
-          <div className="card-head">
-            <h2 className="card-title"><FileBox size={18} /> Reading {job.filename}</h2>
-            <span className="muted small">{fmt(job.size_bytes / 1e6, 1)} MB</span>
-          </div>
-          {job.status === 'failed' ? (
-            <div className="banner error">
-              <span>Could not read the model: {job.error}</span>
-              {job.document_id != null && <button className="btn small" onClick={() => startFromDocument(job.document_id!)}>Try again</button>}
-            </div>
-          ) : (
-            <>
-              <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(job.progress * 100)}>
-                <div style={{ width: `${Math.max(job.progress, 0.02) * 100}%` }} />
-              </div>
-              <p className="muted small">{job.stage} · {fmt(job.progress * 100)}%. Large models take a minute or two; you can leave this page.</p>
-            </>
-          )}
-        </section>
-      )}
-
+      <WireframeNote>Wireframe: reading the model is simulated. Whichever IFC you pick, the sample floor and wall types below are used.</WireframeNote>
+      {error && <div className="banner error">{error}</div>}
       <div className="two-col">
         <section className="card">
           <h2 className="card-title"><FileBox size={18} /> Upload an IFC model</h2>
@@ -171,7 +128,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
           <input
             ref={input}
             type="file"
-            accept=".ifc,.ifczip,.rvt"
+            accept=".ifc"
             hidden
             onChange={(e) => {
               upload([...(e.target.files ?? [])]);
@@ -181,23 +138,14 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </section>
 
         <section className="card">
-          <h2 className="card-title"><Link2 size={18} /> Point to a Revit model</h2>
-          <p className="muted">A local .rvt path or a cloud model (ACC / BIM 360) link.</p>
-          <label className="field">
-            Model location
-            <input placeholder="C:\\Projects\\Riverside\\Riverside_STR.rvt" value={path} onChange={(e) => setPath(e.target.value)} />
-          </label>
-          <button
-            className="btn"
-            disabled={!path.trim()}
-            onClick={() => {
-              openDemo();
-              setModel({ kind: 'revit', label: path.trim() });
-            }}
-          >
-            Connect
-          </button>
-          {model?.kind === 'revit' && <p className="ok-line"><Check size={14} /> Connected to {model.label}</p>}
+          <h2 className="card-title"><ListOrdered size={18} /> Export an IFC from Revit</h2>
+          <ol className="howto-list">
+            <li>Open the architect's model in Revit and open a 3D view (hit the <b>Home</b> icon at the middle/top of Revit).</li>
+            <li>In Visibility/Graphics, show only <b>Walls, Floors, Roofs, Ceilings, Curtain Panels/Systems</b> (smaller file, faster upload).</li>
+            <li><b>File → Export → IFC</b>. Setup: <b>IFC 2x3 Coordination View 2.0</b>.</li>
+            <li>Then change the setup to <b>In-Session Setup</b> and go to the <b>Additional Content</b> tab → General: tick <b>Export only elements visible in view</b>.</li>
+            <li>Hit OK, then do the export.</li>
+          </ol>
         </section>
       </div>
 
@@ -209,7 +157,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </div>
       </section>
 
-      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? `Read ${model.kind === 'ifc' ? 'IFC' : 'Revit'} model` : 'Choose a model first'} />
+      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? 'Read IFC model' : 'Choose a model first'} />
     </>
   );
 }

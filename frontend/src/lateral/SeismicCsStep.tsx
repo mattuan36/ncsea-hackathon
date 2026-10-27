@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { archiveSiteReport } from "../api";
 import { saveLocalDocuments } from "../localDocuments";
 import { csReportFile, type CsReportData } from "./csReport";
+import { listHazardDocuments, parseHazardCsv, preferredHazardCsv, type DocumentPick, type HazardImport } from "./hazardCsv";
 import { hazardFiles } from "./hazardExport";
-import type { SiteReport } from "./skyciv";
+import { apiBase, type SiteReport } from "./skyciv";
 
 type Combination = "single" | "horizontal" | "vertical";
 
@@ -131,10 +132,27 @@ async function readError(response: Response): Promise<string> {
   return `Request failed (${response.status}).`;
 }
 
+async function readHazardFile(file: File): Promise<HazardImport> {
+  const csv = /\.csv$/i.test(file.name);
+  if (csv) {
+    const local = parseHazardCsv(await file.text());
+    try {
+      const form = new FormData();
+      form.append("xlsx", file);
+      return await seismicJson<HazardImport>("/import", { method: "POST", body: form });
+    } catch {
+      return local;
+    }
+  }
+  const form = new FormData();
+  form.append("xlsx", file);
+  return seismicJson<HazardImport>("/import", { method: "POST", body: form });
+}
+
 async function seismicJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`/api/seismic${path}`, init);
+    response = await fetch(`${apiBase()}/api/seismic${path}`, init);
   } catch {
     throw new Error("The seismic calculation service is not running.");
   }
@@ -177,9 +195,11 @@ export default function SeismicCsStep({
   const [hazardFile, setHazardFile] = useState("");
   const [savedPath, setSavedPath] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState<"calc" | "export" | "import" | "save" | null>(null);
+  const [docList, setDocList] = useState<DocumentPick[] | null>(null);
+  const [busy, setBusy] = useState<"calc" | "export" | "import" | "docs" | "save" | null>(null);
   const [result, setResult] = useState<CalcResult | null>(null);
   const loaded = useRef(false);
+  const loadedHazard = useRef(false);
   const appliedReport = useRef<SiteReport | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -206,10 +226,15 @@ export default function SeismicCsStep({
     (async () => {
       try {
         if (!loaded.current) {
-          const catalog = await seismicJson<{ systems: SystemOption[]; period_types: Record<string, string> }>("/systems");
+          try {
+            const catalog = await seismicJson<{ systems: SystemOption[]; period_types: Record<string, string> }>("/systems");
+            if (cancel) return;
+            setSystems(catalog.systems);
+            setPeriodTypes(catalog.period_types);
+          } catch {
+            if (!cancel) setNote("The calculation service is offline, so the system list is empty. Hazard values still load from the CSV.");
+          }
           if (cancel) return;
-          setSystems(catalog.systems);
-          setPeriodTypes(catalog.period_types);
           setDirs(pageDefaults());
           setHn("60");
           setStories("4");
@@ -222,24 +247,35 @@ export default function SeismicCsStep({
             setError("This step calculates ASCE 7-22 only. The site report on step 1 uses another edition, so its hazard model was not loaded.");
             return;
           }
-          const csv = hazardFiles(report, projectName)[0];
-          const form = new FormData();
-          form.append("xlsx", csv);
-          const hazard = await seismicJson<HazardPayload>("/import", { method: "POST", body: form });
+          const file = hazardFiles(report, projectName)[0];
+          const hazard = await readHazardFile(file);
           if (cancel) return;
           appliedReport.current = report;
+          loadedHazard.current = true;
           applyHazard(hazard, "");
           setFromStep1(true);
-          setHazardFile(csv.name);
+          setHazardFile(file.name);
           setPendingStep1(false);
           return;
         }
-        if (!report && !appliedReport.current) {
-          const hazard = await seismicJson<HazardPayload>("/default-hazard");
+        if (!report && !appliedReport.current && !loadedHazard.current) {
+          loadedHazard.current = true;
+          const saved = preferredHazardCsv(await listHazardDocuments());
+          if (!saved) {
+            if (!cancel) {
+              setFromStep1(false);
+              setPendingStep1(false);
+            }
+            return;
+          }
+          const file = await saved.load();
+          const hazard = await readHazardFile(file);
           if (cancel) return;
           applyHazard(hazard, "");
-          setFromStep1(false);
-          setHazardFile("");
+          setFromStep1(true);
+          setHazardFile(file.name);
+          setPendingStep1(false);
+          return;
         }
         if (!cancel) setPendingStep1(false);
       } catch (err) {
@@ -420,18 +456,35 @@ export default function SeismicCsStep({
     }),
   });
 
-  const onImport = async (file: File) => {
+  const takeFile = async (file: File, fromPrevious: boolean) => {
     setBusy("import");
     setError("");
-    const form = new FormData();
-    form.append("xlsx", file);
     try {
-      const hazard = await seismicJson<HazardPayload>("/import", { method: "POST", body: form });
-      applyHazard(hazard, `Imported ${file.name}. ${(hazard.warnings ?? []).join(" ")}`.trim());
-      setFromStep1(false);
+      const hazard = await readHazardFile(file);
+      const fromHazardSheet = fromPrevious || /Hazard_Studio_Revit_Import\.csv$/i.test(file.name);
+      applyHazard(hazard, fromHazardSheet ? "" : `Imported ${file.name}. ${(hazard.warnings ?? []).join(" ")}`.trim());
+      setFromStep1(fromHazardSheet);
       setHazardFile(file.name);
+      setDocList(null);
+      loadedHazard.current = true;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Import failed.");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const onShowDocuments = async () => {
+    if (docList) {
+      setDocList(null);
+      return;
+    }
+    setBusy("docs");
+    setError("");
+    try {
+      setDocList(await listHazardDocuments());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not read Documents.");
     } finally {
       setBusy(null);
     }
@@ -465,15 +518,36 @@ export default function SeismicCsStep({
             hidden
             onChange={(event) => {
               const file = event.target.files?.[0];
-              if (file) void onImport(file);
+              if (file) void takeFile(file, false);
               event.target.value = "";
             }}
           />
           <button className="btn" type="button" disabled={busy != null} onClick={() => fileRef.current?.click()}>
-            {busy === "import" ? "Importing…" : "Import Excel or CSV"}
+            {busy === "import" ? "Importing…" : "Import from computer"}
+          </button>
+          <button className="btn" type="button" disabled={busy != null} onClick={() => void onShowDocuments()}>
+            {busy === "docs" ? "Loading…" : "Load from documents"}
           </button>
           <span className="cs-choice">{sourceLabel(source)}</span>
         </div>
+        {docList && (
+          <div className="pick-list">
+            {docList.length === 0 ? (
+              <p className="muted small">No CSV or Excel file is in Documents › Site Reports yet.</p>
+            ) : docList.map((pick) => (
+              <button
+                type="button"
+                className="btn"
+                key={pick.key}
+                onClick={() => {
+                  void pick.load().then((file) => takeFile(file, /Hazard_Studio_Revit_Import\.csv$/i.test(pick.filename)));
+                }}
+              >
+                {pick.filename}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="form-grid">
           <label className="span-2">
             Project
