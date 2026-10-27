@@ -1,0 +1,45 @@
+parameter_name,value,units,description,preliminary,source_status,engineer_confirmed
+BP_HZ_PROJECT_NUMBER,Riverside_Office_Building,,Project number,NO,USER_SETTING,NO
+BP_HZ_PROJECT_NAME,Riverside Office Building,,Project name,NO,USER_SETTING,NO
+BP_HZ_ISSUED,2026-10-27,,Calculation issue date (ISO),NO,APP,NO
+BP_HZ_ADDRESS,"750 Kearny St, San Francisco, CA 94108, USA",,Site address resolved by the hazard source,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_LATITUDE,37.795143,deg,"Site latitude, WGS84",NO,USER_SETTING,NO
+BP_HZ_LONGITUDE,-122.404312,deg,"Site longitude, WGS84",NO,USER_SETTING,NO
+BP_HZ_ELEVATION,7.15,m,Ground elevation (23 ft),NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_ASCE_EDITION,ASCE 7-22,,ASCE 7 edition used for the request,NO,USER_SETTING,NO
+BP_HZ_RISK_CATEGORY,II,,"Risk category, ASCE 7 Section 1.5",NO,USER_SETTING,NO
+BP_HZ_SITE_CLASS,D,,"Site class, ASCE 7 Chapter 20 / 11.4.3",NO,USER_SETTING,NO
+BP_HZ_SDC,D,,Seismic design category from SkyCiv,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_SDC_SDS,D,,"SDC from SDS and risk category, ASCE 7 Table 11.6-1",NO,COMPUTED_ASCE7_11_6,NO
+BP_HZ_SDC_SD1,D,,"SDC from SD1 and risk category, ASCE 7 Table 11.6-2",NO,COMPUTED_ASCE7_11_6,NO
+BP_HZ_SDC_GOVERNING,D,,"Governing SDC = max(Table 11.6-1, Table 11.6-2)",NO,COMPUTED_ASCE7_11_6,NO
+BP_HZ_SS,1.500,g,Mapped MCER short-period spectral acceleration Ss,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_S1,0.600,g,Mapped MCER 1-second spectral acceleration S1,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_SMS,1.630,g,MCER spectral acceleration at short periods SMS = Fa Ss,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_SM1,1.700,g,MCER spectral acceleration at 1 second SM1 = Fv S1,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_SDS,1.090,g,Design spectral acceleration at short periods SDS = (2/3) SMS,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_SD1,1.130,g,Design spectral acceleration at 1 second SD1 = (2/3) SM1,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_PGAM,0.550,g,Maximum considered earthquake geometric mean PGA,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_TS,1.040,s,Transition period Ts = SD1 / SDS,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_T0,0.209,s,Transition period T0 = 0.2 Ts,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_TL,12.000,s,Long-period transition period TL,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_CV,,,Additional seismic parameter cv,NO,NOT_RETURNED,NO
+BP_HZ_WIND_VULT,92.0,mph,"Basic wind speed V for Risk Category II (speed, not pressure)",NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_I,87.0,mph,"Basic wind speed V, Risk Category I",NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_II,92.0,mph,"Basic wind speed V, Risk Category II",NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_III,99.0,mph,"Basic wind speed V, Risk Category III",NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_IV,103.0,mph,"Basic wind speed V, Risk Category IV",NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_10_YEAR,61.0,mph,Wind speed 10-year,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_25_YEAR,68.0,mph,Wind speed 25-year,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_50_YEAR,73.0,mph,Wind speed 50-year,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_WIND_V_100_YEAR,78.0,mph,Wind speed 100-year,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_GROUND_SNOW,,,Ground snow load pg (not roof snow pf),NO,NOT_RETURNED,NO
+BP_HZ_W2,0.25,,Winter wind parameter W2,NO,SKYCIV_GETSITEDATA,NO
+BP_HZ_R,,,Response modification coefficient R. Engineer input required before Cs.,YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_IE,,,"Seismic importance factor Ie, ASCE 7 Table 1.5-2. Engineer input required before Cs.",YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_T,,s,Fundamental period T used in ELF. Engineer input required before Cs.,YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_CS_PRELIM,,,"Preliminary Cs = SDS / (R/Ie), limited per ASCE 7 12.8.1.1. Blank until R, Ie, and T are provided.",YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_W_PRELIM,,kips,Effective seismic weight W. Engineer supplied; never assume zero.,YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_V_PRELIM,,kips,Preliminary base shear V = Cs W. Reported symbolically until W is provided.,YES,ENGINEER_INPUT_REQUIRED,NO
+BP_HZ_SOURCE,SkyCiv standalone.loads.getSiteData,,Hazard retrieval method,NO,APP,NO
+BP_HZ_DISCLAIMER,Not an official ASCE Hazard Tool Full Report. Confirm before design use.,,Use limitation,NO,APP,NO
