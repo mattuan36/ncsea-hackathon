@@ -45,6 +45,17 @@ cd frontend && npm install && npm run dev  # http://localhost:5180
 
 The API creates its tables (`backend/schema.sql`) and a default folder tree on first start.
 
+### Supabase setup (frontend)
+
+1. Create a Supabase project at [supabase.com](https://supabase.com/).
+2. In **Project Settings → API**, copy the **Project URL** and **anon/public key**.
+3. Create a local `.env` from `.env.example` and set:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+
+The frontend Supabase client is initialized in `frontend/src/supabase/client.ts` using those public
+`VITE_` variables.
+
 The Lateral page calls `POST /api/site-report` on port 8101. That process does not use Postgres. It reads `SKYCIV_USERNAME` and `SKYCIV_KEY` from the environment, `.env`, or `API_Key.txt`.
 
 ```bash
