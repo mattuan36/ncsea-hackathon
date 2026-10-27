@@ -23,6 +23,8 @@ interface LtlState {
   setModel: (m: ModelSource | null) => void;
   gravityStep: number;
   setGravityStep: (n: number) => void;
+  lateralStep: number;
+  setLateralStep: (n: number) => void;
   materials: Material[];
   /** 'offline': the materials API could not be reached; the Demo samples are shown instead */
   materialsSource: 'loading' | 'db' | 'offline';
@@ -76,6 +78,7 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const [projectName, setProjectNameState] = useState(DEMO_NAME);
   const [model, setModel] = useState<ModelSource | null>(null);
   const [gravityStep, setGravityStep] = useState(0);
+  const [lateralStep, setLateralStep] = useState(0);
   const [dbMaterials, setDbMaterials] = useState<Material[]>([]);
   const [localMaterials, setLocalMaterials] = useState<Material[]>(DEMO_MATERIALS);
   const [materialsSource, setMaterialsSource] = useState<LtlState['materialsSource']>('loading');
@@ -310,13 +313,13 @@ export function LtlProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       project, isDemo: project.kind === 'demo',
-      projectName, setProjectName, model, setModel, gravityStep, setGravityStep,
+      projectName, setProjectName, model, setModel, gravityStep, setGravityStep, lateralStep, setLateralStep,
       materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption,
       types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error,
     }),
-    [project, projectName, setProjectName, model, gravityStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
+    [project, projectName, setProjectName, model, gravityStep, lateralStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption, types, plan, updateType, copyLayers, mergeTypes, unmerge,
       models, job, startUpload, startFromDocument, openModel, openDemo, error],
   );
