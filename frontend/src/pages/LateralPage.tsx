@@ -1,7 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
+import { archiveSiteReport } from "../api";
+import { hazardFiles } from "../lateral/hazardExport";
+import { saveLocalDocuments } from "../localDocuments";
 import MapView from "../lateral/MapView";
 import ReportView from "../lateral/ReportView";
 import { inServiceArea } from "../lateral/coverage";
+import { useLtl } from "../ltl/store";
 import { LocateError, searchPlaces, type Place } from "../lateral/search";
 import { fetchSiteReport, SkyCivError, type SiteReport } from "../lateral/skyciv";
 
@@ -46,6 +51,9 @@ export default function LateralPage() {
   const [reportError, setReportError] = useState("");
   const [busy, setBusy] = useState<"search" | "report" | null>(null);
   const [report, setReport] = useState<SiteReport | null>(null);
+  const [archiveNote, setArchiveNote] = useState("");
+  const [archiveError, setArchiveError] = useState("");
+  const { projectName } = useLtl();
 
   useEffect(() => {
     if (!SITE_CLASSES[designCode].includes(siteClass)) setSiteClass("D");
@@ -107,20 +115,40 @@ export default function LateralPage() {
       return;
     }
     setBusy("report");
+    setArchiveNote("");
+    setArchiveError("");
     try {
-      setReport(await fetchSiteReport({
+      const next = await fetchSiteReport({
         lat,
         lng,
         designCode,
         riskCategory: risk,
         siteClass,
-      }));
+      });
+      setReport(next);
+      await saveReportDocuments(next, projectName, setArchiveNote, setArchiveError);
     } catch (error) {
       setReport(null);
       setReportError(error instanceof SkyCivError ? error.message : "SkyCiv did not return a report.");
     } finally {
       setBusy(null);
     }
+  };
+
+  const onSample = async () => {
+    setReport(SAMPLE_REPORT);
+    setLat(SAMPLE_REPORT.latitude);
+    setLng(SAMPLE_REPORT.longitude);
+    setLabel(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
+    setQuery(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
+    setRisk(SAMPLE_REPORT.riskCategory);
+    setDesignCode(SAMPLE_REPORT.designCode);
+    setSiteClass(SAMPLE_REPORT.siteClass ?? "D");
+    setReportError("");
+    setAreaError("");
+    setArchiveNote("");
+    setArchiveError("");
+    await saveReportDocuments(SAMPLE_REPORT, projectName, setArchiveNote, setArchiveError);
   };
 
   return (
@@ -174,29 +202,20 @@ export default function LateralPage() {
           <button className="btn primary" type="button" onClick={onGenerate} disabled={busy != null}>
             {busy === "report" ? "Generating…" : "Generate SkyCiv report"}
           </button>
-          <button
-            className="btn"
-            type="button"
-            disabled={busy != null}
-            onClick={() => {
-              setReport(SAMPLE_REPORT);
-              setLat(SAMPLE_REPORT.latitude);
-              setLng(SAMPLE_REPORT.longitude);
-              setLabel(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
-              setQuery(SAMPLE_REPORT.address ?? "750 Kearny St, San Francisco");
-              setRisk(SAMPLE_REPORT.riskCategory);
-              setDesignCode(SAMPLE_REPORT.designCode);
-              setSiteClass(SAMPLE_REPORT.siteClass ?? "D");
-              setReportError("");
-              setAreaError("");
-            }}
-          >
+          <button className="btn" type="button" disabled={busy != null} onClick={onSample}>
             Load sample report
           </button>
         </div>
         {searchError && <p className="banner error">{searchError}</p>}
         {areaError && <p className="banner error">{areaError}</p>}
         {reportError && <p className="banner error">{reportError}</p>}
+        {archiveNote && (
+          <p className="banner ok">
+            {archiveNote}{" "}
+            <Link className="link" to="/documents">Open Documents</Link>
+          </p>
+        )}
+        {archiveError && <p className="banner info">{archiveError}</p>}
         {matches.length > 1 && (
           <div className="match-grid">
             {matches.map((place) => (
@@ -215,4 +234,23 @@ export default function LateralPage() {
       {report && <ReportView report={report} />}
     </div>
   );
+}
+
+async function saveReportDocuments(
+  report: SiteReport,
+  projectName: string,
+  setNote: (note: string) => void,
+  setError: (error: string) => void,
+) {
+  const files = hazardFiles(report, projectName);
+  const local = await saveLocalDocuments(files);
+  try {
+    const saved = await archiveSiteReport(files);
+    const names = saved.documents.map((doc) => doc.filename).join(" and ");
+    setNote(`${names} saved to Documents › ${saved.folder_path.slice(1).join(" › ")}.`);
+  } catch {
+    const names = local.map((doc) => doc.filename).join(" and ");
+    setNote(`${names} saved to Documents › Project Documents › Site Reports.`);
+    setError("The Documents API is offline, so the files are stored in this browser until the local API is running.");
+  }
 }

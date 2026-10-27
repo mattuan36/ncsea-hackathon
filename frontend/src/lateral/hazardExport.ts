@@ -320,6 +320,14 @@ export function hazardPdf(report: SiteReport, projectName?: string): Uint8Array 
   return doc.build();
 }
 
+export function hazardFiles(report: SiteReport, projectName?: string): File[] {
+  const name = projectName || "Untitled Project";
+  return [
+    new File([hazardCsv(report, name)], exportFilename(name, "Hazard_Studio_Revit_Import.csv"), { type: "text/csv" }),
+    new File([new Uint8Array(hazardPdf(report, name))], exportFilename(name, "Hazard_Studio_Site_Criteria.pdf"), { type: "application/pdf" }),
+  ];
+}
+
 export function downloadBytes(filename: string, bytes: Uint8Array | string, mime: string) {
   const blob = new Blob([bytes] as BlobPart[], { type: mime });
   const url = URL.createObjectURL(blob);
