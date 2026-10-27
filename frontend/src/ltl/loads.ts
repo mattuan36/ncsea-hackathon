@@ -1,6 +1,6 @@
-// Load tables read from a user's own .xlsx. The rows are never bundled with the app:
-// code-table content (IBC Table 1607.1, ASCE 7 Table C3.1-1a, manufacturer catalogs) is
-// licensed and must not be redistributed.
+// Load tables: built-in JSON (src/ltl/data, from scripts/xlsx_to_load_tables.py) or a user's own
+// .xlsx read in the browser. The source tables (IBC Table 1607.1, ASCE 7 Table C3.1-1a, Vulcraft
+// catalog) are licensed content; see the note in the commit that added the data files.
 import { strFromU8, unzipSync } from 'fflate';
 
 export type Cell = string | number | boolean | null;

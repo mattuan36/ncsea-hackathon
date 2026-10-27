@@ -5,6 +5,7 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+  glob<T = unknown>(pattern: string, options: { eager: true; import: string }): Record<string, T>;
 }
 
 declare module "*.png" {

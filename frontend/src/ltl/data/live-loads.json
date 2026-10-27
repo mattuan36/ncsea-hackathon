@@ -1,0 +1,479 @@
+{
+ "fileName": "Live Loads_IBC_2024_Table_1607.xlsx",
+ "sheetName": "Live loads",
+ "title": "IBC 2024 Table 1607.1 - Minimum live loads",
+ "captions": [
+  "Source: CHAPTER_16_STRUCTURAL_DESIGN.pdf, pages 1-4. First Version: Aug 2023.",
+  "Numeric loads retain source units. A dash reproduces the source dash. Footnotes are on the Notes sheet."
+ ],
+ "columns": [
+  "Occupancy or use",
+  "Uniform (psf)",
+  "Source"
+ ],
+ "rows": [
+  [
+   "Access floor systems: Office use",
+   50,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Access floor systems: Computer use",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Armories and drill rooms",
+   150,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Fixed seats (fastened to floor)",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Lobbies",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Movable seats",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Stage floors",
+   150,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Platforms (assembly)",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Bleachers, folding and telescopic seating and grandstands",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Stadiums and arenas with fixed seats (fastened to the floor)",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Assembly areas: Other assembly areas",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Balconies and decks",
+   60,
+   "Sample"
+  ],
+  [
+   "Catwalks for maintenance and service access",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Cornices",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Corridors: First floor",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Dining rooms and restaurants",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Fire escapes",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Fire escapes: On single-family dwellings only",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Garages and vehicle floors: Passenger vehicle garages",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Helipads: Helicopter takeoff weight 3,000 pounds or less",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Helipads: Helicopter takeoff weight more than 3,000 pounds",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Hospitals: Corridors above first floor",
+   80,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Hospitals: Operating rooms, laboratories",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Hospitals: Patient rooms",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Libraries: Corridors above first floor",
+   80,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Libraries: Reading rooms",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Libraries: Stack rooms",
+   150,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Manufacturing: Heavy",
+   250,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Manufacturing: Light",
+   125,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Marquees, except one- and two-family dwellings",
+   75,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Office buildings: Corridors above first floor",
+   80,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Office buildings: Lobbies and first-floor corridors",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Office buildings: Offices",
+   50,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Penal institutions: Cell blocks",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Penal institutions: Corridors",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Bowling alleys, poolrooms and similar uses",
+   75,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Dance halls and ballrooms",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Gymnasiums",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Theater projection, control, and follow spot rooms",
+   50,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Ice skating rinks",
+   250,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Recreational uses: Roller skating rinks",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: One- and two-family dwellings / Uninhabitable attics without storage",
+   10,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: One- and two-family dwellings / Uninhabitable attics with storage",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: One- and two-family dwellings / Habitable attics and sleeping areas",
+   30,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: One- and two-family dwellings / Canopies, including marquees",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: One- and two-family dwellings / All other areas",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: Hotels and multifamily dwellings / Private rooms and corridors serving them",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: Hotels and multifamily dwellings / Public rooms",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Residential: Hotels and multifamily dwellings / Corridors serving public rooms",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Ordinary flat, pitched, and curved roofs (that are not occupiable)",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Roof areas used for assembly purposes",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Vegetative and landscaped roofs / Roof areas not intended for occupancy",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Vegetative and landscaped roofs / Roof areas used for assembly purposes",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Awnings and canopies / Fabric construction supported by a skeleton structure",
+   5,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Roofs: Awnings and canopies / All other construction, except one- and two-family dwellings",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Schools: Classrooms",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Schools: Corridors above first floor",
+   80,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Schools: First-floor corridors",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Sidewalks, vehicular driveways and yards, subject to trucking",
+   250,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Stairs and exits: One- and two-family dwellings",
+   40,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Stairs and exits: All other",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Storage areas above ceilings",
+   20,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Storage warehouses (shall be designed for heavier loads if required for anticipated storage): Heavy",
+   250,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Storage warehouses (shall be designed for heavier loads if required for anticipated storage): Light",
+   125,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Stores: Retail / First floor",
+   100,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Stores: Retail / Upper floors",
+   75,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Stores: Wholesale, all floors",
+   125,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Walkways and elevated platforms (other than exitways)",
+   60,
+   "IBC 2024 Table 1607.1"
+  ],
+  [
+   "Yards and terraces, pedestrian",
+   100,
+   "IBC 2024 Table 1607.1"
+  ]
+ ],
+ "rowNotes": [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+ ],
+ "footer": [],
+ "notes": [
+  {
+   "ref": "Table",
+   "text": "2024 International Building Code (IBC), Chapter 16 Structural Design, Table 1607.1"
+  },
+  {
+   "ref": "Title",
+   "text": "Minimum uniformly distributed live loads, L0, and minimum concentrated live loads"
+  },
+  {
+   "ref": "a",
+   "text": "Live load reduction is not permitted."
+  },
+  {
+   "ref": "b",
+   "text": "Live load reduction is only permitted in accordance with Section 1607.13.1.2 or Item 1 of Section 1607.13.2."
+  },
+  {
+   "ref": "c",
+   "text": "Live load reduction is only permitted in accordance with Section 1607.13.1.3 or Item 2 of Section 1607.13.2."
+  },
+  {
+   "ref": "SI conversions",
+   "text": "1 inch = 25.4 mm; 1 square inch = 645.16 mm²; 1 square foot = 0.0929 m²; 1 pound per square foot = 0.0479 kN/m²; 1 pound = 0.004448 kN."
+  },
+  {
+   "ref": "Source URL",
+   "text": "http://codes.iccsafe.org/content/IBC2024P1/chapter-16-structural-design#IBC2024P1_Ch16_Sec1607.1"
+  },
+  {
+   "ref": "Source pages",
+   "text": "PDF pages 1-4. Footnotes and SI conversions: page 4."
+  },
+  {
+   "ref": "Transcription",
+   "text": "Occupancy and specific use are combined with a colon. Rows with no uniform load value or requirement are omitted. Shared references are repeated on applicable rows."
+  },
+  {
+   "ref": "Copyright",
+   "text": "Copyright © 2026 International Code Council, Inc., or its licensors (ALL RIGHTS RESERVED)."
+  },
+  {
+   "ref": "Source license notice",
+   "text": "Accessed by Chelsea Darnelle-Jeong on 10/27/2026 pursuant to License Agreement with ICC. No further reproduction or distribution authorized. Any Unauthorized reproduction or distribution is a violation of the federal copyright, and subject to civil and criminal penalties thereunder."
+  }
+ ]
+}

@@ -1,0 +1,5127 @@
+{
+ "fileName": "Dead_Load_Weights_FINAL 102726.xlsx",
+ "sheetName": "Dead Loads",
+ "title": "Dead Load Weights – ASCE 7-22 Commentary Table C3.1-1a + Firm Typical Dead Loads",
+ "captions": [
+  "Yellow dimension = input: psf recalculates from it (per-inch or pcf rows). Other dimensions are descriptive only. Orange rows = flagged, see cell comment. Preliminary reference only; PE review required."
+ ],
+ "columns": [
+  "dimension (in)",
+  "material",
+  "orientation",
+  "use/component",
+  "additional info",
+  "psf",
+  "source"
+ ],
+ "rows": [
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "asbestos-cement shingles",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "asphalt shingles",
+   2,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "concrete",
+   "Horizontal",
+   "roof covering",
+   "Cement tile",
+   16,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "copper or tin",
+   1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "corrugated asbestos-cement",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Horizontal",
+   "roof covering",
+   "wood shakes and shingles",
+   3,
+   "ASCE C3.1-1a"
+  ],
+  [
+   2,
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "wood shingles",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   3,
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "wood shakes",
+   20,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "clay tile, Ludowici; add 10 psf for mortar",
+   10,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "clay tile, Roman; add 10 psf for mortar",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "clay tile, Spanish; add 10 psf for mortar",
+   19,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "composition roofing, three-ply ready roofing",
+   1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "composition roofing, four-ply felt and gravel",
+   5.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "composition roofing, five-ply felt and gravel",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.1875,
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "slate, 3/16 in.",
+   7,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.25,
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "slate, 1/4 in.",
+   10,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "waterproofing membrane",
+   "bituminous membrane, gravel-covered",
+   5.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "waterproofing membrane",
+   "bituminous membrane, smooth surface",
+   1.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "waterproofing membrane",
+   "liquid-applied membrane",
+   1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "waterproofing membrane",
+   "single-ply membrane, sheet",
+   0.7,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.375,
+   "architectural material",
+   "Both",
+   "skylight/window",
+   "glass, glazing typ, metal frame",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "cap sheet",
+   3,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "four-ply felt and gravel",
+   6,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "wood",
+   "Horizontal",
+   "roof covering",
+   "wood shingles",
+   3,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "wood",
+   "Horizontal",
+   "roof covering",
+   "wood shakes",
+   6,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "standing seam metal, panel only",
+   1.5,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "standing seam metal, assembly",
+   6,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "clay tile",
+   19,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "roof covering",
+   "ballast rock",
+   16,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "roof covering",
+   "solar panels, future allowance",
+   3,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "metal deck",
+   "Horizontal",
+   "deck",
+   "20 gauge; depth not specified",
+   2.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "metal deck",
+   "Horizontal",
+   "deck",
+   "18 gauge; depth not specified",
+   3,
+   "ASCE C3.1-1a"
+  ],
+  [
+   2,
+   "wood",
+   "Horizontal",
+   "deck",
+   "wood decking (Douglas fir)",
+   5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   3,
+   "wood",
+   "Horizontal",
+   "deck",
+   "wood decking (Douglas fir)",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "roof deck",
+   "Tectum, 2 psf per in.",
+   2,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "roof deck",
+   "Insulrock/Petrical, 2.7 psf per in.",
+   2.7,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "roof deck",
+   "poured gypsum, 6.5 psf per in.",
+   6.5,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "roof deck",
+   "vermiculite concrete, 2.6 psf per in.",
+   2.6,
+   "Firm DL"
+  ],
+  [
+   0.5,
+   "architectural material",
+   "Both",
+   "sheathing",
+   "gypsum",
+   2,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.375,
+   "wood",
+   "Both",
+   "sheathing",
+   "plywood, 0.4 psf per 1/8 in.",
+   1.2000000000000002,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "wood",
+   "Both",
+   "sheathing",
+   "plywood, 0.4 psf per 1/8 in.",
+   1.6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.625,
+   "wood",
+   "Both",
+   "sheathing",
+   "plywood, 0.4 psf per 1/8 in.",
+   2,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "wood",
+   "Both",
+   "sheathing",
+   "3 psf per in.",
+   3,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "architectural material",
+   "Both",
+   "sheathing",
+   "fiberboard",
+   0.75,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "wood",
+   "Both",
+   "sheathing",
+   "OSB",
+   1.7,
+   "Firm DL"
+  ],
+  [
+   0.625,
+   "wood",
+   "Both",
+   "sheathing",
+   "OSB",
+   2,
+   "Firm DL"
+  ],
+  [
+   0.75,
+   "wood",
+   "Both",
+   "sheathing",
+   "OSB",
+   2.5,
+   "Firm DL"
+  ],
+  [
+   0.875,
+   "wood",
+   "Both",
+   "sheathing",
+   "OSB",
+   2.9,
+   "Firm DL"
+  ],
+  [
+   1.125,
+   "wood",
+   "Both",
+   "sheathing",
+   "OSB",
+   3.7,
+   "Firm DL"
+  ],
+  [
+   1.125,
+   "wood",
+   "Both",
+   "sheathing",
+   "plywood",
+   3.4,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "wood",
+   "Both",
+   "sheathing",
+   "1x wood boards",
+   2.2,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "cellular glass, wall or roof boards; 0.7 psf per in.",
+   0.7,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "fibrous glass, wall or roof boards; 1.1 psf per in.",
+   1.1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "fiberboard, wall or roof boards; 1.5 psf per in.",
+   1.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "perlite, wall or roof boards; 0.8 psf per in.",
+   0.8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "polystyrene or polyisocyanurate foam, wall or roof boards; 0.2 psf per in.",
+   0.2,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "urethane foam with skin, wall or roof boards; 0.5 psf per in.",
+   0.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "architectural material",
+   "Both",
+   "insulation board",
+   "rigid insulation",
+   0.75,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation (rigid)",
+   "Styrofoam, 0.2 psf per in.",
+   0.2,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation (rigid)",
+   "cellular glass, 0.7 psf per in.",
+   0.7,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation (rigid)",
+   "fiberboard, 1.5 psf per in.",
+   1.5,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation",
+   "open cell spray foam, 0.6 psf per in.",
+   0.6,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation",
+   "closed cell spray foam, 3 psf per in.",
+   3,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Both",
+   "insulation (soft)",
+   "loose fill, blown-in, batt, 0.2 psf per in.",
+   0.2,
+   "Firm DL"
+  ],
+  [
+   0.3125,
+   "architectural material",
+   "Vertical",
+   "wall covering",
+   "fiber cement siding",
+   2.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.05,
+   "architectural material",
+   "Vertical",
+   "wall covering",
+   "vinyl siding, nominal material thickness",
+   0.6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "exterior wall",
+   "wood stud wall, 2x4 @ 16 in., 5/8 in. gyp, insulated, 3/8 in. siding",
+   11,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "exterior wall",
+   "wood stud wall, 2x6 @ 16 in., 5/8 in. gyp, insulated, 3/8 in. siding",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "exterior wall",
+   "wood stud wall, 2x6 @ 16 in., 5/8 in. gyp, insulated, stucco (lath and plaster)",
+   18,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "exterior wall",
+   "wood stud wall, 2x6 @ 16 in., 5/8 in. gyp, insulated, adhered masonry veneer",
+   25,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "exterior wall",
+   "wood stud wall, 2x6 @ 16 in., 5/8 in. gyp, insulated, anchored brick veneer",
+   48,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "architectural material",
+   "Vertical",
+   "wall",
+   "clay brick, wythe; incl. mortar, no plaster",
+   39,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "architectural material",
+   "Vertical",
+   "wall",
+   "clay brick, wythe; incl. mortar, no plaster",
+   79,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "architectural material",
+   "Vertical",
+   "wall",
+   "clay brick, wythe; incl. mortar, no plaster",
+   115,
+   "ASCE C3.1-1a"
+  ],
+  [
+   16,
+   "architectural material",
+   "Vertical",
+   "wall",
+   "clay brick, wythe; incl. mortar, no plaster",
+   155,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 105 pcf unit",
+   22,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 105 pcf unit",
+   24,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 105 pcf unit",
+   31,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 105 pcf unit",
+   37,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 105 pcf unit",
+   43,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 105 pcf unit",
+   29,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 105 pcf unit",
+   38,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 105 pcf unit",
+   47,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 105 pcf unit",
+   55,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 105 pcf unit",
+   30,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 105 pcf unit",
+   40,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 105 pcf unit",
+   49,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 105 pcf unit",
+   57,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 105 pcf unit",
+   32,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 105 pcf unit",
+   42,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 105 pcf unit",
+   52,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 105 pcf unit",
+   61,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 105 pcf unit",
+   34,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 105 pcf unit",
+   46,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 105 pcf unit",
+   57,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 105 pcf unit",
+   67,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 105 pcf unit",
+   40,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 105 pcf unit",
+   53,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 105 pcf unit",
+   66,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 105 pcf unit",
+   79,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 105 pcf unit",
+   55,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 105 pcf unit",
+   75,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 105 pcf unit",
+   95,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 105 pcf unit",
+   115,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 125 pcf unit",
+   26,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 125 pcf unit",
+   28,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 125 pcf unit",
+   36,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 125 pcf unit",
+   44,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 125 pcf unit",
+   50,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 125 pcf unit",
+   33,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 125 pcf unit",
+   44,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 125 pcf unit",
+   54,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 125 pcf unit",
+   62,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 125 pcf unit",
+   34,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 125 pcf unit",
+   45,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 125 pcf unit",
+   56,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 125 pcf unit",
+   65,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 125 pcf unit",
+   36,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 125 pcf unit",
+   47,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 125 pcf unit",
+   58,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 125 pcf unit",
+   68,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 125 pcf unit",
+   39,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 125 pcf unit",
+   51,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 125 pcf unit",
+   63,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 125 pcf unit",
+   75,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 125 pcf unit",
+   44,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 125 pcf unit",
+   59,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 125 pcf unit",
+   73,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 125 pcf unit",
+   87,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 125 pcf unit",
+   59,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 125 pcf unit",
+   81,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 125 pcf unit",
+   102,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 125 pcf unit",
+   123,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 135 pcf unit",
+   29,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 135 pcf unit",
+   30,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 135 pcf unit",
+   39,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 135 pcf unit",
+   47,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "no grout; 135 pcf unit",
+   54,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 135 pcf unit",
+   36,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 135 pcf unit",
+   47,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 135 pcf unit",
+   57,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 48 in. o.c.; 135 pcf unit",
+   66,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 135 pcf unit",
+   37,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 135 pcf unit",
+   48,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 135 pcf unit",
+   59,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 40 in. o.c.; 135 pcf unit",
+   69,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 135 pcf unit",
+   38,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 135 pcf unit",
+   50,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 135 pcf unit",
+   62,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 32 in. o.c.; 135 pcf unit",
+   72,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 135 pcf unit",
+   41,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 135 pcf unit",
+   54,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 135 pcf unit",
+   67,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 24 in. o.c.; 135 pcf unit",
+   78,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 135 pcf unit",
+   46,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 135 pcf unit",
+   61,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 135 pcf unit",
+   76,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "grout @ 16 in. o.c.; 135 pcf unit",
+   90,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 135 pcf unit",
+   62,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 135 pcf unit",
+   83,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 135 pcf unit",
+   105,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "solid grout; 135 pcf unit",
+   127,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 105 pcf unit",
+   32,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 105 pcf unit",
+   51,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 105 pcf unit",
+   69,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 105 pcf unit",
+   87,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 105 pcf unit",
+   105,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 125 pcf unit",
+   38,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 125 pcf unit",
+   60,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 125 pcf unit",
+   81,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 125 pcf unit",
+   102,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 125 pcf unit",
+   124,
+   "ASCE C3.1-1a"
+  ],
+  [
+   4,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 135 pcf unit",
+   41,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 135 pcf unit",
+   64,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 135 pcf unit",
+   87,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 135 pcf unit",
+   110,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "cmu",
+   "Vertical",
+   "wall",
+   "CMU Solid Grout, 135 pcf unit",
+   133,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Vertical",
+   "partition",
+   "movable steel",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "partition",
+   "wood/CFS stud, 1/2 in. gyp each side",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "partition",
+   "2x4, unplastered wood stud wall",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "partition",
+   "2x4, plastered one side wood stud wall",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "partition",
+   "2x4, plastered two sides wood stud wall",
+   20,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Vertical",
+   "partition",
+   "wood/CFS stud, plaster one side, gyp other",
+   16,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor fill",
+   "Cinder concrete floor fill, 1 in, 9 psf per in.",
+   9,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "concrete",
+   "Horizontal",
+   "floor fill",
+   "lightweight concrete, 1 in, 8 psf per in.",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor fill",
+   "sand, 1 in, 8 psf per in.",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor fill",
+   "stone concrete, 1 in, 12 psf per in.",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   2,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "2 in asphalt with 1/2 in. mortar",
+   30,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "concrete",
+   "Horizontal",
+   "floor finish",
+   "Cement finish on stone-concrete fill",
+   32,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.75,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "ceramic or quarry tile, on 1/2 in. mortar bed",
+   16,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.75,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "ceramic or quarry tile, on 1 in. mortar bed",
+   23,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "concrete",
+   "Horizontal",
+   "floor finish",
+   "Concrete fill finish 1 in, 12 psf per in.",
+   12,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.875,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "hardwood",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.25,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "linoleum or asphalt tile",
+   1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "marble and mortar, on stone-concrete fill",
+   33,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.25,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 1/4 in.; 15 psf per in.",
+   3.75,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.375,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 3/8 in.; 15 psf per in.",
+   5.625,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 1/2 in.; 15 psf per in.",
+   7.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.625,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 5/8 in.; 15 psf per in.",
+   9.375,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.75,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 3/4 in.; 15 psf per in.",
+   11.25,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.875,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 7/8 in.; 15 psf per in.",
+   13.125,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "slate, 1 in.; 15 psf per in.",
+   15,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "solid flat tile, on 1 in. mortar base",
+   23,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.75,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood subflooring",
+   3,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1.5,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "terrazzo, directly on slab",
+   19,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "terrazzo, on stone-concrete fill",
+   32,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "terrazzo, 2 in. stone concrete",
+   32,
+   "ASCE C3.1-1a"
+  ],
+  [
+   3,
+   "wood",
+   "Horizontal",
+   "floor finish",
+   "wood block on mastic, no fill",
+   10,
+   "ASCE C3.1-1a"
+  ],
+  [
+   3,
+   "wood",
+   "Horizontal",
+   "floor finish",
+   "wood block on 1/2 in. mortar base",
+   16,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x6 @ 12 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x6 @ 16 in. o.c.; double wood floor, no plaster",
+   5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   6,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x6 @ 24 in. o.c.; double wood floor, no plaster",
+   5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x8 @ 12 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x8 @ 16 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   8,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x8 @ 24 in. o.c.; double wood floor, no plaster",
+   5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x10 @ 12 in. o.c.; double wood floor, no plaster",
+   7,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x10 @ 16 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   10,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x10 @ 24 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x12 @ 12 in. o.c.; double wood floor, no plaster",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x12 @ 16 in. o.c.; double wood floor, no plaster",
+   7,
+   "ASCE C3.1-1a"
+  ],
+  [
+   12,
+   "wood",
+   "Horizontal",
+   "floor",
+   "wood joist, 2x12 @ 24 in. o.c.; double wood floor, no plaster",
+   6,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "hardwood, 4 psf per in.",
+   4,
+   "Firm DL"
+  ],
+  [
+   1,
+   "concrete",
+   "Horizontal",
+   "floor",
+   "normal weight concrete, 12 psf per in.",
+   12,
+   "Firm DL"
+  ],
+  [
+   1,
+   "concrete",
+   "Horizontal",
+   "floor",
+   "lightweight concrete, 10 psf per in.",
+   10,
+   "Firm DL"
+  ],
+  [
+   4,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "normal weight concrete (NWC), 150 pcf (12.5 psf per in.)",
+   50,
+   "Firm DL"
+  ],
+  [
+   6,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "normal weight concrete (NWC), 150 pcf (12.5 psf per in.)",
+   75,
+   "Firm DL"
+  ],
+  [
+   8,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "normal weight concrete (NWC), 150 pcf (12.5 psf per in.)",
+   100,
+   "Firm DL"
+  ],
+  [
+   10,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "normal weight concrete (NWC), 150 pcf (12.5 psf per in.)",
+   125,
+   "Firm DL"
+  ],
+  [
+   12,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "normal weight concrete (NWC), 150 pcf (12.5 psf per in.)",
+   150,
+   "Firm DL"
+  ],
+  [
+   4,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "lightweight concrete (LWC), 110 pcf (9.17 psf per in.)",
+   36.666666666666664,
+   "Firm DL"
+  ],
+  [
+   6,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "lightweight concrete (LWC), 110 pcf (9.17 psf per in.)",
+   55,
+   "Firm DL"
+  ],
+  [
+   8,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "lightweight concrete (LWC), 110 pcf (9.17 psf per in.)",
+   73.33333333333333,
+   "Firm DL"
+  ],
+  [
+   10,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "lightweight concrete (LWC), 110 pcf (9.17 psf per in.)",
+   91.66666666666667,
+   "Firm DL"
+  ],
+  [
+   12,
+   "concrete",
+   "Both",
+   "deck/wall",
+   "lightweight concrete (LWC), 110 pcf (9.17 psf per in.)",
+   110,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "linoleum or soft tile",
+   1.5,
+   "Firm DL"
+  ],
+  [
+   0.375,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "ceramic tile, w/ 1/2 in. mortar",
+   12,
+   "Firm DL"
+  ],
+  [
+   0.75,
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "ceramic tile, w/ 3/4 in. mortar",
+   20,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "carpet",
+   1.5,
+   "Firm DL"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "floor topping",
+   "Gyp-Crete, 8.7 psf per in.",
+   8.7,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "floor finish",
+   "pedestals and pavers",
+   25,
+   "Firm DL"
+  ],
+  [
+   4,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x4 @ 12 in. o.c.",
+   1.4,
+   "Firm DL"
+  ],
+  [
+   6,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x6 @ 12 in. o.c.",
+   2.2,
+   "Firm DL"
+  ],
+  [
+   8,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x8 @ 12 in. o.c.",
+   2.9,
+   "Firm DL"
+  ],
+  [
+   10,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x10 @ 12 in. o.c.",
+   3.7,
+   "Firm DL"
+  ],
+  [
+   12,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x12 @ 12 in. o.c.",
+   4.4,
+   "Firm DL"
+  ],
+  [
+   4,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x4 @ 16 in. o.c.",
+   1.1,
+   "Firm DL"
+  ],
+  [
+   6,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x6 @ 16 in. o.c.",
+   1.7,
+   "Firm DL"
+  ],
+  [
+   8,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x8 @ 16 in. o.c.",
+   2.2,
+   "Firm DL"
+  ],
+  [
+   10,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x10 @ 16 in. o.c.",
+   2.8,
+   "Firm DL"
+  ],
+  [
+   12,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x12 @ 16 in. o.c.",
+   3.3,
+   "Firm DL"
+  ],
+  [
+   4,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x4 @ 24 in. o.c.",
+   0.7,
+   "Firm DL"
+  ],
+  [
+   6,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x6 @ 24 in. o.c.",
+   1.1,
+   "Firm DL"
+  ],
+  [
+   8,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x8 @ 24 in. o.c.",
+   1.5,
+   "Firm DL"
+  ],
+  [
+   10,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x10 @ 24 in. o.c.",
+   1.9,
+   "Firm DL"
+  ],
+  [
+   12,
+   "wood",
+   "Both",
+   "framing",
+   "Douglas Fir, 2x12 @ 24 in. o.c.",
+   2.2,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "acoustical fiberboard",
+   1,
+   "ASCE C3.1-1a"
+  ],
+  [
+   1,
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "gypsum board 1 in single layer",
+   4.4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Both",
+   "ceiling",
+   "plaster, on tile or concrete",
+   5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Both",
+   "ceiling",
+   "plaster, on wood lath",
+   8,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "steel channel, suspended system",
+   2,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "plaster, suspended metal lath",
+   15,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Both",
+   "ceiling",
+   "gypsum, suspended metal lath, gypsum plaster",
+   10,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "wood",
+   "Horizontal",
+   "ceiling",
+   "wood furring suspension system",
+   2.5,
+   "ASCE C3.1-1a"
+  ],
+  [
+   0.5,
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "gypsum board 0.5 in single layer",
+   2.2,
+   "Firm DL"
+  ],
+  [
+   0.625,
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "gypsum board0.625 in single layer",
+   2.8,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "architectural material",
+   "Horizontal",
+   "ceiling",
+   "metal suspension system, w/ tile",
+   1.3,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "wood",
+   "Horizontal",
+   "ceiling",
+   "wood suspension system with tile",
+   2.5,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "MEP Duct allowance",
+   4,
+   "ASCE C3.1-1a"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "residential; minimum",
+   1,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "typical; minimum",
+   3,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "industrial; minimum",
+   8,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "sprinkler system, residential; minimum",
+   0.5,
+   "Firm DL"
+  ],
+  [
+   "--",
+   "MEP",
+   "Horizontal",
+   "MEP allowance",
+   "sprinkler system, typical; minimum",
+   2,
+   "Firm DL"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46.5,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   47.3,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   48.2,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   61.1,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   61.6,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62.4,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   63.3,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.1,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.6,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.4,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   66.3,
+   "Vulcraft 2026 LRFD p. 114"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.4,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.9,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   36.7,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   37.6,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   40,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   40.5,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   41.3,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   42.2,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 22 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   46.9,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47.4,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.2,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0D Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   49.1,
+   "Vulcraft 2026 LRFD p. 115"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   59.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   60.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   62,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   63.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   65,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   66.9,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68,
+   "Vulcraft 2026 LRFD p. 118"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   46.2,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   47.2,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   48.3,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.5,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   49.5,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   50.6,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 20 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   69.1,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 18 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   70.1,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5D Dovetail, 16 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   71.2,
+   "Vulcraft 2026 LRFD p. 119"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   45.5,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46.9,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   47.8,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   60.6,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   61.1,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62.9,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   63.6,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.1,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.9,
+   "Vulcraft 2026 LRFD p. 122"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.5,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   36.4,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   37.3,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   39.6,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   40.1,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   41,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   41.9,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 22 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   46.5,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47.9,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DS-30 FL Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.8,
+   "Vulcraft 2026 LRFD p. 123"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   46.9,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   47.8,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   47,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   47.9,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   48.8,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.1,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.9,
+   "Vulcraft 2026 LRFD p. 126"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.5,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   36.4,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   37.3,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   40.1,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   41,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   41.9,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47.9,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2.0DF-30 FL Dovetail, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.8,
+   "Vulcraft 2026 LRFD p. 127"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   58.6,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   59.7,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   60.8,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   61.6,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62.7,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   63.8,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.7,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.8,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   66.9,
+   "Vulcraft 2026 LRFD p. 130"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   45.3,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   46.4,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   47.5,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47.6,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.7,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   49.8,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 20 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   68.2,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 18 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   69.3,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DS-24 FL Dovetail, 16 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   70.4,
+   "Vulcraft 2026 LRFD p. 131"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   59.7,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   60.8,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   62.7,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); NWC 145 pcf; concrete + deck",
+   63.8,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   65.8,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 6 in. total slab (2-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   66.9,
+   "Vulcraft 2026 LRFD p. 134"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   46.4,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 5-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   47.5,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   48.7,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   5.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 5-3/4 in. total slab (2-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   49.8,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 18 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   69.3,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   8,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3.5DF-24 FL Dovetail, 16 ga; 8 in. total slab (4-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   70.4,
+   "Vulcraft 2026 LRFD p. 135"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   32.2,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   32.6,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   32.9,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   33.2,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   33.9,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   50.3,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   50.7,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   51,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   51.3,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   52,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   62.4,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   62.8,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   63.1,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   63.4,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   64.1,
+   "Vulcraft 2026 LRFD p. 138"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   24.8,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   25.2,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   25.5,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   25.8,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   26.5,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.4,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.8,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   30.1,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   30.4,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   31.1,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 22 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   36.3,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 20 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   36.7,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 19 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   37,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 18 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   37.3,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VL/1.5VLI/1.5PLVLI-36, 16 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   38,
+   "Vulcraft 2026 LRFD p. 139"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   37.5,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   37.9,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   38.2,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   38.5,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 3-1/2 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   39.2,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   55.6,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56.3,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56.6,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 5 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   57.3,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   67.7,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.1,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.4,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.7,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   6,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 6 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   69.4,
+   "Vulcraft 2026 LRFD p. 142"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   28.8,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.2,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.5,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.8,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   3.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 3-1/2 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   30.5,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   33.4,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   33.8,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.1,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.4,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 4 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.1,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 22 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   40.3,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 20 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   40.7,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 19 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   41,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 18 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   41.3,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4.75,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "1.5VLR-36, 16 ga; 4-3/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   42,
+   "Vulcraft 2026 LRFD p. 143"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   37.9,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   38.2,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   38.5,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   38.8,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 4 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   39.5,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56.3,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56.6,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   56.9,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 5-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   57.6,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 6-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.1,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 6-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.4,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 6-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   68.7,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 6-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   69,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 6-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   69.7,
+   "Vulcraft 2026 LRFD p. 146"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.1,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.4,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   29.7,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   30,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 4 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   30.7,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   33.7,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   34,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.3,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.6,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   4.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 4-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.3,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 22 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   40.6,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 20 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   40.9,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 19 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   41.2,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 18 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   41.5,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "2VLI/2VLJ/2PLVLI-36, 16 ga; 5-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   42.2,
+   "Vulcraft 2026 LRFD p. 147"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 5 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   44,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 5 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   44.4,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 5 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   44.7,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 5 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   45,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 5 in. total slab (2 in. over deck); NWC 145 pcf; concrete + deck",
+   45.8,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 6-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   62.1,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 6-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   62.5,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 6-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   62.8,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 6-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   63.1,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   6.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 6-1/2 in. total slab (3-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   63.9,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   7.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 7-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   74.2,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   7.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 7-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   74.6,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   7.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 7-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   74.9,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   7.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 7-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   75.2,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   7.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 7-1/2 in. total slab (4-1/2 in. over deck); NWC 145 pcf; concrete + deck",
+   76,
+   "Vulcraft 2026 LRFD p. 150"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 5 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   33.8,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 5 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.2,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 5 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.5,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 5 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   34.8,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 5 in. total slab (2 in. over deck); LWC 110 pcf; concrete + deck",
+   35.6,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 5-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   38.4,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 5-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   38.8,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 5-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   39.1,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 5-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   39.4,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   5.5,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 5-1/2 in. total slab (2-1/2 in. over deck); LWC 110 pcf; concrete + deck",
+   40.2,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   6.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 22 ga; 6-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   45.2,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   6.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 20 ga; 6-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   45.6,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   6.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 19 ga; 6-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   45.9,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   6.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 18 ga; 6-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   46.2,
+   "Vulcraft 2026 LRFD p. 151"
+  ],
+  [
+   6.25,
+   "composite deck",
+   "Horizontal",
+   "deck",
+   "3VLI/3VLJ/3PLVLI-36, 16 ga; 6-1/4 in. total slab (3-1/4 in. over deck); LWC 110 pcf; concrete + deck",
+   47,
+   "Vulcraft 2026 LRFD p. 151"
+  ]
+ ],
+ "rowNotes": [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  [
+   "CHECK: 0.6 psf/in = 7.2 pcf. Open-cell SPF is typically ~0.5 pcf (~0.04 psf/in). Value may be pcf entered as psf/in."
+  ],
+  [
+   "CHECK: 3 psf/in = 36 pcf. Closed-cell SPF is typically ~2–3 pcf (~0.2 psf/in). Value may be pcf entered as psf/in."
+  ],
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  [
+   "ASCE C3.1-1a labels slate '15 psf per mm thickness'. Applied per INCH here: per mm would give 381 psf for 1 in. (~4,570 pcf, vs. slate density 172 pcf in Table C3.1-2). Per inch agrees with Table C3.1-1b (0.028 kN/m² per mm = 14.8 psf per in.)."
+  ],
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  [
+   "Catalog p. 126 prints 47.0/47.9/48.8 psf for 2.0DF NWC 5-1/4 in., identical to the LWC values on p. 127. The NWC values should be ~61 psf (2.0DS NWC 5-1/4 in. = 61.1–62.9; volume check 1.49 yd³/100 ft² × 145 pcf + deck ≈ 61–63). Likely a catalog error; using 47–49 psf is UNCONSERVATIVE by ~14 psf. Confirm with Vulcraft."
+  ],
+  [
+   "Catalog p. 126 prints 47.0/47.9/48.8 psf for 2.0DF NWC 5-1/4 in., identical to the LWC values on p. 127. The NWC values should be ~61 psf (2.0DS NWC 5-1/4 in. = 61.1–62.9; volume check 1.49 yd³/100 ft² × 145 pcf + deck ≈ 61–63). Likely a catalog error; using 47–49 psf is UNCONSERVATIVE by ~14 psf. Confirm with Vulcraft."
+  ],
+  [
+   "Catalog p. 126 prints 47.0/47.9/48.8 psf for 2.0DF NWC 5-1/4 in., identical to the LWC values on p. 127. The NWC values should be ~61 psf (2.0DS NWC 5-1/4 in. = 61.1–62.9; volume check 1.49 yd³/100 ft² × 145 pcf + deck ≈ 61–63). Likely a catalog error; using 47–49 psf is UNCONSERVATIVE by ~14 psf. Confirm with Vulcraft."
+  ],
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+ ],
+ "footer": [
+  "Notes:",
+  "• ASCE 7-22 Sec. 3.1.2 requires actual weights; commentary values are non-mandatory. Manufacturer data governs where available.",
+  "• ASCE masonry weights include mortar but not plaster; add 5 psf per plastered face. Values are averages; actual range can be considerable.",
+  "• ASCE CMU wythe values are by nominal thickness. Firm pcf rows: enter actual thickness.",
+  "• Firm values for MEP, sprinkler, and miscellaneous are minimums; increase to round out DL (verify with manager).",
+  "• Table C3.1-1b (SI) omitted: it duplicates C3.1-1a and units are not mixed on this sheet.",
+  "• Composite deck rows: Vulcraft Deck Solutions 2026 LRFD, 'Concrete + Deck' column. Values include deck self-weight; catalog uses NWC 145 pcf and LWC 110 pcf (firm NWC rows use 150 pcf).",
+  "• Composite deck weights are theoretical: no allowance for concrete ponding from deck/framing deflection. Add per firm practice/EOR.",
+  "• 1.5VLR-36: catalog p. 144 slab-information table repeats the 1.5VL volumes, which do not match the 1.5VLR weights (VLR is ~5 psf heavier). Tabulated weights used."
+ ],
+ "notes": []
+}
