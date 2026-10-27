@@ -97,7 +97,7 @@ Menus: **Analytics, Documents, Settings, Lateral, Gravity, Reports**.
 | Reports | **Wireframe** — graphical output sheets + spreadsheet layout preview |
 | Settings | **Wireframe** — project info + material database |
 | Analytics | **Wireframe** — takeoff summary (KPIs, dead load by assembly) |
-| Lateral | Placeholder (no requirements yet) |
+| Lateral | Site wind, snow, and seismic report. Search or drop a pin in the United States, Alaska, or Puerto Rico, then enter a SkyCiv username and API key in the page. The key is not stored in the repo. |
 
 #### Wireframe scope (Gravity / Reports / Settings / Analytics)
 

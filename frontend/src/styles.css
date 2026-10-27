@@ -206,7 +206,7 @@ button { font: inherit; color: inherit; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: 0; }
 .ok-line { display: inline-flex; align-items: center; gap: 4px; color: #15803d; font-weight: 500; margin: 8px 0 0; }
 
-input:not([type]), input[type=number], input[type=text], select {
+input:not([type]), input[type=number], input[type=text], input[type=password], select {
   height: 34px; border: 1px solid var(--border); border-radius: 7px; padding: 0 10px; font: inherit; background: #fff; color: var(--text);
 }
 input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
@@ -214,6 +214,7 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
 .field.inline { min-width: 240px; margin: 0; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.form-grid input, .form-grid select { width: 100%; }
 .form-grid .span-2 { grid-column: span 2; }
 .modal-body { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 .modal { width: min(520px, calc(100vw - 32px)); }
@@ -388,6 +389,22 @@ input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
   .bar-row { grid-template-columns: 120px minmax(0, 1fr) 60px; }
   .bar-meta { display: none; }
   .xls-body { grid-template-columns: 1fr; }
+}
+
+/* lateral site loads */
+.site-map { height: 460px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; isolation: isolate; }
+.site-map .leaflet-container { height: 100%; width: 100%; background: #e8eef4; font: inherit; }
+.match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.metric-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
+.metric-row span { display: block; font-size: 12px; }
+.metric-row strong { font-size: 20px; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+.banner.ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; margin: 10px 0; }
+.spectrum-card { margin: 0; border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px 0; }
+.spectrum-card figcaption { font-weight: 600; font-size: 13px; }
+.spectrum { width: 100%; height: 180px; }
+.spectrum-label { font-size: 11px; fill: var(--muted); }
+@media (max-width: 760px) {
+  .match-grid, .metric-row { grid-template-columns: 1fr; }
 }
 
 @media print {
