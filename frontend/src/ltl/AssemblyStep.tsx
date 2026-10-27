@@ -131,12 +131,12 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
             <AssemblyGraphic kind={t.kind} layers={parent.layers} />
           </div>
         ) : (
-          <div className="card build">
-            <div className="build-graphic">
+          <div className="build">
+            <div className="card build-graphic">
               <h3 className="section-label">Section</h3>
               <AssemblyGraphic kind={t.kind} layers={layers} />
             </div>
-            <div className="build-table">
+            <div className="card build-table">
               <h3 className="section-label">Layers {t.kind === 'floor' ? '(top to bottom)' : '(exterior to interior)'}</h3>
               <table className="data-table layers">
                 <thead>
