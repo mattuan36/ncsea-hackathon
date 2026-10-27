@@ -4,6 +4,7 @@ import { archiveSiteReport } from "../api";
 import { readBuildingInfo } from "../ifc/buildingInfo";
 import { useLtl } from "../ltl/store";
 import { saveLocalDocuments } from "../localDocuments";
+import { csDisplayFromParts, csFormulas, FormulaList } from "../math/Equation";
 import { csReportFile, type CsReportData } from "./csReport";
 import { listHazardDocuments, parseHazardCsv, preferredHazardCsv, type DocumentPick, type HazardImport } from "./hazardCsv";
 import { hazardFiles } from "./hazardExport";
@@ -719,6 +720,25 @@ export default function SeismicCsStep({
       </div>
 
       <section className="card">
+        <h2 className="card-title">Section 12.8 equations</h2>
+        <p className="muted">
+          Cs is the larger of the lower bound and the lesser of Eq. 12.8-2 and the period limit. V = Cs W.
+        </p>
+        {result ? (
+          <div className="two-col">
+            {(["X", "Y"] as const).map((axis) => (
+              <div key={axis}>
+                <h3 className="card-title">Direction {axis}</h3>
+                <FormulaList formulas={csFormulas(directionTerms(result, axis, sd1, s1, tl, weight))} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <FormulaList formulas={csFormulas(null)} />
+        )}
+      </section>
+
+      <section className="card">
         <h2 className="card-title">Section 12.8.1.3</h2>
         <div className="form-grid">
           <label className="check span-2">
@@ -862,6 +882,24 @@ function DirectionCard({
       </div>
     </section>
   );
+}
+
+function directionTerms(result: CalcResult, axis: "X" | "Y", sd1: string, s1: string, tl: string, weight: string) {
+  const direction = result.directions[axis];
+  return csDisplayFromParts({
+    sds: direction.sds_used,
+    sd1: Number(sd1),
+    s1: Number(s1),
+    tl: Number(tl),
+    r: direction.R,
+    ie: result.ie,
+    t: direction.T_used,
+    cs: direction.cs,
+    governing: direction.governing,
+    weight: weight.trim() ? Number(weight) : null,
+    ta: direction.Ta,
+    cuTa: direction.CuTa,
+  });
 }
 
 function ResultView({ result }: { result: CalcResult }) {

@@ -7,6 +7,7 @@ import PlanView from '../ltl/PlanView';
 import { ComparisonDashboard } from '../lateral/SiteClassStep';
 import ReportView from '../lateral/ReportView';
 import type { CsReportData } from '../lateral/csReport';
+import { csDisplayFromParts, csFormulas, deadLoadFormulas, FormulaList } from '../math/Equation';
 import { WireframeNote } from '../ltl/ui';
 
 export default function ReportsPage() {
@@ -82,6 +83,7 @@ function Spreadsheet() {
     <section className="sheet">
       <TitleBlock subtitle="Assembly breakdown (spreadsheet layout)" />
       <WireframeNote>Preview of the .xlsx layout: one block per assembly with its section graphic and layer breakdown. Quantities are from the plan levels shown in the graphical output.</WireframeNote>
+      <FormulaList formulas={deadLoadFormulas(types.some((t) => t.netArea != null))} />
       <div className="xls">
         <div className="xls-head">
           <span>Section</span>
@@ -159,7 +161,10 @@ function BaseShearReport() {
     <section className="sheet">
       <TitleBlock subtitle="Lateral base shear" kind="ASCE 7-22 ELF" />
       {baseShearReport ? <ShearBody data={baseShearReport} /> : (
-        <p className="muted">No base shear report yet. Calculate Cs on Lateral.</p>
+        <>
+          <p className="muted">No base shear report yet. Calculate Cs on Lateral. The equations below are the ones that sheet will evaluate.</p>
+          <FormulaList formulas={csFormulas(null)} />
+        </>
       )}
       <h2 className="card-title">Site class comparison</h2>
       {siteClassComparison && siteClassComparison.rows.length > 0 ? (
@@ -221,6 +226,20 @@ function ShearBody({ data }: { data: CsReportData }) {
               <div className="kpi"><span>Cs</span><strong>{direction.cs.toFixed(5)}</strong><span>{direction.governing}</span></div>
               <div className="kpi"><span>Base shear</span><strong>{direction.baseShear}</strong></div>
             </div>
+            <FormulaList formulas={csFormulas(csDisplayFromParts({
+              sds: direction.sdsUsed,
+              sd1: Number(data.sd1),
+              s1: Number(data.s1),
+              tl: Number(data.tl),
+              r: direction.r,
+              ie: data.ie,
+              t: direction.tUsed,
+              cs: direction.cs,
+              governing: direction.governing,
+              weight: data.weight.trim() ? Number(data.weight) : null,
+              ta: direction.ta,
+              cuTa: direction.cuTa,
+            }))} />
             <table className="data-table">
               <tbody>
                 <tr><td>Lateral system</td><td>{direction.systemIds.map((id, index) => `${id} ${direction.systemNames[index] ?? ''}`.trim()).join('; ') || '—'}</td></tr>

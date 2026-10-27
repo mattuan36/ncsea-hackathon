@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Copy, GitMerge, Plus, SkipForward, Trash2, Undo2 } from 'lucide-react';
 import { STRUCTURAL_MATERIALS, uid, type ElementType, type Layer } from './data';
+import { Equation } from '../math/Equation';
 import { assemblyPsf, basisLabel, calcPsf, fmt, fmtIn, totalThickness } from './calc';
 import { useLtl } from './store';
 import { MaterialModal, MaterialPicker, Modal } from './ui';
@@ -218,7 +219,12 @@ export default function AssemblyStep({ onDone }: { onDone: () => void }) {
                         <Plus size={14} /> New material
                       </button>
                     </td>
-                    <td className="num total" colSpan={2}>{fmt(psf, 1)} psf</td>
+                    <td className="num total" colSpan={2}>
+                      {fmt(psf, 1)} psf
+                      <span className="eq-caption">
+                        <Equation tex={String.raw`w=\gamma t/12`} plain="psf equals pcf times inches divided by 12" />
+                      </span>
+                    </td>
                     <td />
                   </tr>
                 </tfoot>
