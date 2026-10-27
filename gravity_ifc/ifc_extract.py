@@ -217,12 +217,14 @@ def poly_coords(mp: MultiPolygon):
 
 # ---------------------------------------------------------------- main extraction
 
-def extract(path: str, db_path: str | None, with_geometry: bool = True) -> dict:
+def extract(path: str, db_path: str | None, with_geometry: bool = True, db_rows: list | None = None) -> dict:
+    """db_rows: DbRow list to match against instead of reading db_path (the web app passes its materials table)."""
     t0 = time.time()
     f = ifcopenshell.open(path)
     log(f"opened {Path(path).name} ({f.schema}) in {time.time() - t0:.0f}s")
     unit_scale = uu.calculate_unit_scale(f)  # metres per file length unit
-    matcher = Matcher(load_db(db_path)) if db_path else None
+    rows = db_rows if db_rows is not None else (load_db(db_path) if db_path else None)
+    matcher = Matcher(rows) if rows is not None else None
 
     storeys = sorted(f.by_type("IfcBuildingStorey"),
                      key=lambda s: up.get_local_placement(s.ObjectPlacement)[2, 3] if s.ObjectPlacement else (s.Elevation or 0))

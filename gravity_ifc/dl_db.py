@@ -1,7 +1,9 @@
 """Load the dead load weights spreadsheet into a flat list of rows.
 
-Spreadsheet layout (sheet "Dead Loads"): header on row 3, columns B..G =
-dimension (in) | material | use/component | additional info | psf | source.
+Spreadsheet layout (sheet "Dead Loads"): header on row 3. Columns are found by
+header name: dimension (in) | material | [orientation] | use/component |
+additional info | psf | source. Kim's "Combined" sheet added orientation
+(Horizontal / Vertical / Both); older sheets have no such column.
 
 A psf cell may be:
   - a number               -> fixed psf for that row
@@ -32,6 +34,7 @@ class DbRow:
     psf_per_in: float | None  # set when the row scales with thickness
     psf_text: str | None    # original text when psf is a range
     source: str
+    orientation: str = ""   # Horizontal / Vertical / Both, "" when the sheet has no column
 
     def psf_at(self, t_in: float | None) -> float | None:
         """psf for a layer of thickness t_in using this row."""
@@ -64,12 +67,34 @@ def _per_inch_factor(formula: str) -> float | None:
     return float(eval(expr, {"__builtins__": {}}, {}))  # digits and operators only
 
 
+# header text (lower-cased, startswith) -> field; first match wins
+_HEADERS = {"dimension": "dim", "material": "mat", "orientation": "orient", "use": "use",
+            "additional": "info", "psf": "psf", "source": "src"}
+
+
+def _columns(ws) -> dict[str, int]:
+    cols: dict[str, int] = {}
+    for c in range(1, ws.max_column + 1):
+        h = str(ws.cell(HEADER_ROW, c).value or "").strip().lower()
+        for prefix, field in _HEADERS.items():
+            if h.startswith(prefix) and field not in cols:
+                cols[field] = c
+    if not cols:  # no header row: the original fixed layout, B..G
+        cols = dict(zip(("dim", "mat", "use", "info", "psf", "src"), range(2, 8)))
+    missing = {"mat", "psf"} - cols.keys()
+    if missing:
+        raise ValueError(f"dead load sheet: header row {HEADER_ROW} has no {sorted(missing)} column")
+    return cols
+
+
 def load_db(path: str | Path) -> list[DbRow]:
     wb = openpyxl.load_workbook(path, data_only=False)
     ws = wb[SHEET] if SHEET in wb.sheetnames else wb.worksheets[0]
+    cols = _columns(ws)
     rows: list[DbRow] = []
     for r in range(HEADER_ROW + 1, ws.max_row + 1):
-        dim, mat, use, info, psf_cell, src = (ws.cell(r, c).value for c in range(2, 8))
+        cell = lambda f: ws.cell(r, cols[f]).value if f in cols else None  # noqa: E731
+        dim, mat, orient, use, info, psf_cell, src = (cell(f) for f in ("dim", "mat", "orient", "use", "info", "psf", "src"))
         if not mat or not isinstance(mat, str) or psf_cell is None:
             continue  # notes / blank rows
         t_in = float(dim) if isinstance(dim, (int, float)) else None
@@ -82,7 +107,7 @@ def load_db(path: str | Path) -> list[DbRow]:
         else:
             text = str(psf_cell)
         rows.append(DbRow(f"R{r}", t_in, mat.strip(), str(use or "").strip(), str(info or "").strip(),
-                          psf, per_in, text, str(src or "").strip()))
+                          psf, per_in, text, str(src or "").strip(), str(orient or "").strip()))
     return rows
 
 
