@@ -74,7 +74,8 @@ def ensure_folder_path(names: tuple[str, ...] | list[str] = SITE_REPORTS_PATH) -
 
 def init_db() -> None:
     global pool
-    pool = ConnectionPool(DATABASE_URL, kwargs={"row_factory": dict_row})
+    # prepare_threshold=None: Supabase's transaction pooler (port 6543) rejects prepared statements.
+    pool = ConnectionPool(DATABASE_URL, kwargs={"row_factory": dict_row, "prepare_threshold": None})
     with pool.connection() as conn, conn.cursor() as cur:
         cur.execute(SCHEMA_PATH.read_text())
         cur.execute("SELECT count(*) AS n FROM folders")

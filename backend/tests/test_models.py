@@ -4,9 +4,10 @@ Uses a synthetic IFC (tests/make_ifc.py), not a client model.
 """
 import time
 
+import pytest
 from fastapi.testclient import TestClient
 
-from app import models_api
+from app import db, models_api
 from app.main import app
 from tests.make_ifc import build
 
@@ -23,7 +24,44 @@ def _wait_ready(client, model_id, timeout=120):
     raise AssertionError(f"model {model_id} still {m['status']} after {timeout}s")
 
 
-def test_upload_extract_and_decisions(tmp_path, monkeypatch):
+def _seed_brick_row():
+    """The 4in clay brick wythe the test expects as R77.
+
+    Kim's spreadsheet lives outside git, so a fresh database (CI, a new Postgres) has no
+    materials rows. Insert R77 only when it is missing, so a real import is never overwritten.
+    Returns True when this call inserted it.
+    """
+    with db.pool.connection() as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO materials (id, t_in, material, orientation, use, info, psf, source, custom, edited, position)
+            VALUES ('R77', 4, 'clay brick', '', 'wall', '4 in wythe', 40, 'test fixture', false, false, 0)
+            ON CONFLICT (id) DO NOTHING
+            """
+        )
+        return cur.rowcount == 1
+
+
+def _drop_seeded_brick_row():
+    with db.pool.connection() as conn:
+        conn.execute("DELETE FROM materials WHERE id = 'R77' AND source = 'test fixture'")
+
+
+@pytest.fixture
+def brick_row():
+    """Seed R77, and remove it afterwards only if this test added it.
+
+    Each TestClient block opens (and closes) the app's pool, so seeding and cleanup get their own.
+    """
+    with TestClient(app):
+        seeded = _seed_brick_row()
+    yield
+    if seeded:
+        with TestClient(app):
+            _drop_seeded_brick_row()
+
+
+def test_upload_extract_and_decisions(tmp_path, monkeypatch, brick_row):
     monkeypatch.setattr(models_api, "MODELS_DIR", tmp_path)
     ifc = build(str(tmp_path / "synthetic.ifc"))
     with TestClient(app) as client:

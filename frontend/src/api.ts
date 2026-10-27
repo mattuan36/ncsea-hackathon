@@ -1,3 +1,6 @@
+// Empty in local dev (the Vite proxy answers /api); the deployed Fly URL on GitHub Pages.
+const API_BASE = (import.meta.env.VITE_API_BASE || '').replace(/\/$/, '');
+
 export interface Folder {
   id: number;
   parent_id: number | null;
@@ -29,19 +32,19 @@ async function check(res: Response): Promise<Response> {
 }
 
 export async function fetchFolders(): Promise<Folder[]> {
-  return (await check(await fetch('/api/folders'))).json();
+  return (await check(await fetch(`${API_BASE}/api/folders`))).json();
 }
 
 export async function fetchDocuments(folderId: number, recursive = true): Promise<DocumentRow[]> {
   const qs = new URLSearchParams({ folder_id: String(folderId), recursive: String(recursive) });
-  return (await check(await fetch(`/api/documents?${qs}`))).json();
+  return (await check(await fetch(`${API_BASE}/api/documents?${qs}`))).json();
 }
 
 export async function uploadDocuments(folderId: number, files: File[]): Promise<DocumentRow[]> {
   const body = new FormData();
   body.append('folder_id', String(folderId));
   files.forEach((f) => body.append('files', f));
-  return (await check(await fetch('/api/documents', { method: 'POST', body }))).json();
+  return (await check(await fetch(`${API_BASE}/api/documents`, { method: 'POST', body }))).json();
 }
 
 export interface SiteReportArchive {
@@ -53,14 +56,14 @@ export interface SiteReportArchive {
 export async function archiveSiteReport(files: File[]): Promise<SiteReportArchive> {
   const body = new FormData();
   files.forEach((file) => body.append('files', file));
-  return (await check(await fetch('/api/site-reports/archive', { method: 'POST', body }))).json();
+  return (await check(await fetch(`${API_BASE}/api/site-reports/archive`, { method: 'POST', body }))).json();
 }
 
 export async function deleteDocument(id: number): Promise<void> {
-  await check(await fetch(`/api/documents/${id}`, { method: 'DELETE' }));
+  await check(await fetch(`${API_BASE}/api/documents/${id}`, { method: 'DELETE' }));
 }
 
-export const downloadUrl = (id: number) => `/api/documents/${id}/download`;
+export const downloadUrl = (id: number) => `${API_BASE}/api/documents/${id}/download`;
 
 export function triggerDownload(id: number): void {
   const a = document.createElement('a');
@@ -95,19 +98,19 @@ export type MaterialInput = Partial<Omit<MaterialRow, 'id' | 'custom' | 'edited'
 const json = (body: unknown) => ({ headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 
 export async function fetchMaterialRows(): Promise<MaterialRow[]> {
-  return (await check(await fetch('/api/materials'))).json();
+  return (await check(await fetch(`${API_BASE}/api/materials`))).json();
 }
 
 export async function createMaterialRow(m: MaterialInput): Promise<MaterialRow> {
-  return (await check(await fetch('/api/materials', { method: 'POST', ...json(m) }))).json();
+  return (await check(await fetch(`${API_BASE}/api/materials`, { method: 'POST', ...json(m) }))).json();
 }
 
 export async function patchMaterialRow(id: string, patch: Partial<MaterialInput>): Promise<MaterialRow> {
-  return (await check(await fetch(`/api/materials/${encodeURIComponent(id)}`, { method: 'PATCH', ...json(patch) }))).json();
+  return (await check(await fetch(`${API_BASE}/api/materials/${encodeURIComponent(id)}`, { method: 'PATCH', ...json(patch) }))).json();
 }
 
 export async function deleteMaterialRow(id: string): Promise<void> {
-  await check(await fetch(`/api/materials/${encodeURIComponent(id)}`, { method: 'DELETE' }));
+  await check(await fetch(`${API_BASE}/api/materials/${encodeURIComponent(id)}`, { method: 'DELETE' }));
 }
 
 // ---------------------------------------------------------------- IFC models
@@ -166,31 +169,31 @@ export interface ModelData extends ModelRow {
 }
 
 export async function fetchModels(): Promise<ModelRow[]> {
-  return (await check(await fetch('/api/models'))).json();
+  return (await check(await fetch(`${API_BASE}/api/models`))).json();
 }
 
 export async function fetchModel(id: number): Promise<ModelRow> {
-  return (await check(await fetch(`/api/models/${id}`))).json();
+  return (await check(await fetch(`${API_BASE}/api/models/${id}`))).json();
 }
 
 export async function fetchModelData(id: number): Promise<ModelData> {
-  return (await check(await fetch(`/api/models/${id}/data`))).json();
+  return (await check(await fetch(`${API_BASE}/api/models/${id}/data`))).json();
 }
 
 export async function uploadModel(file: File): Promise<ModelRow> {
   const body = new FormData();
   body.append('file', file);
-  return (await check(await fetch('/api/models', { method: 'POST', body }))).json();
+  return (await check(await fetch(`${API_BASE}/api/models`, { method: 'POST', body }))).json();
 }
 
 export async function modelFromDocument(docId: number): Promise<ModelRow> {
-  return (await check(await fetch(`/api/models/from-document/${docId}`, { method: 'POST' }))).json();
+  return (await check(await fetch(`${API_BASE}/api/models/from-document/${docId}`, { method: 'POST' }))).json();
 }
 
 export async function saveTypeDecision(modelId: number, typeId: string, decision: Record<string, unknown>): Promise<void> {
-  await check(await fetch(`/api/models/${modelId}/types/${encodeURIComponent(typeId)}`, { method: 'PUT', ...json(decision) }));
+  await check(await fetch(`${API_BASE}/api/models/${modelId}/types/${encodeURIComponent(typeId)}`, { method: 'PUT', ...json(decision) }));
 }
 
 export async function patchModelSettings(modelId: number, patch: ModelRow['settings']): Promise<void> {
-  await check(await fetch(`/api/models/${modelId}/settings`, { method: 'PATCH', ...json(patch) }));
+  await check(await fetch(`${API_BASE}/api/models/${modelId}/settings`, { method: 'PATCH', ...json(patch) }));
 }
