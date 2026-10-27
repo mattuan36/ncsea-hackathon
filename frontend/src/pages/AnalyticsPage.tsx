@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Upload } from 'lucide-react';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, fmt, levelFloorArea, levelTakeoff } from '../ltl/calc';
+import IfcViewer from '../ifc/IfcViewer';
 
 export default function AnalyticsPage() {
-  const { types, materials, model, plan, isDemo } = useLtl();
+  const { types, materials, model, plan, isDemo, ifc, ifcStatus, ifcError, loadIfcFile } = useLtl();
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const { rows, floorSF, wallLF, kips } = useMemo(() => {
     const agg = new Map<string, { kips: number; qty: number }>();
@@ -38,6 +41,29 @@ export default function AnalyticsPage() {
           Takeoff summary across {plan.levels.length} plan levels{model ? ` · ${model.label}` : ' · Demo sample model'}.
         </p>
       </header>
+
+      <section className="card">
+        <div className="card-head">
+          <div>
+            <h2 className="card-title">Model</h2>
+            <p className="muted">{ifc ? ifc.name : 'Import an IFC exported from Revit. The file stays in this browser session.'}</p>
+          </div>
+          <button className="btn" onClick={() => fileInput.current?.click()}><Upload size={16} /> Import IFC</button>
+          <input
+            ref={fileInput}
+            type="file"
+            accept=".ifc"
+            hidden
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) void loadIfcFile(file);
+              event.target.value = '';
+            }}
+          />
+        </div>
+        <IfcViewer data={ifcStatus === 'ready' ? ifc?.data ?? null : null} status={ifcStatus} error={ifcError} />
+        <p className="muted small ifc-hint">Drag to orbit. Scroll to zoom.</p>
+      </section>
 
       <div className="kpis">
         <div className="kpi"><span>Total dead load</span><strong>{fmt(kips, 1)} kips</strong></div>

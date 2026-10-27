@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Check } from "lucide-react";
 import { archiveSiteReport } from "../api";
@@ -7,6 +7,8 @@ import { saveLocalDocuments } from "../localDocuments";
 import MapView from "../lateral/MapView";
 import ReportView from "../lateral/ReportView";
 import SeismicCsStep from "../lateral/SeismicCsStep";
+import SiteClassStep from "../lateral/SiteClassStep";
+import type { ClassCache, SeismicInputs } from "../lateral/siteClass";
 import { inServiceArea } from "../lateral/coverage";
 import { useLtl } from "../ltl/store";
 import { LocateError, searchPlaces, type Place } from "../lateral/search";
@@ -34,7 +36,7 @@ const SAMPLE_REPORT: SiteReport = {
 const DEFAULT_LAT = 37.795143;
 const DEFAULT_LNG = -122.404312;
 
-const STEPS = ["Site loads", "Cs and base shear"];
+const STEPS = ["Site loads", "Cs and base shear", "Site class comparison"];
 
 const SITE_CLASSES: Record<string, string[]> = {
   "asce7-22": ["A", "B", "BC", "C", "CD", "D", "DE", "E"],
@@ -57,7 +59,18 @@ export default function LateralPage() {
   const [report, setReport] = useState<SiteReport | null>(null);
   const [archiveNote, setArchiveNote] = useState("");
   const [archiveError, setArchiveError] = useState("");
-  const { projectName, lateralStep: step, setLateralStep: setStep } = useLtl();
+  const [csInputs, setCsInputs] = useState<SeismicInputs | null>(null);
+  const [directionLabels, setDirectionLabels] = useState({ X: "", Y: "" });
+  const { projectName, lateralStep: step, setLateralStep: setStep, setHazardReport, siteClassComparison, setSiteClassComparison } = useLtl();
+  const [classCache, setClassCache] = useState<ClassCache | null>(() => (
+    siteClassComparison?.key
+      ? { key: siteClassComparison.key, fingerprint: siteClassComparison.fingerprint, rows: siteClassComparison.rows }
+      : null
+  ));
+  const storeInputs = useCallback((inputs: SeismicInputs, labels: { X: string; Y: string }) => {
+    setCsInputs((current) => (JSON.stringify(current) === JSON.stringify(inputs) ? current : inputs));
+    setDirectionLabels((current) => (current.X === labels.X && current.Y === labels.Y ? current : labels));
+  }, []);
   const go = (n: number) => setStep(Math.max(0, Math.min(STEPS.length - 1, n)));
   const openCs = () => {
     const onSampleSite = Math.abs(lat - DEFAULT_LAT) < 1e-6 && Math.abs(lng - DEFAULT_LNG) < 1e-6
@@ -69,6 +82,10 @@ export default function LateralPage() {
   useEffect(() => {
     if (!SITE_CLASSES[designCode].includes(siteClass)) setSiteClass("D");
   }, [designCode, siteClass]);
+
+  useEffect(() => {
+    if (report) setHazardReport(report);
+  }, [report, setHazardReport]);
 
   useEffect(() => {
     try {
@@ -166,7 +183,7 @@ export default function LateralPage() {
     <div className="page page-scroll">
       <header className="page-header">
         <h1>Lateral</h1>
-        <p className="muted subtitle">Site loads first, then ASCE 7-22 seismic Cs and base shear.</p>
+        <p className="muted subtitle">Site loads, then ASCE 7-22 seismic Cs, then Cs across site classes.</p>
       </header>
 
       <ol className="stepper">
@@ -180,7 +197,40 @@ export default function LateralPage() {
         ))}
       </ol>
 
-      {step === 1 && <SeismicCsStep report={report} projectName={projectName} onBack={() => go(0)} />}
+      <div hidden={step !== 1}>
+        <SeismicCsStep
+          report={report}
+          projectName={projectName}
+          onBack={() => go(0)}
+          onInputs={storeInputs}
+          onCompare={() => go(2)}
+          active={step === 1}
+        />
+      </div>
+
+      {step === 2 && (
+        <SiteClassStep
+          lat={lat}
+          lng={lng}
+          designCode={designCode}
+          risk={risk}
+          report={report}
+          inputs={csInputs}
+          labels={directionLabels}
+          cache={classCache}
+          onCache={(cache) => {
+            setClassCache(cache);
+            setSiteClassComparison({
+              key: cache.key,
+              fingerprint: cache.fingerprint,
+              rows: cache.rows,
+              projectClass: csInputs?.site_class.trim() || siteClass,
+              risk: csInputs?.risk_category || risk,
+            });
+          }}
+          onBack={() => go(1)}
+        />
+      )}
 
       {step === 0 && <>
       <form className="card" onSubmit={onSearch}>

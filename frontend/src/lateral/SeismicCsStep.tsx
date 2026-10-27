@@ -1,10 +1,13 @@
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { archiveSiteReport } from "../api";
+import { readBuildingInfo } from "../ifc/buildingInfo";
+import { useLtl } from "../ltl/store";
 import { saveLocalDocuments } from "../localDocuments";
 import { csReportFile, type CsReportData } from "./csReport";
 import { listHazardDocuments, parseHazardCsv, preferredHazardCsv, type DocumentPick, type HazardImport } from "./hazardCsv";
 import { hazardFiles } from "./hazardExport";
+import type { SeismicInputs } from "./siteClass";
 import { apiBase, type SiteReport } from "./skyciv";
 
 type Combination = "single" | "horizontal" | "vertical";
@@ -160,14 +163,29 @@ async function seismicJson<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function formatLoaded(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function ifcFieldClass(phase: "idle" | "reading" | "filling" | "filled"): string {
+  if (phase === "idle") return "";
+  return `ifc-${phase}`;
+}
+
 export default function SeismicCsStep({
   report,
   projectName,
   onBack,
+  onInputs,
+  onCompare,
+  active,
 }: {
   report: SiteReport | null;
   projectName: string;
   onBack: () => void;
+  onInputs: (inputs: SeismicInputs, labels: { X: string; Y: string }) => void;
+  onCompare: () => void;
+  active: boolean;
 }) {
   const [systems, setSystems] = useState<SystemOption[]>([]);
   const [periodTypes, setPeriodTypes] = useState<Record<string, string>>({});
@@ -202,6 +220,54 @@ export default function SeismicCsStep({
   const loadedHazard = useRef(false);
   const appliedReport = useRef<SiteReport | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { ifc, ifcStatus, setBaseShearReport } = useLtl();
+  const [ifcPhase, setIfcPhase] = useState<"idle" | "reading" | "filling" | "filled">("idle");
+  const hnTouched = useRef(false);
+  const storiesTouched = useRef(false);
+  const playedFor = useRef<Uint8Array | null>(null);
+
+  useEffect(() => {
+    if (!active || ifcStatus !== "ready" || !ifc || playedFor.current === ifc.data) return;
+    const info = readBuildingInfo(ifc.data);
+    if (!info) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    hnTouched.current = false;
+    storiesTouched.current = false;
+    setIfcPhase("reading");
+    setHn("");
+    setStories("");
+    let frame = 0;
+    const wait = window.setTimeout(() => {
+      if (reduce) {
+        if (!hnTouched.current) setHn(formatLoaded(info.hnFt));
+        if (!storiesTouched.current) setStories(String(info.stories));
+        playedFor.current = ifc.data;
+        setIfcPhase("filled");
+        return;
+      }
+      setIfcPhase("filling");
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / 900);
+        const eased = 1 - (1 - t) ** 3;
+        if (!hnTouched.current) setHn(t < 1 ? (info.hnFt * eased).toFixed(1) : formatLoaded(info.hnFt));
+        if (!storiesTouched.current) {
+          const shown = Math.round(info.stories * eased);
+          setStories(shown > 0 ? String(shown) : "");
+        }
+        if (t < 1) frame = requestAnimationFrame(tick);
+        else {
+          playedFor.current = ifc.data;
+          setIfcPhase("filled");
+        }
+      };
+      frame = requestAnimationFrame(tick);
+    }, reduce ? 0 : 700);
+    return () => {
+      window.clearTimeout(wait);
+      cancelAnimationFrame(frame);
+    };
+  }, [active, ifc, ifcStatus]);
 
   const applyHazard = (hazard: HazardPayload, message: string) => {
     setProject(hazard.project_number || projectName);
@@ -304,7 +370,7 @@ export default function SeismicCsStep({
     setDirs((current) => ({ ...current, [axis]: { ...current[axis], ...patch } }));
   };
 
-  const payload = () => ({
+  const payload = (): SeismicInputs => ({
     project_number: project.trim(),
     asce_edition: "7-22",
     source_status: source,
@@ -336,15 +402,36 @@ export default function SeismicCsStep({
     engineer_reviewed: reviewed,
   });
 
+  const directionSummary = (axis: "X" | "Y") => {
+    const dir = dirs[axis];
+    const count = dir.combination === "single" ? 1 : dir.combination === "vertical" ? 2 : 4;
+    const ids = dir.systems.slice(0, count).filter(Boolean);
+    if (!ids.length) return "No system selected";
+    return ids.map((id) => {
+      const system = systems.find((item) => item.id === id);
+      return system ? `${id} ${system.name}` : id;
+    }).join(" + ");
+  };
+
+  const publish = () => {
+    onInputs(payload(), { X: directionSummary("X"), Y: directionSummary("Y") });
+  };
+
+  useEffect(() => {
+    publish();
+  }, [project, source, sds, sd1, s1, tl, risk, siteClass, part1Sdc, hn, stories, weight, cap, regular, rho, reviewed, dirs, systems, onInputs]);
+
   const onCalculate = async () => {
     setBusy("calc");
     setError("");
     try {
-      setResult(await seismicJson<CalcResult>("/calculate", {
+      const calculated = await seismicJson<CalcResult>("/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload()),
-      }));
+      });
+      setResult(calculated);
+      setBaseShearReport(buildReport(calculated));
       setNote("Calculated. Review all warnings.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Calculation failed.");
@@ -363,6 +450,7 @@ export default function SeismicCsStep({
         body: JSON.stringify({ inputs: payload(), exchange_rows: rows }),
       });
       setResult(data.results);
+      setBaseShearReport(buildReport(data.results));
       const bytes = Uint8Array.from(atob(data.xlsx_base64), (char) => char.charCodeAt(0));
       const url = URL.createObjectURL(new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
       const link = document.createElement("a");
@@ -586,13 +674,29 @@ export default function SeismicCsStep({
             Reported SDC
             <input value={part1Sdc} onChange={(event) => setPart1Sdc(event.target.value)} />
           </label>
-          <label>
+          <label className={ifcFieldClass(ifcPhase)}>
             hn (ft)
-            <input value={hn} inputMode="decimal" onChange={(event) => setHn(event.target.value)} />
+            <input
+              value={hn}
+              inputMode="decimal"
+              onChange={(event) => {
+                hnTouched.current = true;
+                setHn(event.target.value);
+              }}
+            />
+            {ifcPhase === "filled" && <span className="ifc-from">From the IFC</span>}
           </label>
-          <label>
+          <label className={ifcFieldClass(ifcPhase)}>
             Stories above base
-            <input value={stories} inputMode="numeric" onChange={(event) => setStories(event.target.value)} />
+            <input
+              value={stories}
+              inputMode="numeric"
+              onChange={(event) => {
+                storiesTouched.current = true;
+                setStories(event.target.value);
+              }}
+            />
+            {ifcPhase === "filled" && <span className="ifc-from">From the IFC</span>}
           </label>
           <label>
             W (kips)
@@ -653,7 +757,9 @@ export default function SeismicCsStep({
 
       <div className="step-footer">
         <button className="btn" type="button" onClick={onBack}>Back</button>
-        <span />
+        <button className="btn primary" type="button" onClick={() => { publish(); onCompare(); }}>
+          Next: site class comparison
+        </button>
       </div>
     </>
   );

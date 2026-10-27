@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Check, FileBox, ListOrdered, Upload } from 'lucide-react';
-import { fetchDocuments, fetchFolders, uploadDocuments, type DocumentRow } from '../api';
+import { downloadUrl, fetchDocuments, fetchFolders, type DocumentRow } from '../api';
+import IfcViewer from '../ifc/IfcViewer';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, effectiveLayers, fmt } from '../ltl/calc';
 import type { Kind } from '../ltl/data';
@@ -61,16 +62,14 @@ function StepFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled }: { onBa
 }
 
 function ModelStep({ onNext }: { onNext: () => void }) {
-  const { model, setModel, project, models, job, startUpload, startFromDocument, openModel, openDemo, error: storeError } = useLtl();
+  const { model, project, models, job, startUpload, startFromDocument, openModel, ifc, ifcStatus, ifcError, loadIfcFile, loadIfcFromUrl } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
-  const [modelsFolder, setModelsFolder] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     const folders = await fetchFolders();
     const root = folders.find((f) => f.parent_id === null);
-    setModelsFolder(folders.find((f) => f.name === '3D Models')?.id ?? root?.id ?? null);
     if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.ifc$/i.test(d.filename)));
   };
 
@@ -80,14 +79,17 @@ function ModelStep({ onNext }: { onNext: () => void }) {
 
   const upload = async (list: File[]) => {
     if (!list.length) return;
+    const file = list[0];
     setError(null);
-    await startUpload(list[0]);
+    if (/\.ifc$/i.test(file.name)) await loadIfcFile(file);
+    await startUpload(file);
     load().catch(() => undefined);
   };
 
   const readyFor = (docId: number) => models.find((m) => m.document_id === docId && m.status === 'ready');
   const openDoc = (d: DocumentRow) => {
     const ready = readyFor(d.id);
+    if (/\.ifc$/i.test(d.filename)) void loadIfcFromUrl(d.filename, downloadUrl(d.id));
     if (ready) openModel(ready.id);
     else if (/\.rvt$/i.test(d.filename)) setError('A .rvt file cannot be read: export the model to IFC from Revit and upload the .ifc.');
     else startFromDocument(d.id);
@@ -97,7 +99,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
 
   return (
     <>
-      <WireframeNote>Wireframe: reading the model is simulated. Whichever IFC you pick, the sample floor and wall types below are used.</WireframeNote>
+      <WireframeNote>The 3D view shows the imported IFC. Floor and wall types fill in after the model has been read.</WireframeNote>
       {error && <div className="banner error">{error}</div>}
       <div className="two-col">
         <section className="card">
@@ -148,6 +150,16 @@ function ModelStep({ onNext }: { onNext: () => void }) {
           </ol>
         </section>
       </div>
+
+      <section className="card">
+        <h2 className="card-title">Model view</h2>
+        <IfcViewer
+          data={model?.kind === 'ifc' && ifcStatus === 'ready' ? ifc?.data ?? null : null}
+          status={model?.kind === 'ifc' ? ifcStatus : 'idle'}
+          error={model?.kind === 'ifc' ? ifcError : null}
+        />
+        <p className="muted small ifc-hint">Drag to orbit. Scroll to zoom.</p>
+      </section>
 
       <section className="card">
         <h2 className="card-title">I want to build my…</h2>
