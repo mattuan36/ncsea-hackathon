@@ -10,6 +10,15 @@ import {
   type DocumentRow,
   type Folder,
 } from '../api';
+import {
+  deleteLocalDocument,
+  downloadLocalDocument,
+  folderShowsLocalReports,
+  loadLocalDocuments,
+  LOCAL_FOLDERS,
+  toDocumentRows,
+  withLocalCounts,
+} from '../localDocuments';
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -36,6 +45,7 @@ export default function DocumentsPage() {
   const [loadingDocs, setLoadingDocs] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [apiOnline, setApiOnline] = useState(true);
   const [dragging, setDragging] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<DocumentRow[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -47,20 +57,42 @@ export default function DocumentsPage() {
     return m;
   }, [folders]);
 
-  const loadFolders = useCallback(async () => {
-    const list = await fetchFolders();
-    setFolders(list);
-    return list;
+  const mergeLocal = useCallback((list: Folder[], folderId: number, apiDocs: DocumentRow[]) => {
+    const local = loadLocalDocuments();
+    const folder = list.find((item) => item.id === folderId);
+    if (!folderShowsLocalReports(folder, list)) return apiDocs;
+    const extras = toDocumentRows(local).filter((row) => !apiDocs.some((doc) => doc.filename === row.filename));
+    return [...apiDocs, ...extras];
   }, []);
 
-  const loadDocs = useCallback(async (folderId: number) => {
+  const loadFolders = useCallback(async () => {
+    try {
+      const list = withLocalCounts(await fetchFolders(), loadLocalDocuments().length);
+      setFolders(list);
+      setApiOnline(true);
+      return list;
+    } catch (error) {
+      const local = loadLocalDocuments();
+      if (!local.length) throw error;
+      const list = withLocalCounts(LOCAL_FOLDERS, local.length);
+      setFolders(list);
+      setApiOnline(false);
+      return list;
+    }
+  }, []);
+
+  const loadDocs = useCallback(async (folderId: number, list?: Folder[]) => {
     setLoadingDocs(true);
     try {
-      setDocs(await fetchDocuments(folderId));
+      if (!apiOnline || folderId < 0) {
+        setDocs(mergeLocal(list ?? folders, folderId, []));
+        return;
+      }
+      setDocs(mergeLocal(list ?? folders, folderId, await fetchDocuments(folderId)));
     } finally {
       setLoadingDocs(false);
     }
-  }, []);
+  }, [apiOnline, folders, mergeLocal]);
 
   // Initial load: select the first second-level folder (e.g. "Project Documents"), expand its ancestors.
   useEffect(() => {
@@ -68,9 +100,12 @@ export default function DocumentsPage() {
       .then((list) => {
         const root = list.find((f) => f.parent_id === null);
         if (!root) return;
-        const first = list.find((f) => f.parent_id === root.id) ?? root;
-        setSelectedFolderId(first.id);
-        setExpanded(new Set([root.id, first.id]));
+        const projectDocs = list.find((f) => f.parent_id === root.id && f.name === "Project Documents")
+          ?? list.find((f) => f.parent_id === root.id)
+          ?? root;
+        const siteReports = list.find((f) => f.parent_id === projectDocs.id && f.name === "Site Reports");
+        setSelectedFolderId(siteReports?.id ?? projectDocs.id);
+        setExpanded(new Set([root.id, projectDocs.id, siteReports?.id].filter((id): id is number => id != null)));
       })
       .catch((e: Error) => setError(e.message));
   }, [loadFolders]);
@@ -142,7 +177,7 @@ export default function DocumentsPage() {
   const handleBulkDownload = async () => {
     try {
       const rows = await resolveSelection();
-      rows.forEach((d, i) => setTimeout(() => triggerDownload(d.id), i * 300));
+      rows.forEach((d, i) => setTimeout(() => (d.id < 0 ? downloadLocalDocument(d.id) : triggerDownload(d.id)), i * 300));
     } catch (e) {
       setError((e as Error).message);
     }
@@ -165,7 +200,10 @@ export default function DocumentsPage() {
     setBusy(`Deleting ${rows.length} file${rows.length > 1 ? 's' : ''}…`);
     setError(null);
     try {
-      for (const d of rows) await deleteDocument(d.id);
+      for (const d of rows) {
+        if (d.id < 0) deleteLocalDocument(d.id);
+        else await deleteDocument(d.id);
+      }
       setCheckedDocs(new Set());
       setCheckedFolders(new Set());
       await refresh();
@@ -246,6 +284,9 @@ export default function DocumentsPage() {
             <X size={16} />
           </button>
         </div>
+      )}
+      {!apiOnline && (
+        <p className="banner info">Documents API is offline. Site-report CSV and PDF files saved from Lateral are listed here from this browser.</p>
       )}
 
       <div className="docs-layout">
@@ -365,9 +406,15 @@ export default function DocumentsPage() {
                     <td className="num muted">{formatSize(d.size_bytes)}</td>
                     <td className="muted">{formatDate(d.uploaded_at)}</td>
                     <td className="col-actions">
+                      {d.id < 0 ? (
+                        <button className="icon-btn" title="Download" aria-label={`Download ${d.filename}`} onClick={() => downloadLocalDocument(d.id)}>
+                          <Download size={16} />
+                        </button>
+                      ) : (
                       <a className="icon-btn" href={downloadUrl(d.id)} download title="Download" aria-label={`Download ${d.filename}`}>
                         <Download size={16} />
                       </a>
+                      )}
                       <button
                         className="icon-btn danger"
                         title="Delete"

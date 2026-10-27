@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FileSpreadsheet, Printer } from 'lucide-react';
 import { useLtl } from '../ltl/store';
-import { LEVELS } from '../ltl/data';
 import { assemblyPsf, basisLabel, calcPsf, fmt, fmtIn, layerPsf, levelTakeoff } from '../ltl/calc';
 import AssemblyGraphic from '../ltl/AssemblyGraphic';
 import PlanView from '../ltl/PlanView';
@@ -40,18 +39,19 @@ function TitleBlock({ subtitle }: { subtitle: string }) {
       </div>
       <div>{projectName}</div>
       <div className="muted">{subtitle}</div>
-      <div className="muted">Source: {model?.label ?? 'sample model'}</div>
+      <div className="muted">Source: {model?.label ?? 'Demo · sample model'}</div>
       <div className="muted">{new Date().toLocaleDateString()}</div>
     </div>
   );
 }
 
 function GraphicSheets() {
+  const { plan, isDemo } = useLtl();
   return (
     <>
-      {LEVELS.map((l) => (
+      {plan.levels.filter((l) => !l.minor).map((l, i) => (
         <section key={l.id} className="sheet">
-          <TitleBlock subtitle={`Sheet ${l.id} — ${l.name}`} />
+          <TitleBlock subtitle={`Sheet ${isDemo ? l.id : `S-${i + 1}`} — ${l.name}`} />
           <PlanView initialLevel={l.id} showLevelTabs={false} />
         </section>
       ))}
@@ -60,10 +60,10 @@ function GraphicSheets() {
 }
 
 function Spreadsheet() {
-  const { types, materials } = useLtl();
+  const { types, materials, plan } = useLtl();
   const governing = types.filter((t) => t.include && !t.parentId);
   const qtyByGov = new Map<string, { qty: number; kips: number }>();
-  LEVELS.forEach((lvl) =>
+  plan.levels.forEach((lvl) =>
     levelTakeoff(lvl, types, materials).forEach((e) => {
       const cur = qtyByGov.get(e.govId) ?? { qty: 0, kips: 0 };
       qtyByGov.set(e.govId, { qty: cur.qty + e.qty, kips: cur.kips + e.kips });
@@ -112,7 +112,7 @@ function Spreadsheet() {
                     );
                   })}
                   <div className="xls-row total">
-                    <span>Total {t.kind === 'wall' ? `(height ${t.height}')` : ''}</span>
+                    <span>Total {t.kind === 'wall' ? `(height ${t.height}'${t.netArea != null ? `, net ${fmt(t.netArea)} SF` : ''})` : ''}</span>
                     <span />
                     <span />
                     <span />

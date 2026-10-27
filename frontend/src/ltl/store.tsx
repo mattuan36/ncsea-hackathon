@@ -1,32 +1,57 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+  createMaterialRow, deleteMaterialRow, fetchMaterialRows, fetchModel, fetchModelData, fetchModels, modelFromDocument,
+  patchMaterialRow, patchModelSettings, saveTypeDecision, uploadModel, type ModelRow,
+} from '../api';
 import type { SiteReport } from '../lateral/skyciv';
-import { ALLOWANCE_OPTIONS, ELEMENT_TYPES, MATERIALS, uid, type ElementType, type Material } from './data';
+import { ALLOWANCE_OPTIONS, DEMO_PLAN, ELEMENT_TYPES, uid, type ElementType, type Material, type Plan } from './data';
+import { DEMO_MATERIALS, decisionOf, fromModel, materialToRow, rowToMaterial, unitWeightPatch } from './model';
 
 export interface ModelSource {
   kind: 'ifc' | 'revit';
   label: string;
 }
 
+/** Demo = the in-memory sample building; model = an uploaded IFC whose data lives in Postgres. */
+export type Project = { kind: 'demo' } | { kind: 'model'; id: number; filename: string };
+
 interface LtlState {
+  project: Project;
+  isDemo: boolean;
   projectName: string;
   setProjectName: (name: string) => void;
   model: ModelSource | null;
   setModel: (m: ModelSource | null) => void;
   gravityStep: number;
   setGravityStep: (n: number) => void;
+  lateralStep: number;
+  setLateralStep: (n: number) => void;
   materials: Material[];
-  addMaterial: (m: Omit<Material, 'id'>) => Material;
+  /** 'offline': the materials API could not be reached; the Demo samples are shown instead */
+  materialsSource: 'loading' | 'db' | 'offline';
+  addMaterial: (m: Omit<Material, 'id'>) => Promise<Material>;
   updateMaterial: (id: string, patch: Partial<Material>) => void;
   removeMaterial: (id: string) => void;
   allowanceOptions: string[];
   /** adds an allowance option (case-insensitive dedupe) and returns the stored name */
   addAllowanceOption: (name: string) => string;
   types: ElementType[];
+  plan: Plan;
   updateType: (id: string, patch: Partial<ElementType>) => void;
   copyLayers: (fromId: string, toId: string) => void;
   /** Merge two assemblies; the non-governing one becomes a sub-assembly of the governing one. */
   mergeTypes: (aId: string, bId: string, governingId: string) => void;
   unmerge: (id: string) => void;
+  /** uploaded IFC models, newest first */
+  models: ModelRow[];
+  /** the extraction being watched (queued / running / just failed) */
+  job: ModelRow | null;
+  startUpload: (file: File) => Promise<void>;
+  startFromDocument: (docId: number) => Promise<void>;
+  openModel: (id: number) => Promise<void>;
+  openDemo: () => void;
+  /** last error loading a model or saving a decision */
+  error: string | null;
   /** Lateral site inputs and the last SkyCiv report; shared so the assistant can read them. */
   siteInputs: SiteInputs | null;
   setSiteInputs: (i: SiteInputs | null) => void;
@@ -44,39 +69,232 @@ export interface SiteInputs {
 }
 
 const Ctx = createContext<LtlState | null>(null);
+const PROJECT_KEY = 'ltl.project';
+const DEMO_NAME = 'Riverside Office Building';
 
-// Wireframe store: in-memory only, resets on page reload.
+function remember(value: string) {
+  try {
+    localStorage.setItem(PROJECT_KEY, value);
+  } catch {
+    /* storage blocked: the latest model opens next time */
+  }
+}
+
+function recalled(): string | null {
+  try {
+    return localStorage.getItem(PROJECT_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export function LtlProvider({ children }: { children: ReactNode }) {
-  const [projectName, setProjectName] = useState('Riverside Office Building');
+  const [project, setProject] = useState<Project>({ kind: 'demo' });
+  const [projectName, setProjectNameState] = useState(DEMO_NAME);
   const [model, setModel] = useState<ModelSource | null>(null);
   const [gravityStep, setGravityStep] = useState(0);
-  const [materials, setMaterials] = useState<Material[]>(MATERIALS);
+  const [lateralStep, setLateralStep] = useState(0);
+  const [dbMaterials, setDbMaterials] = useState<Material[]>([]);
+  const [localMaterials, setLocalMaterials] = useState<Material[]>(DEMO_MATERIALS);
+  const [materialsSource, setMaterialsSource] = useState<LtlState['materialsSource']>('loading');
   const [types, setTypes] = useState<ElementType[]>(ELEMENT_TYPES);
+  const [plan, setPlan] = useState<Plan>(DEMO_PLAN);
   const [siteInputs, setSiteInputs] = useState<SiteInputs | null>(null);
   const [siteReport, setSiteReport] = useState<SiteReport | null>(null);
   const [allowanceOptions, setAllowanceOptions] = useState<string[]>(ALLOWANCE_OPTIONS);
+  const [models, setModels] = useState<ModelRow[]>([]);
+  const [job, setJob] = useState<ModelRow | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const demoState = useRef<{ types: ElementType[]; name: string; allowances: string[] } | null>(null);
+  const saved = useRef<Map<string, string>>(new Map());
+  const modelId = project.kind === 'model' ? project.id : null;
+
+  // ---- materials: the DB is the source; the Demo also keeps its own samples
+  useEffect(() => {
+    fetchMaterialRows()
+      .then((rows) => {
+        setDbMaterials(rows.map(rowToMaterial));
+        setMaterialsSource('db');
+      })
+      .catch(() => setMaterialsSource('offline'));
+  }, []);
+
+  const materials = useMemo(() => {
+    if (materialsSource !== 'db') return localMaterials;
+    return project.kind === 'demo' ? [...dbMaterials, ...DEMO_MATERIALS] : dbMaterials;
+  }, [materialsSource, localMaterials, dbMaterials, project.kind]);
+
+  const addMaterial = useCallback(async (m: Omit<Material, 'id'>) => {
+    if (materialsSource !== 'db') {
+      const created = { ...m, id: uid('m'), custom: true };
+      setLocalMaterials((list) => [...list, created]);
+      return created;
+    }
+    const created = rowToMaterial(await createMaterialRow(materialToRow(m)));
+    setDbMaterials((list) => [...list, created]);
+    return created;
+  }, [materialsSource]);
+
+  const weightTimers = useRef<Map<string, number>>(new Map());
+  const updateMaterial = useCallback((id: string, patch: Partial<Material>) => {
+    const apply = (list: Material[]) => list.map((m) => (m.id === id ? { ...m, ...patch } : m));
+    const target = dbMaterials.find((m) => m.id === id);
+    if (!target) {
+      setLocalMaterials(apply);
+      return;
+    }
+    setDbMaterials(apply);
+    if (patch.unitWeight == null) return;
+    // the field fires per keystroke: save the last value
+    window.clearTimeout(weightTimers.current.get(id));
+    weightTimers.current.set(id, window.setTimeout(() => {
+      patchMaterialRow(id, unitWeightPatch(target, patch.unitWeight!))
+        .then((row) => setDbMaterials((list) => list.map((m) => (m.id === id ? rowToMaterial(row) : m))))
+        .catch((e: Error) => setError(`Saving ${target.name}: ${e.message}`));
+    }, 400));
+  }, [dbMaterials]);
+
+  const removeMaterial = useCallback((id: string) => {
+    if (!dbMaterials.some((m) => m.id === id)) {
+      setLocalMaterials((list) => list.filter((m) => m.id !== id));
+      return;
+    }
+    deleteMaterialRow(id)
+      .then(() => setDbMaterials((list) => list.filter((m) => m.id !== id)))
+      .catch((e: Error) => setError(e.message));
+  }, [dbMaterials]);
+
+  // ---- projects
+  const openDemo = useCallback(() => {
+    const d = demoState.current;
+    setTypes(d?.types ?? ELEMENT_TYPES);
+    setProjectNameState(d?.name ?? DEMO_NAME);
+    setAllowanceOptions(d?.allowances ?? ALLOWANCE_OPTIONS);
+    setPlan(DEMO_PLAN);
+    setProject({ kind: 'demo' });
+    setModel(null);
+    setGravityStep(0);
+    remember('demo');
+  }, []);
+
+  const openModel = useCallback(async (id: number) => {
+    setError(null);
+    try {
+      const data = await fetchModelData(id);
+      const { types: next, plan: nextPlan } = fromModel(data.result, data.decisions);
+      saved.current = new Map(next.map((t) => [t.id, JSON.stringify(decisionOf(t))]));
+      setProject((p) => {
+        if (p.kind === 'demo') demoState.current = { types, name: projectName, allowances: allowanceOptions };
+        return { kind: 'model', id, filename: data.filename };
+      });
+      setTypes(next);
+      setPlan(nextPlan);
+      setProjectNameState(data.settings.project_name ?? data.filename.replace(/\.ifc(zip)?$/i, ''));
+      setAllowanceOptions(data.settings.allowance_options ?? ALLOWANCE_OPTIONS);
+      setModel({ kind: 'ifc', label: data.filename });
+      remember(String(id));
+    } catch (e) {
+      setError(`Could not open model ${id}: ${(e as Error).message}`);
+    }
+  }, [types, projectName, allowanceOptions]);
+
+  const refreshModels = useCallback(() => fetchModels().then(setModels).catch(() => setModels([])), []);
+
+  // first load: the remembered project, else the newest ready model, else the Demo
+  const booted = useRef(false);
+  useEffect(() => {
+    if (booted.current) return;
+    booted.current = true;
+    fetchModels()
+      .then((list) => {
+        setModels(list);
+        // a model still being read shows its progress whichever project is open
+        const running = list.find((m) => m.status === 'queued' || m.status === 'running');
+        if (running) setJob(running);
+        const want = recalled();
+        if (want === 'demo') return;
+        const pick = list.find((m) => String(m.id) === want && m.status === 'ready') ?? list.find((m) => m.status === 'ready');
+        if (pick) return openModel(pick.id);
+      })
+      .catch(() => { /* API offline: stay on the Demo */ });
+  }, [openModel]);
+
+  // ---- extraction jobs: poll until ready, then open the model
+  const startUpload = useCallback(async (file: File) => {
+    setError(null);
+    setJob({ id: 0, filename: file.name, document_id: null, size_bytes: file.size, status: 'queued', stage: 'Uploading', progress: 0, error: null, settings: {}, created_at: '', finished_at: null });
+    try {
+      setJob(await uploadModel(file));
+    } catch (e) {
+      setJob(null);
+      setError(`Upload failed: ${(e as Error).message}`);
+    }
+  }, []);
+
+  const startFromDocument = useCallback(async (docId: number) => {
+    setError(null);
+    try {
+      setJob(await modelFromDocument(docId));
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!job || !job.id || job.status === 'ready' || job.status === 'failed') return;
+    const timer = window.setTimeout(async () => {
+      try {
+        const next = await fetchModel(job.id);
+        setJob(next);
+        if (next.status === 'ready') {
+          await openModel(next.id);
+          setJob(null);
+          refreshModels();
+        } else if (next.status === 'failed') {
+          refreshModels();
+        }
+      } catch (e) {
+        setJob({ ...job, status: 'failed', error: (e as Error).message });
+      }
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [job, openModel, refreshModels]);
+
+  // ---- decisions: save every changed type of an open model
+  useEffect(() => {
+    if (modelId == null) return;
+    const changed = types.filter((t) => saved.current.get(t.id) !== JSON.stringify(decisionOf(t)));
+    if (!changed.length) return;
+    const timer = window.setTimeout(() => {
+      changed.forEach((t) => {
+        const body = decisionOf(t);
+        saveTypeDecision(modelId, t.id, body)
+          .then(() => saved.current.set(t.id, JSON.stringify(body)))
+          .catch((e: Error) => setError(`Not saved (${t.name}): ${e.message}`));
+      });
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [types, modelId]);
+
+  const nameTimer = useRef<number>();
+  const setProjectName = useCallback((name: string) => {
+    setProjectNameState(name);
+    if (modelId == null) return;
+    window.clearTimeout(nameTimer.current);
+    nameTimer.current = window.setTimeout(() => {
+      patchModelSettings(modelId, { project_name: name }).catch((e: Error) => setError(e.message));
+    }, 400);
+  }, [modelId]);
 
   const addAllowanceOption = useCallback((name: string) => {
     const clean = name.trim();
     const existing = allowanceOptions.find((o) => o.toLowerCase() === clean.toLowerCase());
     if (existing) return existing;
-    setAllowanceOptions((list) => [...list, clean]);
+    const next = [...allowanceOptions, clean];
+    setAllowanceOptions(next);
+    if (modelId != null) patchModelSettings(modelId, { allowance_options: next }).catch((e: Error) => setError(e.message));
     return clean;
-  }, [allowanceOptions]);
-
-  const addMaterial = useCallback((m: Omit<Material, 'id'>) => {
-    const created = { ...m, id: uid('m'), custom: true };
-    setMaterials((list) => [...list, created]);
-    return created;
-  }, []);
-
-  const updateMaterial = useCallback((id: string, patch: Partial<Material>) => {
-    setMaterials((list) => list.map((m) => (m.id === id ? { ...m, ...patch } : m)));
-  }, []);
-
-  const removeMaterial = useCallback((id: string) => {
-    setMaterials((list) => list.filter((m) => m.id !== id));
-  }, []);
+  }, [allowanceOptions, modelId]);
 
   const updateType = useCallback((id: string, patch: Partial<ElementType>) => {
     setTypes((list) => list.map((t) => (t.id === id ? { ...t, ...patch } : t)));
@@ -111,13 +329,17 @@ export function LtlProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      projectName, setProjectName, model, setModel, gravityStep, setGravityStep,
-      materials, addMaterial, updateMaterial, removeMaterial,
+      project, isDemo: project.kind === 'demo',
+      projectName, setProjectName, model, setModel, gravityStep, setGravityStep, lateralStep, setLateralStep,
+      materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
       allowanceOptions, addAllowanceOption,
-      types, updateType, copyLayers, mergeTypes, unmerge,
+      types, plan, updateType, copyLayers, mergeTypes, unmerge,
+      models, job, startUpload, startFromDocument, openModel, openDemo, error,
       siteInputs, setSiteInputs, siteReport, setSiteReport,
     }),
-    [projectName, model, gravityStep, materials, addMaterial, updateMaterial, removeMaterial, allowanceOptions, addAllowanceOption, types, updateType, copyLayers, mergeTypes, unmerge, siteInputs, siteReport],
+    [project, projectName, setProjectName, model, gravityStep, lateralStep, materials, materialsSource, addMaterial, updateMaterial, removeMaterial,
+      allowanceOptions, addAllowanceOption, types, plan, updateType, copyLayers, mergeTypes, unmerge,
+      models, job, startUpload, startFromDocument, openModel, openDemo, error, siteInputs, siteReport],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

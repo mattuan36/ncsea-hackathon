@@ -1,0 +1,1717 @@
+{
+ "standard": "ASCE/SEI 7-22",
+ "table": "12.2-1",
+ "source_workbook": "ASCE7-22_Seismic_Tables.xlsx",
+ "source_sha256": "51bba739fb04c79789b5012fbc1fa2a10483223c7c9d5442ea711ffc9285f9fb",
+ "verification": "Reported complete by B&P team; record reviewer/date in the workbook Verification Log.",
+ "systems": [
+  {
+   "id": "A1",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Special reinforced concrete shear walls",
+   "system_footnotes": [
+    "g",
+    "h"
+   ],
+   "detailing_sections": "14.2",
+   "R": 5.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A2",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Reinforced concrete ductile coupled walls",
+   "system_footnotes": [
+    "q"
+   ],
+   "detailing_sections": "14.2",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 8.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A3",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary reinforced concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 4.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A4",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Detailed plain concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A5",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary plain concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A6",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Intermediate precast shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 4.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 40.0,
+    "E": 40.0,
+    "F": 40.0
+   },
+   "other_footnotes": "D, E, F: i"
+  },
+  {
+   "id": "A7",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary precast shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 3.0,
+   "omega0": 2.5,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A8",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Special reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 5.0,
+   "omega0": 2.5,
+   "Cd": 3.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A9",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Intermediate reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 3.5,
+   "omega0": 2.5,
+   "Cd": 2.25,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A10",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 1.75,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": 160.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A11",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Detailed plain masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 1.75,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A12",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary plain masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.25,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A13",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Prestressed masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.75,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A14",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary reinforced AAC masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": 35.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A15",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Ordinary plain AAC masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A16",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Light-frame (wood) walls sheathed with wood structural panels rated for shear resistance",
+   "system_footnotes": [],
+   "detailing_sections": "14.5",
+   "R": 6.5,
+   "omega0": 3.0,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A17",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Light-frame (cold-formed steel) walls sheathed with wood structural panels rated for shear resistance or steel sheets",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 6.5,
+   "omega0": 3.0,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A18",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Light-frame walls with shear panels of all other materials",
+   "system_footnotes": [],
+   "detailing_sections": "14.1 and 14.5",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 35.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A19",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Light-frame (cold-formed steel) wall systems using flat strap bracing",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 4.0,
+   "omega0": 2.0,
+   "Cd": 3.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A20",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Cross-laminated timber shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.5",
+   "R": 3.0,
+   "omega0": 3.0,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": 65.0,
+    "C": 65.0,
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "A21",
+   "category": "A. BEARING WALL SYSTEMS",
+   "name": "Cross-laminated timber shear walls with shear resistance provided by high-aspect-ratio panels only",
+   "system_footnotes": [],
+   "detailing_sections": "14.5",
+   "R": 4.0,
+   "omega0": 3.0,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": 65.0,
+    "C": 65.0,
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B1",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel eccentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 8.0,
+   "omega0": 2.0,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B2",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel special concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 6.0,
+   "omega0": 2.0,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B3",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel ordinary concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 3.25,
+   "omega0": 2.0,
+   "Cd": 3.25,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 35.0,
+    "E": 35.0,
+    "F": "NP"
+   },
+   "other_footnotes": "D, E, F: j"
+  },
+  {
+   "id": "B4",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Special reinforced concrete shear walls",
+   "system_footnotes": [
+    "g",
+    "h"
+   ],
+   "detailing_sections": "14.2",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B5",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Reinforced concrete ductile coupled walls",
+   "system_footnotes": [
+    "q"
+   ],
+   "detailing_sections": "14.2",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 8.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B6",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Ordinary reinforced concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 5.0,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B7",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Detailed plain concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2 and 14.2.2.7",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B8",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Ordinary plain concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B9",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Intermediate precast shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 5.0,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 40.0,
+    "E": 40.0,
+    "F": 40.0
+   },
+   "other_footnotes": "D, E, F: i"
+  },
+  {
+   "id": "B10",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Ordinary precast shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 4.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B11",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite eccentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B12",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite special concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 5.0,
+   "omega0": 2.0,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B13",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite ordinary braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 3.0,
+   "omega0": 2.0,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B14",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 6.5,
+   "omega0": 2.5,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B15",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite special shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B16",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete composite ordinary shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 5.0,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B17",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Special reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 5.5,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B18",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Intermediate reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 4.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B19",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Ordinary reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": 160.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B20",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Detailed plain masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 2.0,
+   "omega0": 2.5,
+   "Cd": 2.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B21",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Ordinary plain masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.25,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B22",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Prestressed masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 1.5,
+   "omega0": 2.5,
+   "Cd": 1.75,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B23",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Light-frame (wood) walls sheathed with wood structural panels rated for shear resistance",
+   "system_footnotes": [],
+   "detailing_sections": "14.5",
+   "R": 7.0,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B24",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Light-frame (cold-formed steel) walls sheathed with wood structural panels rated for shear resistance or steel sheets",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 7.0,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 65.0,
+    "E": 65.0,
+    "F": 65.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B25",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Light-frame walls with shear panels of all other materials",
+   "system_footnotes": [],
+   "detailing_sections": "14.1 and 14.5",
+   "R": 2.5,
+   "omega0": 2.5,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 35.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B26",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel buckling-restrained braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B27",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel special plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 7.0,
+   "omega0": 2.0,
+   "Cd": 6.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "B28",
+   "category": "B. BUILDING FRAME SYSTEMS",
+   "name": "Steel and concrete coupled composite plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 160.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C1",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel special moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1 and 12.2.5.5",
+   "R": 8.0,
+   "omega0": 3.0,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C2",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel special truss moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 7.0,
+   "omega0": 3.0,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 100.0,
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C3",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel intermediate moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "12.2.5.7 and 14.1",
+   "R": 4.5,
+   "omega0": 3.0,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 35.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": "D, E, F: k"
+  },
+  {
+   "id": "C4",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel ordinary moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "12.2.5.6 and 14.1",
+   "R": 3.5,
+   "omega0": 3.0,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": "D, E, F: l"
+  },
+  {
+   "id": "C5",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Special reinforced concrete moment frames",
+   "system_footnotes": [
+    "m"
+   ],
+   "detailing_sections": "12.2.5.5 and 14.2",
+   "R": 8.0,
+   "omega0": 3.0,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C6",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Intermediate reinforced concrete moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.2",
+   "R": 5.0,
+   "omega0": 3.0,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C7",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Ordinary reinforced concrete moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.2",
+   "R": 3.0,
+   "omega0": 3.0,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C8",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel and concrete composite special moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "12.2.5.5 and 14.3",
+   "R": 8.0,
+   "omega0": 3.0,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C9",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel and concrete composite intermediate moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 5.0,
+   "omega0": 3.0,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C10",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel and concrete composite partially restrained moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 6.0,
+   "omega0": 3.0,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": 160.0,
+    "C": 160.0,
+    "D": 100.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C11",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Steel and concrete composite ordinary moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 3.0,
+   "omega0": 3.0,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "C12",
+   "category": "C. MOMENT-RESISTING FRAME SYSTEMS",
+   "name": "Cold-formed steel—special bolted moment frame",
+   "system_footnotes": [
+    "n"
+   ],
+   "detailing_sections": "14.1",
+   "R": 3.5,
+   "omega0": 3.0,
+   "Cd": 3.5,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": 35.0,
+    "E": 35.0,
+    "F": 35.0
+   },
+   "other_footnotes": "Ω0: o"
+  },
+  {
+   "id": "D1",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel eccentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D2",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel special concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 7.0,
+   "omega0": 2.5,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D3",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Special reinforced concrete shear walls",
+   "system_footnotes": [
+    "g",
+    "h"
+   ],
+   "detailing_sections": "14.2",
+   "R": 7.0,
+   "omega0": 2.5,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D4",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Reinforced concrete ductile coupled walls",
+   "system_footnotes": [
+    "q"
+   ],
+   "detailing_sections": "14.2",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 8.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D5",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Ordinary reinforced concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D6",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite eccentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D7",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite special concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D8",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 7.5,
+   "omega0": 2.5,
+   "Cd": 6.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D9",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite special shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 7.0,
+   "omega0": 2.5,
+   "Cd": 6.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D10",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite ordinary shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D11",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Special reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 5.5,
+   "omega0": 3.0,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D12",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Intermediate reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 4.0,
+   "omega0": 3.0,
+   "Cd": 3.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D13",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel buckling-restrained braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D14",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel special plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 6.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "D15",
+   "category": "D. DUAL SYSTEMS WITH SPECIAL MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete coupled composite plate shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 8.0,
+   "omega0": 2.5,
+   "Cd": 5.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NL",
+    "E": "NL",
+    "F": "NL"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E1",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel special concentrically braced frames",
+   "system_footnotes": [
+    "p"
+   ],
+   "detailing_sections": "14.1",
+   "R": 6.0,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 35.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E2",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Special reinforced concrete shear walls",
+   "system_footnotes": [
+    "g",
+    "h"
+   ],
+   "detailing_sections": "14.2",
+   "R": 6.5,
+   "omega0": 2.5,
+   "Cd": 5.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 100.0,
+    "F": 100.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E3",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Ordinary reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 3.0,
+   "omega0": 3.0,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": 160.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E4",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Intermediate reinforced masonry shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.4",
+   "R": 3.5,
+   "omega0": 3.0,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E5",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite special concentrically braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 5.5,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": 160.0,
+    "E": 100.0,
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E6",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite ordinary braced frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 3.5,
+   "omega0": 2.5,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E7",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Steel and concrete composite ordinary shear walls",
+   "system_footnotes": [],
+   "detailing_sections": "14.3",
+   "R": 5.0,
+   "omega0": 3.0,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "E8",
+   "category": "E. DUAL SYSTEMS WITH INTERMEDIATE MOMENT FRAMES CAPABLE OF RESISTING AT LEAST 25% OF PRESCRIBED SEISMIC FORCES",
+   "name": "Ordinary reinforced concrete shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "14.2",
+   "R": 5.5,
+   "omega0": 2.5,
+   "Cd": 4.5,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "F",
+   "category": "F. SHEAR WALL-FRAME INTERACTIVE SYSTEM WITH ORDINARY REINFORCED CONCRETE MOMENT FRAMES AND ORDINARY REINFORCED CONCRETE SHEAR WALLS",
+   "name": "Shear wall-frame interactive system with ordinary RC moment frames and ordinary RC shear walls",
+   "system_footnotes": [
+    "g"
+   ],
+   "detailing_sections": "12.2.5.8 and 14.2",
+   "R": 4.5,
+   "omega0": 2.5,
+   "Cd": 4.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "G1",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Steel special cantilever column systems",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 2.5,
+   "omega0": 2.5,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": 35.0,
+    "E": 35.0,
+    "F": 35.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "G2",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Steel ordinary cantilever column systems",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 1.25,
+   "omega0": 1.25,
+   "Cd": 1.25,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": "D, E, F: errata mark in source (Errata 1)"
+  },
+  {
+   "id": "G3",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Special reinforced concrete moment frames",
+   "system_footnotes": [
+    "m"
+   ],
+   "detailing_sections": "12.2.5.5 and 14.2",
+   "R": 2.5,
+   "omega0": 2.5,
+   "Cd": 2.5,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": 35.0,
+    "E": 35.0,
+    "F": 35.0
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "G4",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Intermediate reinforced concrete moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.2",
+   "R": 1.5,
+   "omega0": 1.5,
+   "Cd": 1.5,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "G5",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Ordinary reinforced concrete moment frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.2",
+   "R": 1.0,
+   "omega0": 1.25,
+   "Cd": 1.0,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": "NP",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "G6",
+   "category": "G. CANTILEVERED COLUMN SYSTEMS DETAILED TO CONFORM TO THE REQUIREMENTS FOR:",
+   "name": "Timber frames",
+   "system_footnotes": [],
+   "detailing_sections": "14.5",
+   "R": 1.5,
+   "omega0": 1.5,
+   "Cd": 1.5,
+   "height_limits_ft": {
+    "B": 35.0,
+    "C": 35.0,
+    "D": 35.0,
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  },
+  {
+   "id": "H",
+   "category": "H. STEEL SYSTEMS NOT SPECIFICALLY DETAILED FOR SEISMIC RESISTANCE, EXCLUDING CANTILEVER COLUMN SYSTEMS",
+   "name": "Steel systems not specifically detailed for seismic resistance, excluding cantilever column systems",
+   "system_footnotes": [],
+   "detailing_sections": "14.1",
+   "R": 3.0,
+   "omega0": 3.0,
+   "Cd": 3.0,
+   "height_limits_ft": {
+    "B": "NL",
+    "C": "NL",
+    "D": "NP",
+    "E": "NP",
+    "F": "NP"
+   },
+   "other_footnotes": ""
+  }
+ ]
+}

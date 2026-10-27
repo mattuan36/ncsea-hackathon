@@ -1,3 +1,6 @@
+import { Download } from "lucide-react";
+import { useLtl } from "../ltl/store";
+import { downloadBytes, exportFilename, hazardCsv, hazardPdf } from "./hazardExport";
 import { compareSeismicDesignCategory } from "./seismic";
 import type { SiteReport, Spectrum } from "./skyciv";
 
@@ -15,19 +18,17 @@ const SPECTRUM_LABEL: Record<string, string> = {
 const SEISMIC_ORDER = ["sdc", "ss", "s1", "fa", "fv", "sms", "sm1", "sds", "sd1", "pgam", "ts", "t0", "tl"];
 
 export default function ReportView({ report }: { report: SiteReport }) {
+  const { projectName } = useLtl();
   const check = compareSeismicDesignCategory(report.seismic.sds, report.seismic.sd1, report.riskCategory, report.seismic.sdc);
   const spectra = Object.entries(report.spectra).flatMap(([name, spectrum]) => {
     const series = usableSpectrum(spectrum);
     return series ? [[SPECTRUM_LABEL[name] ?? name, series] as const] : [];
   });
-  const download = () => {
-    const blob = new Blob([JSON.stringify(report.raw, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "site-loads.json";
-    link.click();
-    URL.revokeObjectURL(url);
+  const downloadCsv = () => {
+    downloadBytes(exportFilename(projectName, "Hazard_Studio_Revit_Import.csv"), hazardCsv(report, projectName), "text/csv;charset=utf-8");
+  };
+  const downloadPdf = () => {
+    downloadBytes(exportFilename(projectName, "Hazard_Studio_Site_Criteria.pdf"), hazardPdf(report, projectName), "application/pdf");
   };
 
   return (
@@ -37,7 +38,14 @@ export default function ReportView({ report }: { report: SiteReport }) {
           <h2 className="card-title">Site load report</h2>
           <p className="muted">{report.address || "Coordinate sent to SkyCiv"}</p>
         </div>
-        <button type="button" className="btn" onClick={download}>Download JSON</button>
+        <div className="row-gap no-print">
+          <button type="button" className="btn" onClick={downloadCsv}>
+            <Download size={16} /> Download CSV
+          </button>
+          <button type="button" className="btn" onClick={downloadPdf}>
+            <Download size={16} /> Download PDF
+          </button>
+        </div>
       </div>
       <div className="metric-row">
         <div><span className="muted">Wind</span><strong>{formatScalar(report.windSpeed)} {report.windUnit || ""}</strong></div>
@@ -48,6 +56,10 @@ export default function ReportView({ report }: { report: SiteReport }) {
       <p className="muted small">
         {CODE_LABEL[report.designCode] || report.designCode} · Risk {report.riskCategory}
         {report.country ? ` · ${report.country}` : ""} · {report.latitude.toFixed(6)}, {report.longitude.toFixed(6)}
+      </p>
+      <p className="muted small">
+        CSV is a Revit shared-parameter import (parameter_name, value, units, source). PDF is a signed calc sheet.
+        Neither is an official ASCE Hazard Tool Full Report. Confirm before design use.
       </p>
       {report.notes.map((note) => <p key={note} className="banner info">{note}</p>)}
 

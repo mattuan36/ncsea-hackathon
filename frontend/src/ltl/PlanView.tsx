@@ -1,8 +1,11 @@
 import { useId, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, GitMerge } from 'lucide-react';
-import { GRID_X, GRID_Y, LEVELS, PLAN_SIZE, type Pt } from './data';
-import { assemblyPsf, fmt, fmtIn, layerPsf, levelTakeoff, polygonArea, polylineLength } from './calc';
+import type { Level, Pt } from './data';
+import { assemblyPsf, fmt, fmtIn, layerPsf, levelFloorArea, levelTakeoff, polygonArea, polylineLength } from './calc';
 import { useLtl } from './store';
+
+/** IFC models: shorter walls are drawn and clickable but not labelled (hundreds per floor) */
+const MIN_LABEL_LF = 15;
 
 const pts = (p: Pt[]) => p.map(([x, y]) => `${x},${y}`).join(' ');
 
@@ -19,15 +22,37 @@ function longestSegmentMid(p: Pt[]): Pt {
   return mid;
 }
 
+const ring = (p: Pt[]) => `M${p.map(([x, y]) => `${x},${y}`).join('L')}Z`;
+
+/** Extent of every level, so switching levels keeps the same frame. The Demo grid is 150 × 90 from 0,0. */
+function planBounds(levels: Level[]) {
+  let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+  const take = (p: Pt[]) => p.forEach(([x, y]) => {
+    x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+  });
+  levels.forEach((l) => {
+    l.areas.forEach((a) => (a.polys?.map((g) => g.outer) ?? [a.points]).forEach(take));
+    l.walls.forEach((w) => take(w.points));
+  });
+  if (!Number.isFinite(x0)) return { x: 0, y: 0, w: 150, h: 90 };
+  return { x: x0, y: y0, w: Math.max(x1 - x0, 1), h: Math.max(y1 - y0, 1) };
+}
+
 /** Bluebeam-style markup plan with a legend table; click a legend row, area or wall to isolate it. */
-export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = true }: { initialLevel?: string; showLevelTabs?: boolean }) {
-  const { types, materials } = useLtl();
+export default function PlanView({ initialLevel, showLevelTabs = true }: { initialLevel?: string; showLevelTabs?: boolean }) {
+  const { types, materials, plan } = useLtl();
   const pid = `h${useId().replace(/:/g, '')}`;
-  const [levelId, setLevelId] = useState(initialLevel);
+  const tabs = plan.levels.filter((l) => !l.minor);
+  const [levelId, setLevelId] = useState(initialLevel ?? tabs[0]?.id ?? plan.levels[0]?.id);
   const [focus, setFocus] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-  const level = LEVELS.find((l) => l.id === levelId) ?? LEVELS[0];
+  const level: Level = plan.levels.find((l) => l.id === levelId) ?? tabs[0] ?? plan.levels[0] ?? { id: '', name: 'No plan', areas: [], walls: [] };
+  const box = useMemo(() => planBounds(plan.levels), [plan]);
+  // drawing sizes were tuned for the 150 ft Demo; scale them with the building
+  const k = Math.max(box.w, box.h) / 150;
+  const pad = 16 * k;
+  const grid = plan.grid;
   const byId = useMemo(() => new Map(types.map((t) => [t.id, t])), [types]);
   const entries = useMemo(() => levelTakeoff(level, types, materials), [level, types, materials]);
   const govOf = (typeId: string) => {
@@ -39,7 +64,7 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
   const faded = (typeId: string) => focus !== null && govOf(typeId) !== focus;
   const pick = (typeId: string) => setFocus((f) => (f === govOf(typeId) ? null : govOf(typeId)));
 
-  const floorSF = entries.filter((e) => e.kind === 'floor').reduce((s, e) => s + e.qty, 0);
+  const floorSF = levelFloorArea(level, types);
   const wallLF = entries.filter((e) => e.kind === 'wall').reduce((s, e) => s + e.qty, 0);
   const kips = entries.reduce((s, e) => s + e.kips, 0);
   const colorIds = [...new Set(types.map((t) => t.color))];
@@ -50,7 +75,7 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
         <div className="plan-toolbar">
           {showLevelTabs ? (
             <div className="seg">
-              {LEVELS.map((l) => (
+              {tabs.map((l) => (
                 <button key={l.id} className={l.id === level.id ? 'on' : ''} onClick={() => { setLevelId(l.id); setFocus(null); }}>
                   {l.name}
                 </button>
@@ -63,30 +88,31 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
         </div>
         <svg
           className="plan-svg"
-          viewBox={`-16 -16 ${PLAN_SIZE.width + 28} ${PLAN_SIZE.height + 28}`}
+          viewBox={`${box.x - pad} ${box.y - pad} ${box.w + 1.75 * pad} ${box.h + 1.75 * pad}`}
+          style={{ fontSize: `${k}px` }}
           onClick={() => setFocus(null)}
           role="img"
           aria-label={`${level.name} takeoff plan`}
         >
           <defs>
             {colorIds.map((c) => (
-              <pattern key={c} id={`${pid}-${c.slice(1)}`} width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                <line x1="0" y1="0" x2="0" y2="2.4" stroke={c} strokeWidth="0.3" />
+              <pattern key={c} id={`${pid}-${c.slice(1)}`} width={2.4 * k} height={2.4 * k} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2={2.4 * k} stroke={c} strokeWidth={0.3 * k} />
               </pattern>
             ))}
           </defs>
-          <rect x="-16" y="-16" width={PLAN_SIZE.width + 28} height={PLAN_SIZE.height + 28} fill="#fff" />
+          <rect x={box.x - pad} y={box.y - pad} width={box.w + 1.75 * pad} height={box.h + 1.75 * pad} fill="#fff" />
 
-          {GRID_X.map((g) => (
+          {grid?.x.map((g) => (
             <g key={g.name} className="grid">
-              <line x1={g.at} y1={-8} x2={g.at} y2={PLAN_SIZE.height + 4} />
+              <line x1={g.at} y1={-8} x2={g.at} y2={box.h + 4} />
               <circle cx={g.at} cy={-11} r="3.6" />
               <text x={g.at} y={-9.8} textAnchor="middle">{g.name}</text>
             </g>
           ))}
-          {GRID_Y.map((g) => (
+          {grid?.y.map((g) => (
             <g key={g.name} className="grid">
-              <line x1={-8} y1={g.at} x2={PLAN_SIZE.width + 4} y2={g.at} />
+              <line x1={-8} y1={g.at} x2={box.w + 4} y2={g.at} />
               <circle cx={-11} cy={g.at} r="3.6" />
               <text x={-11} y={g.at + 1.2} textAnchor="middle">{g.name}</text>
             </g>
@@ -105,12 +131,22 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
                   if (included(a.typeId)) pick(a.typeId);
                 }}
               >
-                <polygon points={pts(a.points)} fill={color} fillOpacity="0.16" stroke="none" />
-                <polygon points={pts(a.points)} fill={`url(#${pid}-${color.slice(1)})`} stroke={color} strokeWidth="0.6" />
-                <text x={a.label[0]} y={a.label[1] - 1.2} textAnchor="middle" className="area-name">
+                {a.polys ? (
+                  <>
+                    <path d={a.polys.map((g) => [g.outer, ...g.holes].map(ring).join('')).join('')} fillRule="evenodd" fill={color} fillOpacity="0.16" stroke="none" />
+                    <path d={a.polys.map((g) => [g.outer, ...g.holes].map(ring).join('')).join('')} fillRule="evenodd" fill={`url(#${pid}-${color.slice(1)})`} stroke={color} strokeWidth={0.6 * k} />
+                  </>
+                ) : (
+                  <>
+                    <polygon points={pts(a.points)} fill={color} fillOpacity="0.16" stroke="none" />
+                    <polygon points={pts(a.points)} fill={`url(#${pid}-${color.slice(1)})`} stroke={color} strokeWidth="0.6" />
+                  </>
+                )}
+                <text x={a.label[0]} y={a.label[1] - 1.2 * k} textAnchor="middle" className="area-name">
                   {included(a.typeId) ? t?.assemblyName : `${t?.assemblyName} (excluded)`}
+                  {a.stackTypeIds && a.stackTypeIds.length > 1 ? ` + ${a.stackTypeIds.length - 1}` : ''}
                 </text>
-                <text x={a.label[0]} y={a.label[1] + 3} textAnchor="middle" className="area-qty">{fmt(polygonArea(a.points))} SF</text>
+                <text x={a.label[0]} y={a.label[1] + 3 * k} textAnchor="middle" className="area-qty">{fmt(a.areaSf ?? polygonArea(a.points))} SF</text>
               </g>
             );
           })}
@@ -128,9 +164,13 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
                   if (included(w.typeId)) pick(w.typeId);
                 }}
               >
-                <polyline points={pts(w.points)} fill="none" stroke="transparent" strokeWidth="5" />
-                <polyline points={pts(w.points)} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" />
-                <text x={mx} y={my + 0.9} textAnchor="middle" className="wall-qty">{fmt(polylineLength(w.points))} LF</text>
+                <title>{`${byId.get(w.typeId)?.assemblyName ?? w.typeId} · ${fmt(polylineLength(w.points))} LF`}</title>
+                <polyline points={pts(w.points)} fill="none" stroke="transparent" strokeWidth={5 * k} />
+                <polyline points={pts(w.points)} fill="none" stroke={color} strokeWidth={w.netAreaSf == null ? 1.5 * k : Math.min(1.5 * k, 1)} strokeLinecap="square" strokeLinejoin="miter" />
+                {/* IFC plans: label walls ≥ 15 ft only (owner's call 2026-10-27); the Demo labels every wall */}
+                {(w.netAreaSf == null || polylineLength(w.points) >= MIN_LABEL_LF) && (
+                  <text x={mx} y={my + 0.9 * k} textAnchor="middle" className="wall-qty">{fmt(polylineLength(w.points))} LF</text>
+                )}
               </g>
             );
           })}
@@ -209,7 +249,7 @@ export default function PlanView({ initialLevel = LEVELS[0].id, showLevelTabs = 
                             </tr>
                           </tbody>
                         </table>
-                        {kind === 'wall' && <p className="muted small">Height {gov.height}' → {fmt(assemblyPsf(gov.layers, materials) * (gov.height ?? 0), 0)} plf</p>}
+                        {kind === 'wall' && <p className="muted small">Height {gov.height}' → {fmt(assemblyPsf(gov.layers, materials) * (gov.height ?? 0), 0)} plf{gov.netArea != null ? ' (weight uses net area, openings removed)' : ''}</p>}
                         {children.length > 0 && (
                           <div className="subassemblies">
                             {children.map((c) => (

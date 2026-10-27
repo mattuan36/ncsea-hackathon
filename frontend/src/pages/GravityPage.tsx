@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Check, FileBox, Link2, Upload } from 'lucide-react';
+import { Box, Check, FileBox, ListOrdered, Upload } from 'lucide-react';
 import { fetchDocuments, fetchFolders, uploadDocuments, type DocumentRow } from '../api';
 import { useLtl } from '../ltl/store';
 import { assemblyPsf, effectiveLayers, fmt } from '../ltl/calc';
@@ -12,14 +12,17 @@ import PlanView from '../ltl/PlanView';
 const STEPS = ['Model', 'Floor types', 'Wall types', 'Build assemblies', 'Type table', 'Plan view'];
 
 export default function GravityPage() {
-  const { gravityStep: step, setGravityStep: setStep, model } = useLtl();
+  const { gravityStep: step, setGravityStep: setStep, model, isDemo, project, error } = useLtl();
   const go = (n: number) => setStep(Math.max(0, Math.min(STEPS.length - 1, n)));
 
   return (
     <div className="page page-scroll">
       <header className="page-header">
         <h1>Dead Load Takeoff</h1>
-        <p className="muted subtitle">Build dead-load assemblies and design criteria from the model, step by step.</p>
+        <p className="muted subtitle">
+          Build dead-load assemblies and design criteria from the model, step by step.
+          {isDemo ? <span className="tag demo">Demo · sample data</span> : <span className="tag">{project.kind === 'model' ? project.filename : ''}</span>}
+        </p>
       </header>
 
       <ol className="stepper">
@@ -33,6 +36,7 @@ export default function GravityPage() {
         ))}
       </ol>
 
+      {error && step > 0 && <div className="banner error">{error}</div>}
       {step === 0 && <ModelStep onNext={() => go(1)} />}
       {step === 1 && <FilterStep kind="floor" onBack={() => go(0)} onNext={() => go(2)} />}
       {step === 2 && <FilterStep kind="wall" onBack={() => go(1)} onNext={() => go(3)} />}
@@ -57,10 +61,9 @@ function StepFooter({ onBack, onNext, nextLabel = 'Next', nextDisabled }: { onBa
 }
 
 function ModelStep({ onNext }: { onNext: () => void }) {
-  const { model, setModel } = useLtl();
+  const { model, setModel, project, models, job, startUpload, startFromDocument, openModel, openDemo, error: storeError } = useLtl();
   const [files, setFiles] = useState<DocumentRow[]>([]);
   const [modelsFolder, setModelsFolder] = useState<number | null>(null);
-  const [path, setPath] = useState(model?.kind === 'revit' ? model.label : '');
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
@@ -68,27 +71,33 @@ function ModelStep({ onNext }: { onNext: () => void }) {
     const folders = await fetchFolders();
     const root = folders.find((f) => f.parent_id === null);
     setModelsFolder(folders.find((f) => f.name === '3D Models')?.id ?? root?.id ?? null);
-    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.(ifc|rvt)$/i.test(d.filename)));
+    if (root) setFiles((await fetchDocuments(root.id)).filter((d) => /\.ifc$/i.test(d.filename)));
   };
 
   useEffect(() => {
     load().catch((e: Error) => setError(e.message));
-  }, []);
+  }, [models.length]);
 
   const upload = async (list: File[]) => {
-    if (!list.length || modelsFolder == null) return;
-    try {
-      const created = await uploadDocuments(modelsFolder, list);
-      await load();
-      setModel({ kind: 'ifc', label: created[0].filename });
-    } catch (e) {
-      setError((e as Error).message);
-    }
+    if (!list.length) return;
+    setError(null);
+    await startUpload(list[0]);
+    load().catch(() => undefined);
   };
+
+  const readyFor = (docId: number) => models.find((m) => m.document_id === docId && m.status === 'ready');
+  const openDoc = (d: DocumentRow) => {
+    const ready = readyFor(d.id);
+    if (ready) openModel(ready.id);
+    else if (/\.rvt$/i.test(d.filename)) setError('A .rvt file cannot be read: export the model to IFC from Revit and upload the .ifc.');
+    else startFromDocument(d.id);
+  };
+  const activeDoc = project.kind === 'model' ? models.find((m) => m.id === project.id)?.document_id : undefined;
+  const busy = job != null && job.status !== 'failed';
 
   return (
     <>
-      <WireframeNote>Wireframe: reading the model is simulated. Whichever source you pick, the sample floor and wall types below are used.</WireframeNote>
+      <WireframeNote>Wireframe: reading the model is simulated. Whichever IFC you pick, the sample floor and wall types below are used.</WireframeNote>
       {error && <div className="banner error">{error}</div>}
       <div className="two-col">
         <section className="card">
@@ -97,27 +106,29 @@ function ModelStep({ onNext }: { onNext: () => void }) {
           <ul className="pick-list">
             {files.map((f) => (
               <li key={f.id}>
-                <label className={model?.kind === 'ifc' && model.label === f.filename ? 'selected' : ''}>
+                <label className={activeDoc === f.id ? 'selected' : ''}>
                   <input
                     type="radio"
                     name="model"
-                    checked={model?.kind === 'ifc' && model.label === f.filename}
-                    onChange={() => setModel({ kind: 'ifc', label: f.filename })}
+                    checked={activeDoc === f.id}
+                    disabled={busy}
+                    onChange={() => openDoc(f)}
                   />
                   <Box size={16} /> {f.filename}
+                  {!readyFor(f.id) && <span className="tag">not read yet</span>}
                 </label>
               </li>
             ))}
             {files.length === 0 && <li className="muted small">No IFC files yet.</li>}
           </ul>
           <div className="row-gap">
-            <button className="btn" onClick={() => input.current?.click()}><Upload size={16} /> Upload IFC</button>
+            <button className="btn" disabled={busy} onClick={() => input.current?.click()}><Upload size={16} /> Upload IFC</button>
             <Link className="link" to="/documents">Open Documents</Link>
           </div>
           <input
             ref={input}
             type="file"
-            accept=".ifc,.rvt"
+            accept=".ifc"
             hidden
             onChange={(e) => {
               upload([...(e.target.files ?? [])]);
@@ -127,16 +138,14 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </section>
 
         <section className="card">
-          <h2 className="card-title"><Link2 size={18} /> Point to a Revit model</h2>
-          <p className="muted">A local .rvt path or a cloud model (ACC / BIM 360) link.</p>
-          <label className="field">
-            Model location
-            <input placeholder="C:\Projects\Riverside\Riverside_STR.rvt" value={path} onChange={(e) => setPath(e.target.value)} />
-          </label>
-          <button className="btn" disabled={!path.trim()} onClick={() => setModel({ kind: 'revit', label: path.trim() })}>
-            Connect
-          </button>
-          {model?.kind === 'revit' && <p className="ok-line"><Check size={14} /> Connected to {model.label}</p>}
+          <h2 className="card-title"><ListOrdered size={18} /> Export an IFC from Revit</h2>
+          <ol className="howto-list">
+            <li>Open the architect's model in Revit and open a 3D view (hit the <b>Home</b> icon at the middle/top of Revit).</li>
+            <li>In Visibility/Graphics, show only <b>Walls, Floors, Roofs, Ceilings, Curtain Panels/Systems</b> (smaller file, faster upload).</li>
+            <li><b>File → Export → IFC</b>. Setup: <b>IFC 2x3 Coordination View 2.0</b>.</li>
+            <li>Then change the setup to <b>In-Session Setup</b> and go to the <b>Additional Content</b> tab → General: tick <b>Export only elements visible in view</b>.</li>
+            <li>Hit OK, then do the export.</li>
+          </ol>
         </section>
       </div>
 
@@ -148,7 +157,7 @@ function ModelStep({ onNext }: { onNext: () => void }) {
         </div>
       </section>
 
-      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? `Read ${model.kind === 'ifc' ? 'IFC' : 'Revit'} model` : 'Choose a model first'} />
+      <StepFooter onNext={onNext} nextDisabled={!model} nextLabel={model ? 'Read IFC model' : 'Choose a model first'} />
     </>
   );
 }
@@ -197,7 +206,12 @@ function FilterStep({ kind, onBack, onNext }: { kind: Kind; onBack: () => void; 
                     <td className="col-check">
                       <input type="checkbox" className="checkbox" checked={t.include} onChange={(e) => updateType(t.id, { include: e.target.checked })} aria-label={`Include ${t.name}`} />
                     </td>
-                    <td>{t.name}{t.instances === 0 && <span className="tag">unused</span>}</td>
+                    <td>
+                      {t.name}
+                      {t.ifcKind && t.ifcKind !== t.kind && <span className={`tag kind-${t.ifcKind}`}>{KIND_LABEL[t.ifcKind] ?? t.ifcKind}</span>}
+                      {t.instances === 0 && <span className="tag">unused</span>}
+                      {t.flags?.map((f) => <span key={f} className="tag warn" title={FLAG_HINT[f]}>{f.replace(/_/g, ' ')}</span>)}
+                    </td>
                     <td className="num">{t.instances}</td>
                     <td className="num">{fmt(t.modelQty)}</td>
                   </tr>
@@ -224,6 +238,15 @@ function FragmentRows({ header, children }: { header: string | null; children: R
     </>
   );
 }
+
+const KIND_LABEL: Record<string, string> = { roof: 'Roof', ceiling: 'Ceiling', curtain_wall: 'Curtain wall', floor: 'Floor', wall: 'Wall' };
+const FLAG_HINT: Record<string, string> = {
+  finish_only: 'Finish layers only (soffit, wall tile): flagged by the extractor',
+  placeholder_material: 'Revit placeholder material (Default Wall/Floor): define the layers',
+  no_layers: 'No material layers in the IFC',
+  layer_thickness_unknown: 'A layer has no thickness in the IFC',
+  layer_name_thickness_mismatch: 'Layer name and modelled thickness disagree; modelled thickness used',
+};
 
 const STATUS_LABEL = { todo: 'To do', done: 'Done', skipped: 'Skipped', merged: 'Merged' } as const;
 
@@ -259,7 +282,10 @@ function TypeTableStep({ onBack, onNext }: { onBack: () => void; onNext: () => v
               return (
                 <FragmentRows key={t.id} header={header ? `${t.kind === 'floor' ? 'Floors' : 'Walls'} · ${t.revitMaterial}` : null}>
                   <tr>
-                    <td><span className="swatch" style={{ background: t.color }} /> {t.name}</td>
+                    <td>
+                      <span className="swatch" style={{ background: t.color }} /> {t.name}
+                      {t.ifcKind && t.ifcKind !== t.kind && <span className={`tag kind-${t.ifcKind}`}>{KIND_LABEL[t.ifcKind] ?? t.ifcKind}</span>}
+                    </td>
                     <td>{t.assemblyName}</td>
                     <td className="num">{t.instances}</td>
                     <td className="num">{fmt(t.modelQty)} {t.kind === 'floor' ? 'SF' : 'LF'}</td>

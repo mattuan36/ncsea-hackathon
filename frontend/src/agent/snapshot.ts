@@ -1,5 +1,5 @@
-import { LEVELS, type ElementType } from '../ltl/data';
-import { assemblyPsf, calcPsf, effectiveLayers, layerPsf, levelTakeoff, polygonArea, polylineLength, totalThickness } from '../ltl/calc';
+import type { ElementType } from '../ltl/data';
+import { assemblyPsf, calcPsf, effectiveLayers, layerPsf, levelFloorArea, levelTakeoff, polylineLength, totalThickness } from '../ltl/calc';
 import type { SiteInputs } from '../ltl/store';
 import { useLtl } from '../ltl/store';
 import { compareSeismicDesignCategory } from '../lateral/seismic';
@@ -18,7 +18,7 @@ type LtlValue = ReturnType<typeof useLtl>;
 
 /** Everything the assistant may answer from. Computed with the app's own calc functions. */
 export function buildSnapshot(s: LtlValue): Record<string, unknown> {
-  const { types, materials, projectName, model, gravityStep } = s;
+  const { types, materials, projectName, model, gravityStep, plan } = s;
   const byId = new Map(types.map((t) => [t.id, t]));
   const typeName = (id: string) => byId.get(id)?.assemblyName ?? id;
 
@@ -54,7 +54,7 @@ export function buildSnapshot(s: LtlValue): Record<string, unknown> {
     };
   });
 
-  const levels = LEVELS.map((lv) => {
+  const levels = plan.levels.map((lv) => {
     const entries = levelTakeoff(lv, types, materials).map((e) => ({
       assembly: typeName(e.govId),
       kind: e.kind,
@@ -64,7 +64,7 @@ export function buildSnapshot(s: LtlValue): Record<string, unknown> {
     }));
     return {
       level: lv.name,
-      floorAreaSF: r(lv.areas.reduce((a, x) => a + polygonArea(x.points), 0), 1),
+      floorAreaSF: r(levelFloorArea(lv, types), 1),
       wallLengthLF: r(lv.walls.reduce((a, x) => a + polylineLength(x.points), 0), 1),
       totalKips: r(entries.reduce((a, e) => a + e.kips, 0)),
       takeoff: entries,
