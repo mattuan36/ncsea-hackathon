@@ -8,9 +8,10 @@ from __future__ import annotations
 
 import os
 import sys
+import tempfile
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, File, HTTPException, Response, UploadFile
 from pydantic import BaseModel
 
 from . import db
@@ -155,3 +156,18 @@ def reimport():
     if path is None or not path.is_file():
         raise HTTPException(404, f"No Dead_Load*.xlsx in {INPUTS_DIR}")
     return {"file": path.name, "rows": import_rows(load_db(path))}
+
+
+@router.post("/import-file")
+async def import_file(file: UploadFile = File(...)):
+    """Import an uploaded Dead_Load spreadsheet, for hosts with no persistent disk to leave it on."""
+    if not (file.filename or "").lower().endswith(".xlsx"):
+        raise HTTPException(400, "Upload the Dead Load spreadsheet (.xlsx).")
+    with tempfile.TemporaryDirectory(prefix="dead-load-") as tmp:
+        path = Path(tmp) / "Dead_Load.xlsx"
+        path.write_bytes(await file.read())
+        try:
+            rows = load_db(path)
+        except Exception as e:
+            raise HTTPException(400, f"Could not read the spreadsheet: {e}") from e
+        return {"file": file.filename, "rows": import_rows(rows)}

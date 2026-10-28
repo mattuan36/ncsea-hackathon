@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import uuid
 import subprocess
 import sys
 from pathlib import Path
@@ -18,7 +19,7 @@ from fastapi import APIRouter, File, HTTPException, Response, UploadFile
 from psycopg.types.json import Jsonb
 from pydantic import BaseModel
 
-from . import db
+from . import db, storage
 from .materials import INPUTS_DIR
 
 MODELS_DIR = Path(os.environ.get("LTL_MODELS_DIR", INPUTS_DIR / "models"))
@@ -56,7 +57,7 @@ def _safe_name(name: str) -> str:
     return re.sub(r"[^\w.\- ]+", "_", Path(name).name).strip() or "model.ifc"
 
 
-def _create(filename: str, size: int, storage_path: Path, document_id: int | None) -> dict:
+def _create(filename: str, size: int, storage_path: Path | str, document_id: int | None) -> dict:
     with db.pool.connection() as conn:
         return conn.execute(
             f"""
@@ -86,17 +87,35 @@ def upload_model(file: UploadFile = File(...)):
         tmp.unlink()
         raise HTTPException(413, f"{filename} exceeds 2 GB")
     folder_id = db.ensure_folder_path(MODELS_FOLDER_PATH)
-    with db.pool.connection() as conn:
-        doc = conn.execute(
-            """
-            INSERT INTO documents (folder_id, filename, content_type, size_bytes, data, storage_path)
-            VALUES (%s, %s, 'application/x-step', %s, NULL, '') RETURNING id
-            """,
-            (folder_id, filename, size),
-        ).fetchone()
-        path = MODELS_DIR / f"{doc['id']}-{filename}"
-        tmp.rename(path)
-        conn.execute("UPDATE documents SET storage_path = %s WHERE id = %s", (str(path), doc["id"]))
+    if storage.enabled():
+        # Supabase Storage: the host keeps nothing. Upload first so a failure leaves no orphan row.
+        try:
+            stored = storage.upload(f"models/{uuid.uuid4().hex}-{filename}", tmp, "application/x-step")
+        except Exception as e:
+            raise HTTPException(502, f"Could not store the model: {e}") from e
+        finally:
+            tmp.unlink(missing_ok=True)
+        with db.pool.connection() as conn:
+            doc = conn.execute(
+                """
+                INSERT INTO documents (folder_id, filename, content_type, size_bytes, data, storage_path)
+                VALUES (%s, %s, 'application/x-step', %s, NULL, %s) RETURNING id
+                """,
+                (folder_id, filename, size, stored),
+            ).fetchone()
+        path = stored
+    else:
+        with db.pool.connection() as conn:
+            doc = conn.execute(
+                """
+                INSERT INTO documents (folder_id, filename, content_type, size_bytes, data, storage_path)
+                VALUES (%s, %s, 'application/x-step', %s, NULL, '') RETURNING id
+                """,
+                (folder_id, filename, size),
+            ).fetchone()
+            path = MODELS_DIR / f"{doc['id']}-{filename}"
+            tmp.rename(path)
+            conn.execute("UPDATE documents SET storage_path = %s WHERE id = %s", (str(path), doc["id"]))
     model = _create(filename, size, path, doc["id"])
     _start_job(model["id"])
     return model
@@ -114,12 +133,19 @@ def model_from_document(doc_id: int):
     _check_ifc(doc["filename"])
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     if doc["storage_path"]:
-        path = Path(doc["storage_path"])
-        if not path.is_file():
+        path = doc["storage_path"]
+        if not storage.is_remote(path) and not Path(path).is_file():
             raise HTTPException(410, "The stored file is no longer on disk")
     else:
         path = MODELS_DIR / f"{doc['id']}-{_safe_name(doc['filename'])}"
         path.write_bytes(bytes(doc["data"]))
+        if storage.enabled():
+            try:
+                path = storage.upload(f"models/{uuid.uuid4().hex}-{_safe_name(doc['filename'])}", path, "application/x-step")
+            except Exception as e:
+                raise HTTPException(502, f"Could not store the model: {e}") from e
+            finally:
+                (MODELS_DIR / f"{doc['id']}-{_safe_name(doc['filename'])}").unlink(missing_ok=True)
     model = _create(doc["filename"], doc["size_bytes"], path, doc["id"])
     _start_job(model["id"])
     return model

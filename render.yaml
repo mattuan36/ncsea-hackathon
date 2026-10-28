@@ -1,0 +1,26 @@
+# Render Blueprint: the full API (documents, IFC extraction, materials, site routes).
+# IFC files live in Supabase Storage, so this service keeps nothing on disk.
+# Secrets marked sync: false are entered in the Render dashboard, never committed.
+services:
+  - type: web
+    name: ncsea-hackathon-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    plan: starter  # IFC extraction is memory hungry; move up a plan if jobs are killed
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL        # Supabase Postgres, session pooler string with ?sslmode=require
+        sync: false
+      - key: SUPABASE_URL        # https://<project-ref>.supabase.co
+        sync: false
+      - key: SUPABASE_SERVICE_KEY  # service_role key; server-side only
+        sync: false
+      - key: SUPABASE_BUCKET
+        value: ifc-models
+      - key: LTL_MODELS_DIR      # scratch space for uploads in flight
+        value: /tmp/models
+      - key: LTL_INPUTS_DIR
+        value: /tmp/inputs
+      - key: API_CORS_ORIGINS
+        value: https://mattuan36.github.io,http://localhost:5180,http://127.0.0.1:5180

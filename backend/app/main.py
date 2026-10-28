@@ -4,9 +4,9 @@ from urllib.parse import quote
 
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 
-from . import db, materials, models_api
+from . import db, materials, models_api, storage
 from .site_api import cors_origins, router as site_router
 
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
@@ -15,6 +15,7 @@ MAX_UPLOAD_BYTES = 200 * 1024 * 1024
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     db.init_db()
+    storage.ensure_bucket()
     materials.import_if_empty()
     models_api.fail_interrupted_jobs()
     yield
@@ -134,6 +135,26 @@ async def archive_site_report(files: list[UploadFile] = File(...)):
     }
 
 
+def _stream_remote(ref: str, filename: str, content_type: str) -> StreamingResponse:
+    """Stream a Supabase object through the API; the service key stays on the server."""
+    stream = storage.open_stream(ref)
+    try:
+        upstream = stream.__enter__()
+    except Exception as e:
+        raise HTTPException(410, "The stored file is no longer in storage") from e
+
+    def body():
+        try:
+            yield from upstream.iter_bytes(storage.CHUNK)
+        finally:
+            stream.__exit__(None, None, None)
+
+    headers = {"Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename)}"}
+    if (length := upstream.headers.get("content-length")):
+        headers["Content-Length"] = length
+    return StreamingResponse(body(), media_type=content_type, headers=headers)
+
+
 @app.get("/api/documents/{doc_id}/download")
 def download_document(doc_id: int):
     with db.pool.connection() as conn:
@@ -142,6 +163,8 @@ def download_document(doc_id: int):
         ).fetchone()
     if row is None:
         raise HTTPException(404, "Document not found")
+    if storage.is_remote(row["storage_path"]):  # IFC model kept in Supabase Storage: proxy the bytes
+        return _stream_remote(row["storage_path"], row["filename"], row["content_type"])
     if row["storage_path"]:  # large upload kept on disk (IFC models)
         if not Path(row["storage_path"]).is_file():
             raise HTTPException(410, "The stored file is no longer on disk")
@@ -158,7 +181,15 @@ def download_document(doc_id: int):
 @app.delete("/api/documents/{doc_id}", status_code=204)
 def delete_document(doc_id: int):
     with db.pool.connection() as conn:
-        deleted = conn.execute("DELETE FROM documents WHERE id = %s", (doc_id,)).rowcount
-    if not deleted:
+        row = conn.execute("DELETE FROM documents WHERE id = %s RETURNING storage_path", (doc_id,)).fetchone()
+        # a model's extraction still reads the object, so keep it while any model points at it
+        orphaned = (
+            row is not None
+            and storage.is_remote(row["storage_path"])
+            and conn.execute("SELECT 1 FROM models WHERE storage_path = %s", (row["storage_path"],)).fetchone() is None
+        )
+    if row is None:
         raise HTTPException(404, "Document not found")
+    if orphaned:
+        storage.delete(row["storage_path"])
     return Response(status_code=204)

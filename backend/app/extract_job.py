@@ -18,7 +18,7 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool
 
-from . import db
+from . import db, storage
 from .materials import matcher_rows  # also puts gravity_ifc on sys.path
 
 # extractor log line -> (stage, progress at that point)
@@ -75,7 +75,8 @@ def run(model_id: int) -> None:
 
         ifc_extract.log = log
         report("Opening the IFC file", 0.03, True)
-        data = _clean(ifc_extract.extract(row[0], None, with_geometry=True, db_rows=matcher_rows()))
+        with storage.local_copy(row[0]) as ifc_path:  # a temp download when the file lives in Supabase
+            data = _clean(ifc_extract.extract(str(ifc_path), None, with_geometry=True, db_rows=matcher_rows()))
         report("Saving", 0.97, True)
         conn.execute(
             """
