@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 import { Upload } from 'lucide-react';
 import { useLtl } from '../ltl/store';
 import { deadLoadFormulas, FormulaList } from '../math/Equation';
-import { assemblyPsf, fmt, levelFloorArea, levelTakeoff } from '../ltl/calc';
+import { assemblyPsf, effectiveLayers, fmt, levelFloorArea, levelTakeoff } from '../ltl/calc';
 import IfcViewer from '../ifc/IfcViewer';
 
 export default function AnalyticsPage() {
-  const { types, materials, model, plan, isDemo, ifc, ifcStatus, ifcError, loadIfcFile } = useLtl();
+  const { types, materials, model, plan, isDemo, ifc, ifcStatus, ifcError, loadIfcFile, startUpload, job, error } = useLtl();
   const fileInput = useRef<HTMLInputElement>(null);
+  const busy = job != null && job.status !== 'failed';
+
+  const importIfc = async (file: File | undefined) => {
+    if (!file) return;
+    if (/\.ifc$/i.test(file.name)) await loadIfcFile(file);
+    await startUpload(file);
+  };
 
   const { rows, floorSF, wallLF, kips } = useMemo(() => {
     const agg = new Map<string, { kips: number; qty: number }>();
@@ -47,9 +54,9 @@ export default function AnalyticsPage() {
         <div className="card-head">
           <div>
             <h2 className="card-title">Model</h2>
-            <p className="muted">{ifc ? ifc.name : 'Import an IFC exported from Revit. The file stays in this browser session.'}</p>
+            <p className="muted">{ifc ? ifc.name : 'Import an IFC exported from Revit. It is stored with the project and read for Gravity, Analytics, and Reports.'}</p>
           </div>
-          <button className="btn" onClick={() => fileInput.current?.click()}><Upload size={16} /> Import IFC</button>
+          <button className="btn" disabled={busy} onClick={() => fileInput.current?.click()}><Upload size={16} /> Import IFC</button>
           <input
             ref={fileInput}
             type="file"
@@ -57,13 +64,21 @@ export default function AnalyticsPage() {
             hidden
             onChange={(event) => {
               const file = event.target.files?.[0];
-              if (file) void loadIfcFile(file);
+              void importIfc(file);
               event.target.value = '';
             }}
           />
         </div>
+        {error && <div className="banner error">{error}</div>}
+        {job?.status === 'failed' && job.error && <div className="banner error">{job.error}</div>}
+        {busy && (
+          <>
+            <p className="muted small">{job.stage}{job.id ? ` · ${Math.round(job.progress * 100)}%` : ''}</p>
+            <div className="progress" aria-hidden="true"><div style={{ width: `${Math.round((job.progress || 0) * 100)}%` }} /></div>
+          </>
+        )}
         <IfcViewer data={ifcStatus === 'ready' ? ifc?.data ?? null : null} status={ifcStatus} error={ifcError} />
-        <p className="muted small ifc-hint">Drag to orbit. Scroll to zoom.</p>
+        <p className="muted small ifc-hint">Drag to orbit. Scroll to zoom. Floor and wall types fill in after the model has been read.</p>
       </section>
 
       <div className="kpis">
@@ -85,7 +100,7 @@ export default function AnalyticsPage() {
               </div>
               <span className="bar-val">{fmt(r.kips, 1)} k</span>
               <span className="bar-meta muted small">
-                {fmt(assemblyPsf(r.t.layers, materials), 1)} psf · {fmt(r.qty)} {r.t.kind === 'floor' ? 'SF' : 'LF'}
+                {fmt(assemblyPsf(effectiveLayers(r.t, types), materials), 1)} psf · {fmt(r.qty)} {r.t.kind === 'floor' ? 'SF' : 'LF'}
               </span>
             </div>
           ))}

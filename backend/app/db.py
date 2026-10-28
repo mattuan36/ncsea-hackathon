@@ -72,9 +72,23 @@ def ensure_folder_path(names: tuple[str, ...] | list[str] = SITE_REPORTS_PATH) -
     return folder_id
 
 
+def connection_kwargs() -> dict:
+    """Keyword args for every psycopg connection this process opens.
+
+    prepare_threshold=None: Supabase's transaction pooler (port 6543) rejects
+    prepared statements. psycopg prepares a statement after a few repeats, so
+    the app pool and the extract worker must both disable that.
+    """
+    return {"row_factory": dict_row, "prepare_threshold": None}
+
+
+def make_pool(**pool_kwargs) -> ConnectionPool:
+    return ConnectionPool(DATABASE_URL, kwargs=connection_kwargs(), **pool_kwargs)
+
+
 def init_db() -> None:
     global pool
-    pool = ConnectionPool(DATABASE_URL, kwargs={"row_factory": dict_row})
+    pool = make_pool()
     with pool.connection() as conn, conn.cursor() as cur:
         cur.execute(SCHEMA_PATH.read_text())
         cur.execute("SELECT count(*) AS n FROM folders")

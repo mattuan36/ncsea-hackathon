@@ -14,9 +14,7 @@ import time
 import traceback
 
 import psycopg
-from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
-from psycopg_pool import ConnectionPool
 
 from . import db
 from .materials import matcher_rows  # also puts gravity_ifc on sys.path
@@ -41,8 +39,11 @@ def _clean(o):
 
 
 def run(model_id: int) -> None:
-    conn = psycopg.connect(db.DATABASE_URL, autocommit=True)
-    db.pool = ConnectionPool(db.DATABASE_URL, kwargs={"row_factory": dict_row}, min_size=1, max_size=1)
+    # Same prepare_threshold=None as init_db. This connection repeats one UPDATE
+    # for every progress tick; the pool is what matcher_rows() uses. Either one
+    # preparing a statement fails on Supabase's transaction pooler.
+    conn = psycopg.connect(db.DATABASE_URL, autocommit=True, prepare_threshold=None)
+    db.pool = db.make_pool(min_size=1, max_size=1)
     last = [0.0]
 
     def report(stage: str, progress: float, force: bool = False) -> None:
